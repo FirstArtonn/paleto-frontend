@@ -1004,9 +1004,35 @@ function showLogin() {
 
 // ==================== NAVIGATION ====================
 function switchTab(tabName) {
+  if (typeof tabName === 'object' && tabName.target) return;
+  
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.remove('active');
   });
+  
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(item => {
+    const onclick = item.getAttribute('onclick');
+    if (onclick && onclick.includes("'" + tabName + "'")) {
+      item.classList.add('active');
+    }
+  });
+  
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  const targetTab = document.getElementById('tab-' + tabName);
+  if (targetTab) {
+    targetTab.classList.add('active');
+  }
+  
+  if (tabName === 'profil') {
+    loadProfilPage();
+  } else if (tabName === 'logs') {
+    loadLogsPage();
+  }
+});
   event.target.classList.add('active');
   
   document.querySelectorAll('.tab-content').forEach(tab => {
@@ -1524,7 +1550,6 @@ showApp = function() {
   originalShowApp();
   setTimeout(() => showDebugInfo(), 1000);
 };
-  
-</script>
+  </script>
 </body>
 </html>
