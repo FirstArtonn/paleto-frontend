@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎓 Fiches Employés - Paleto Garage</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary-gradient: linear-gradient(135deg, #667eea, #764ba2);
+  --secondary-gradient: linear-gradient(135deg, #8b80ff, #b48ef7);
+  --bg-light: #f5f7fb;
+  --bg-dark: #1c1c2c;
+  --card-light: #ffffff;
+  --card-dark: #2a2a3b;
+  --text-light: #2b3a67;
+  --text-dark: #f0f0f5;
+  --border-radius: 20px;
+  --transition: all 0.3s ease;
+  --header-height: 180px;
+  --discord-blue: #5865F2;
+}
+
+* { box-sizing: border-box; }
+html { overflow-x: hidden; }
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg-light);
+  color: var(--text-light);
+  transition: background 0.5s, color 0.5s;
+  overflow-x: hidden;
+  padding-top: var(--header-height);
+}
+
+body.dark-mode {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+body.dark-mode header { background: linear-gradient(135deg, #2c2c54, #3c3c8a); }
+body.dark-mode .nav-item { color: #ccc; }
+body.dark-mode .nav-item.active::after { background: #a6a6ff; }
+body.dark-mode input, body.dark-mode select {
+  background: var(--card-dark);
+  color: #fff;
+  border-color: #444;
+}
+body.dark-mode input::placeholder { color: #aaa; }
+body.dark-mode .employee-card, body.dark-mode .recruit-card { 
+  background: var(--card-dark); 
+  color: var(--text-dark); 
+}
+body.dark-mode .login-container {
+  background: var(--card-dark);
+}
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--primary-gradient);
+  color: white;
+  padding: 30px 20px 10px;
+  text-align: center;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+header h1 { 
+  font-size: clamp(1.5rem, 5vw, 2.5rem); 
+  margin: 0; 
+}
+
+header p { 
+  margin-top: 8px; 
+  font-size: clamp(0.9rem, 2vw, 1.05rem); 
+  color: #e0e0ff; 
+}
+
+#moon {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: transform 0.5s;
+  user-select: none;
+}
+#moon.rotate { transform: rotate(360deg); }
+
+#user-profile {
+  position: absolute;
+  top: 20px;
+  right: 70px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px 15px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 25px;
+  transition: var(--transition);
+  backdrop-filter: blur(5px);
+}
+
+#user-profile:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+#user-profile img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+#user-profile .username {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+#logout-btn {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: var(--transition);
+  margin-left: 5px;
+}
+
+#logout-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.login-container {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-light);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.login-card {
+  background: var(--card-light);
+  border-radius: 25px;
+  padding: 50px 40px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+  text-align: center;
+  max-width: 450px;
+  width: 90%;
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-card h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--text-light);
+}
+
+.login-card p {
+  color: #666;
+  margin-bottom: 30px;
+  font-size: 1.05rem;
+}
+
+.discord-login-btn {
+  background: var(--discord-blue);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4);
+}
+
+.discord-login-btn:hover {
+  background: #4752C4;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6);
+}
+
+.discord-login-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.login-info {
+  margin-top: 30px;
+  padding: 20px;
+  background: rgba(88, 101, 242, 0.1);
+  border-radius: 12px;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+body.dark-mode .login-card h1 {
+  color: var(--text-dark);
+}
+
+body.dark-mode .login-card p,
+body.dark-mode .login-info {
+  color: #bbb;
+}
+
+#main-nav {
+  display: flex;
+  justify-content: center;
+  gap: clamp(20px, 5vw, 50px);
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.nav-item {
+  position: relative;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: var(--transition);
+  user-select: none;
+}
+
+.nav-item:hover { color: #dcdcff; }
+
+.nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background: #fff;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.nav-item.active::after { width: 100%; }
+
+.nav-item.admin-only,
+.nav-item.rh-only {
+  display: none;
+}
+
+body.role-admin .nav-item.admin-only,
+body.role-rh .nav-item.admin-only,
+body.role-rh .nav-item.rh-only {
+  display: block;
+}
+
+.tab {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.tab.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#search-container,
+#search-container-recrutement {
+  margin: 30px auto 10px;
+  text-align: center;
+}
+
+#search-bar,
+#search-bar-recrutement {
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 2px solid #667eea;
+  width: min(300px, 90%);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+#search-bar:focus,
+#search-bar-recrutement:focus {
+  outline: none;
+  border-color: #764ba2;
+  box-shadow: 0 0 10px rgba(118,75,162,0.4);
+}
+
+#employee-list,
+#recruitment-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+  padding: 20px;
+  min-height: 200px;
+}
+
+.employee-card,
+.recruit-card {
+  background: var(--card-light);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  width: 220px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.07);
+  position: relative;
+}
+
+.employee-card:hover,
+.recruit-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+.employee-name { 
+  font-weight: 700; 
+  font-size: 1.2rem; 
+  margin-bottom: 5px; 
+  word-break: break-word;
+}
+
+.employee-grade { 
+  font-weight: 500; 
+  color: #787878; 
+}
+
+body.dark-mode .employee-grade { color: #bbb; }
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #222;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  z-index: 9999;
+  max-width: 350px;
+}
+
+.toast.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast.success { background: linear-gradient(135deg, #4CAF50, #45a049); }
+.toast.error { background: linear-gradient(135deg, #e53935, #c62828); }
+
+.info-message {
+  text-align: center;
+  padding: 40px 20px;
+  font-size: 1.1rem;
+  color: #667eea;
+}
+
+@media (max-width: 768px) {
+  :root { --header-height: 220px; }
+  header h1 { font-size: 1.8rem; }
+  #main-nav { gap: 20px; }
+  #user-profile {
+    position: static;
+    margin: 15px auto 0;
+    width: fit-content;
+  }
+  #moon {
+    right: 15px;
+  }
+  .employee-card,
+  .recruit-card { width: calc(50% - 15px); }
+}
+
+@media (max-width: 480px) {
+  .employee-card,
+  .recruit-card { width: 90%; }
+  .toast {
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="login-container" id="login-container">
+  <div class="login-card">
+    <h1>🔥 Paleto Garage</h1>
+    <p>Connectez-vous avec Discord pour accéder au système de gestion</p>
+    
+    <button class="discord-login-btn" onclick="loginWithDiscord()">
+      <svg viewBox="0 0 127.14 96.36" fill="currentColor">
+        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+      </svg>
+      Se connecter avec Discord
+    </button>
+
+    <div class="login-info">
+      <strong>ℹ️ Information</strong><br>
+      Votre ID Discord doit être dans la liste des employés du Google Sheet pour accéder à cette application.
+    </div>
+  </div>
+</div>
+
+<header id="main-header" style="display: none;">
+  <h1>🔥 Paleto Garage</h1>
+  <p>Ce site est soumis à des droits d'auteur, By Artonn</p>
+  
+  <div id="user-profile" style="display: none;">
+    <img id="user-avatar" src="" alt="Avatar">
+    <span class="username" id="user-name"></span>
+    <button id="logout-btn" onclick="logout()">Déconnexion</button>
+  </div>
+  
+  <div id="moon" title="Basculer mode sombre" onclick="toggleDarkMode()">🌙</div>
+
+  <nav id="main-nav">
+    <div class="nav-item active" data-tab="accueil" onclick="switchTab(this)">Accueil</div>
+    <div class="nav-item" data-tab="employe" onclick="switchTab(this)">Employés</div>
+    <div class="nav-item rh-only" data-tab="recrutement" onclick="switchTab(this)">Recrutement</div>
+    <div class="nav-item admin-only" data-tab="absence" onclick="switchTab(this)">Absence</div>
+  </nav>
+</header>
+
+<div id="tab-contents" style="display: none;">
+  <div class="tab active" id="tab-accueil">
+    <div style="text-align:center; margin-top:40px; padding: 20px;">
+      <h2>👋 Bienvenue <span id="welcome-name"></span></h2>
+      <p style="color: #666; max-width: 600px; margin: 20px auto;">
+        Vous êtes connecté avec succès. Utilisez le menu ci-dessus pour naviguer entre les différentes sections.
+      </p>
+      <div style="margin-top: 30px; padding: 20px; background: rgba(102,126,234,0.1); border-radius: 15px; max-width: 500px; margin: 30px auto;">
+        <strong>Vos permissions :</strong>
+        <p id="user-permissions" style="margin-top: 10px; color: #667eea;"></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab" id="tab-employe">
+    <div id="search-container">
+      <input type="text" id="search-bar" placeholder="🔍 Rechercher un employé...">
+    </div>
+    <div id="employee-list"></div>
+  </div>
+
+  <div class="tab" id="tab-recrutement">
+    <div id="search-container-recrutement">
+      <input type="text" id="search-bar-recrutement" placeholder="🔍 Rechercher un candidat...">
+    </div>
+    <div id="recruitment-list"></div>
+  </div>
+
+  <div class="tab" id="tab-absence">
+    <div style="text-align:center; margin-top:40px; padding: 20px;">
+      <h2>📅 Gestion des absences</h2>
+      <p style="color: #666;">Cette section est en cours de développement.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ==================== CONFIGURATION ====================
+const BACKEND_URL = "https://paleto-backend.vercel.app";
+
+const SHEET_ID = "17ZntDHZ8olidnCM1pig311AcjawM4l6HoRxSYFP7KGw";
+const API_KEY = "AIzaSyBtOfa8W5POpJ2KOZSKqxsC4CfZBkYG40E";
+const SHEET_EMPLOYEES = "Info Employé";
+
+let currentUser = null;
+let allEmployees = [];
+let filteredEmployees = [];
+
+// ==================== AUTHENTIFICATION ====================
+
+function loginWithDiscord() {
+  console.log('🔗 Redirection vers Discord via:', BACKEND_URL);
+  window.location.href = `${BACKEND_URL}/auth/discord`;
+}
+
+async function checkAuth() {
+  try {
+    console.log('🔍 Vérification authentification...');
+    const response = await fetch(`${BACKEND_URL}/api/check-auth`, {
+      credentials: 'include'
+    });
+    
+    const data = await response.json();
+    console.log('📥 Réponse auth:', data);
+    
+    if (data.authenticated) {
+      currentUser = data.user;
+      showApp();
+    } else {
+      showLogin();
+    }
+  } catch (error) {
+    console.error('❌ Erreur vérification auth:', error);
+    showLogin();
+  }
+}
+
+async function logout() {
+  try {
+    await fetch(`${BACKEND_URL}/api/logout`, {
+      method: 'POST',
+      credentials: 'include'
+    });
+    
+    currentUser = null;
+    showLogin();
+    showToast('👋 Déconnexion réussie', 'success');
+  } catch (error) {
+    console.error('❌ Erreur déconnexion:', error);
+    showToast('❌ Erreur de déconnexion', 'error');
+  }
+}
+
+function showLogin() {
+  document.getElementById('login-container').style.display = 'flex';
+  document.getElementById('main-header').style.display = 'none';
+  document.getElementById('tab-contents').style.display = 'none';
+}
+
+function showApp() {
+  document.getElementById('login-container').style.display = 'none';
+  document.getElementById('main-header').style.display = 'block';
+  document.getElementById('tab-contents').style.display = 'block';
+  
+  document.getElementById('user-avatar').src = currentUser.avatar;
+  document.getElementById('user-name').textContent = currentUser.employeeName || currentUser.username;
+  document.getElementById('user-profile').style.display = 'flex';
+  document.getElementById('welcome-name').textContent = currentUser.employeeName || currentUser.username;
+  
+  const permissions = {
+    'admin': 'Administrateur - Accès complet',
+    'rh': 'Ressources Humaines - Accès aux employés et recrutement',
+    'employee': 'Employé - Consultation uniquement',
+    'visitor': 'Visiteur - Accès limité'
+  };
+  document.getElementById('user-permissions').textContent = permissions[currentUser.role] || 'Aucune permission';
+  
+  document.body.className = `role-${currentUser.role}`;
+  
+  loadEmployees();
+}
+
+// ==================== GOOGLE SHEETS ====================
+
+async function loadEmployees() {
+  const list = document.getElementById('employee-list');
+  
+  try {
+    list.innerHTML = '<p class="info-message">⏳ Chargement des employés...</p>';
+    
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_EMPLOYEES)}?key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (!data.values || data.values.length === 0) {
+      list.innerHTML = '<p class="info-message" style="color:#ff6b6b;">❌ Aucune donnée trouvée.</p>';
+      return;
+    }
+
+    const rows = data.values;
+    let headerIndex = -1;
+    
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i] && rows[i].some(cell => 
+        cell && (cell.toString().includes("Prénom / Nom") || cell.toString().includes("ID Unique"))
+      )) {
+        headerIndex = i;
+        break;
+      }
+    }
+    
+    if (headerIndex === -1) {
+      list.innerHTML = '<p class="info-message" style="color:#ff6b6b;">❌ En-tête introuvable.</p>';
+      return;
+    }
+
+    const dataRows = rows.slice(headerIndex + 1);
+    const unique = new Set();
+
+    allEmployees = dataRows
+      .filter(row => {
+        const nom = row[2] ? row[2].toString().trim() : '';
+        return nom && 
+               nom !== "Prénom / Nom" && 
+               nom !== "Démission/Licenciement";
+      })
+      .map(r => ({
+        id: r[1] ? r[1].toString().trim() : '',
+        nom: r[2] ? r[2].toString().trim() : '',
+        grade: r[4] ? r[4].toString().trim() : '',
+        tel: r[5] ? r[5].toString().trim() : '',
+        discord: r[6] ? r[6].toString().trim() : ''
+      }))
+      .filter(e => {
+        if (!e.nom || !e.id || unique.has(e.nom)) return false;
+        unique.add(e.nom);
+        return true;
+      });
+
+    console.log('✅ Employés chargés:', allEmployees.length);
+    filteredEmployees = [...allEmployees];
+    displayEmployees(filteredEmployees);
+
+  } catch (error) {
+    list.innerHTML = `
+      <div class="info-message" style="color:#ff6b6b;">
+        <p style="font-size:1.3rem; margin-bottom:10px;">❌ Erreur de chargement</p>
+        <p>${error.message}</p>
+      </div>
+    `;
+  }
+}
+
+function displayEmployees(employees) {
+  const list = document.getElementById('employee-list');
+  list.innerHTML = '';
+
+  if (employees.length === 0) {
+    list.innerHTML = '<p class="info-message">Aucun employé trouvé.</p>';
+    return;
+  }
+
+  employees.forEach(emp => {
+    const card = document.createElement('div');
+    card.className = 'employee-card';
+    card.innerHTML = `
+      <div class="employee-name">${emp.nom || 'Sans nom'}</div>
+      <div class="employee-grade">${emp.grade || 'Sans grade'}</div>
+    `;
+    list.appendChild(card);
+  });
+}
+
+// ==================== NAVIGATION ====================
+
+function switchTab(item) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  item.classList.add('active');
+
+  const tabName = item.dataset.tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(`tab-${tabName}`).classList.add('active');
+}
+
+// ==================== DARK MODE ====================
+
+function toggleDarkMode() {
+  const moon = document.getElementById('moon');
+  const isDark = document.body.classList.toggle('dark-mode');
+  moon.classList.add('rotate');
+  setTimeout(() => moon.classList.remove('rotate'), 600);
+  localStorage.setItem('darkMode', isDark ? 'true' : 'false');
+}
+
+// ==================== UTILITAIRES ====================
+
+function showToast(message, type = 'info') {
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = message;
+  
+  document.body.appendChild(toast);
+  setTimeout(() => toast.classList.add('visible'), 50);
+  
+  setTimeout(() => {
+    toast.classList.remove('visible');
+    setTimeout(() => toast.remove(), 400);
+  }, 3000);
+}
+
+// ==================== GESTION DES ERREURS ====================
+
+function handleError(errorCode) {
+  const errors = {
+    'no_code': 'Code d\'autorisation manquant',
+    'not_employee': 'Votre ID Discord n\'est pas dans la liste des employés',
+    'auth_failed': 'Échec de l\'authentification',
+    'session_error': 'Erreur de création de session'
+  };
+  
+  showToast(`❌ ${errors[errorCode] || 'Erreur inconnue'}`, 'error');
+  showLogin();
+}
+
+// ==================== DÉMARRAGE ====================
+
+document.addEventListener('DOMContentLoaded', () => {
+  console.log('🚀 Démarrage de l\'application...');
+  console.log('🔗 Backend URL:', BACKEND_URL);
+  
+  // Vérifier les paramètres URL
+  const params = new URLSearchParams(window.location.search);
+  const authStatus = params.get('auth');
+  const error = params.get('error');
+  
+  if (authStatus === 'success') {
+    console.log('✅ Authentification réussie, vérification session...');
+    checkAuth();
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else if (error) {
+    console.log('❌ Erreur:', error);
+    handleError(error);
+  } else {
+    checkAuth();
+  }
+  
+  // Charger le dark mode
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+  }
+});
+</script>
+
+</body>
+</html>
+
