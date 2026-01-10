@@ -1486,6 +1486,44 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-</script>
+
+// ==================== DEBUG OVERLAY ====================
+function showDebugInfo() {
+  const debugDiv = document.createElement('div');
+  debugDiv.id = 'debugOverlay';
+  debugDiv.style.cssText = `
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.9);
+    color: lime;
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 12px;
+    z-index: 99999;
+    max-width: 400px;
+    word-wrap: break-word;
+  `;
+  
+  debugDiv.innerHTML = `
+    <strong>🐛 DEBUG INFO</strong><br><br>
+    <strong>currentUser:</strong><br>
+    ${currentUser ? JSON.stringify(currentUser, null, 2) : 'NULL'}<br><br>
+    <strong>Grade:</strong> ${currentUser?.grade || 'NON DÉFINI'}<br>
+    <strong>Catégories:</strong> ${userCategories.join(', ') || 'AUCUNE'}<br><br>
+    <button onclick="document.getElementById('debugOverlay').remove()" style="background: red; color: white; border: none; padding: 0.5rem; border-radius: 4px; cursor: pointer;">Fermer</button>
+  `;
+  
+  document.body.appendChild(debugDiv);
+}
+
+// Modifier showApp pour afficher le debug
+const originalShowApp = showApp;
+showApp = function() {
+  originalShowApp();
+  setTimeout(() => showDebugInfo(), 1000);
+};
+  </script>
 </body>
 </html>
