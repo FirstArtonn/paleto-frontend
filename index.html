@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 :root {
   --color-primary: #1a1a2e;
@@ -721,167 +720,24 @@ body.role-rh .nav-item.rh-only {
   }
 }
 
-/* ==================== CSS FACTURES ==================== */
-.main-grid {
-  display: grid;
-  grid-template-columns: 450px 1fr;
-  gap: 2rem;
-  animation: fadeIn 1s ease-out 0.2s both;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.form-panel {
-  background: rgba(26, 26, 46, 0.8);
-  backdrop-filter: blur(30px);
-  border: 1px solid var(--color-border);
-  border-radius: 24px;
-  padding: 2.5rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
-  height: fit-content;
-  position: sticky;
-  top: 2rem;
-}
-
-.preview-panel {
-  background: rgba(26, 26, 46, 0.8);
-  backdrop-filter: blur(30px);
-  border: 1px solid var(--color-border);
-  border-radius: 24px;
-  padding: 2.5rem;
-  min-height: 600px;
-}
-
-.form-section {
-  margin-bottom: 2rem;
-}
-
-.section-title {
-  font-family: Impact, sans-serif;
-  font-size: 1.8rem;
-  color: var(--color-gold);
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.8rem;
-  border-bottom: 2px solid var(--color-border);
-  text-transform: uppercase;
-}
-
-.input-group {
-  margin-bottom: 1.2rem;
-}
-
-.input-group label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--color-text-dim);
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.custom-input {
+/* Iframe fullscreen sans bords */
+.iframe-container {
   width: 100%;
-  padding: 1rem 1.3rem;
-  background: rgba(15, 52, 96, 0.25);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  color: var(--color-text);
-  font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  outline: none;
-}
-
-.custom-input:focus {
-  border-color: var(--color-highlight);
-  background: rgba(15, 52, 96, 0.35);
-  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.15);
-}
-
-.reason-line {
-  display: grid;
-  grid-template-columns: 1fr 80px 140px 52px;
-  gap: 0.6rem;
-  margin-bottom: 0.8rem;
-  align-items: center;
-}
-
-.reason-price-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.reason-price-wrapper::after {
-  content: '$';
-  position: absolute;
-  right: 1rem;
-  color: var(--color-text-dim);
-  font-weight: 600;
-  pointer-events: none;
-}
-
-.btn {
-  padding: 1rem 2rem;
+  height: calc(100vh - 300px);
+  background: transparent;
   border: none;
-  border-radius: 12px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.iframe-container iframe {
   width: 100%;
+  height: 100%;
+  border: none;
+  overflow: auto;
 }
-
-.btn-primary {
-  background: linear-gradient(135deg, #d14561 0%, #b93650 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(209, 69, 97, 0.2);
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #e94560 0%, #c83653 100%);
-  box-shadow: 0 6px 16px rgba(209, 69, 97, 0.25);
-  transform: translateY(-2px);
-}
-
-.btn-secondary {
-  background: rgba(15, 52, 96, 0.25);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  margin-top: 0.5rem;
-}
-
-.btn-secondary:hover {
-  background: rgba(15, 52, 96, 0.35);
-  border-color: var(--color-highlight);
-}
-
-#preview {
-  background: white;
-  color: #000;
-  padding: 2rem;
-  border-radius: 12px;
-  min-height: 500px;
-  font-family: 'Roboto', sans-serif;
-}
-
-@media (max-width: 768px) {
-  .main-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .preview-panel {
-    display: none;
-  }
-}
-</style>
+  </style>
 </head>
 <body>
 
@@ -961,60 +817,14 @@ body.role-rh .nav-item.rh-only {
       <div class="employee-grid" id="recruitList"></div>
     </div>
 
-    <!-- ABSENCE -->
     <!-- FACTURES -->
     <div class="tab-content" id="tab-factures">
-      <div class="main-grid">
-        <!-- FORMULAIRE -->
-        <div class="form-panel">
-          <div class="form-section">
-            <h2 class="section-title">Informations Client</h2>
-            
-            <div class="input-group">
-              <label>Nom de l'entreprise</label>
-              <input type="text" id="entrepriseName" class="custom-input" placeholder="Nom de l'entreprise">
-            </div>
-            
-            <div class="input-group">
-              <label>RIB</label>
-              <input type="text" id="entrepriseRIB" class="custom-input" placeholder="RIB">
-            </div>
-            
-            <div class="input-group">
-              <label>Date</label>
-              <input type="date" id="factureDate" class="custom-input">
-            </div>
-          </div>
-
-          <div class="form-section">
-            <h2 class="section-title">Prestations</h2>
-            <div id="reasonsContainer"></div>
-            <button type="button" class="btn btn-secondary" onclick="FacturesModule.addReason()">+ Ajouter une prestation</button>
-          </div>
-
-          <div class="form-section">
-            <h2 class="section-title">Logo (optionnel)</h2>
-            <div class="input-group">
-              <input type="file" id="logoUpload" class="custom-input" accept="image/*">
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-primary" onclick="FacturesModule.generatePDF()">
-            📄 Générer la facture PDF
-          </button>
-        </div>
-
-        <!-- PREVIEW -->
-        <div class="preview-panel">
-          <h2 class="section-title">Aperçu</h2>
-          <div id="preview">
-            <p style="text-align: center; color: #999; padding: 2rem;">
-              L'aperçu de la facture apparaîtra ici
-            </p>
-          </div>
-        </div>
+      <div class="iframe-container">
+        <iframe src="Facture_Paleto.html"></iframe>
       </div>
     </div>
+
+    <!-- ABSENCE -->
     <div class="tab-content" id="tab-absence">
       <div class="info-message">
         <h2>📅 Gestion des absences</h2>
@@ -1140,16 +950,6 @@ function switchTab(tabName) {
 }
 
 // ==================== THEME ====================
-function toggleTheme() {
-  const html = document.documentElement;
-  const currentTheme = html.getAttribute('data-theme');
-  const newTheme = currentTheme === 'light' ? '' : 'light';
-  html.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  
-  const icon = document.querySelector('.theme-icon');
-  icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
-}
 
 // Load saved theme
 const savedTheme = localStorage.getItem('theme');
@@ -1454,236 +1254,55 @@ document.getElementById('employeeModal').addEventListener('click', (e) => {
     closeModal();
   }
 });
-</script>
 
-// ==================== MODULE FACTURES ====================
-const FacturesModule = (function() {
-  let reasons = [];
-  let logoData = null;
+// ==================== THEME AVEC SYNC IFRAME ====================
+function toggleTheme() {
+  const html = document.documentElement;
+  const currentTheme = html.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? '' : 'light';
+  html.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
   
-  function init() {
-    // Initialiser avec 3 prestations par défaut
-    for (let i = 0; i < 3; i++) {
-      addReason();
+  const icon = document.querySelector('.theme-icon');
+  icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+  
+  // Envoyer le thème à l'iframe
+  const iframe = document.querySelector('.iframe-container iframe');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ 
+      type: 'theme-change', 
+      theme: newTheme 
+    }, '*');
+  }
+}
+
+// Écouter les demandes de thème de l'iframe
+window.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'get-theme') {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || '';
+    const iframe = document.querySelector('.iframe-container iframe');
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage({ 
+        type: 'theme-change', 
+        theme: currentTheme 
+      }, '*');
     }
-    
-    // Date du jour par défaut
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('factureDate').value = today;
-    
-    // Upload logo
-    document.getElementById('logoUpload').addEventListener('change', handleLogoUpload);
-    
-    // Update preview on input
-    document.querySelectorAll('.custom-input').forEach(input => {
-      input.addEventListener('input', updatePreview);
+  }
+});
+
+// Au chargement de l'iframe, envoyer le thème actuel
+document.addEventListener('DOMContentLoaded', () => {
+  const iframe = document.querySelector('.iframe-container iframe');
+  if (iframe) {
+    iframe.addEventListener('load', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || '';
+      iframe.contentWindow.postMessage({ 
+        type: 'theme-change', 
+        theme: currentTheme 
+      }, '*');
     });
   }
-  
-  function addReason() {
-    const id = Date.now();
-    reasons.push({ id, description: '', quantity: 1, price: 0 });
-    renderReasons();
-  }
-  
-  function removeReason(id) {
-    reasons = reasons.filter(r => r.id !== id);
-    renderReasons();
-  }
-  
-  function renderReasons() {
-    const container = document.getElementById('reasonsContainer');
-    container.innerHTML = reasons.map((r, index) => `
-      <div class="reason-line">
-        <input type="text" class="custom-input" placeholder="Description" 
-          value="${r.description}" 
-          oninput="FacturesModule.updateReason(${r.id}, 'description', this.value)">
-        <input type="number" class="custom-input" min="1" 
-          value="${r.quantity}"
-          oninput="FacturesModule.updateReason(${r.id}, 'quantity', this.value)">
-        <div class="reason-price-wrapper">
-          <input type="number" class="custom-input reason-price" min="0" step="0.01"
-            value="${r.price}"
-            oninput="FacturesModule.updateReason(${r.id}, 'price', this.value)">
-        </div>
-        <button type="button" class="btn btn-secondary" 
-          style="padding: 0.5rem; width: auto; font-size: 1.2rem;"
-          onclick="FacturesModule.removeReason(${r.id})">✖</button>
-      </div>
-    `).join('');
-    updatePreview();
-  }
-  
-  function updateReason(id, field, value) {
-    const reason = reasons.find(r => r.id === id);
-    if (reason) {
-      reason[field] = field === 'description' ? value : parseFloat(value) || 0;
-      updatePreview();
-    }
-  }
-  
-  function handleLogoUpload(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        logoData = event.target.result;
-        updatePreview();
-      };
-      reader.readAsDataURL(file);
-    }
-  }
-  
-  function updatePreview() {
-    const entreprise = document.getElementById('entrepriseName').value || 'Nom de l\'entreprise';
-    const rib = document.getElementById('entrepriseRIB').value || 'RIB';
-    const date = document.getElementById('factureDate').value || new Date().toISOString().split('T')[0];
-    
-    const total = reasons.reduce((sum, r) => sum + (r.quantity * r.price), 0);
-    
-    const preview = document.getElementById('preview');
-    preview.innerHTML = `
-      <div style="font-family: Arial, sans-serif;">
-        ${logoData ? `<img src="${logoData}" style="max-width: 150px; margin-bottom: 1rem;">` : ''}
-        <h1 style="color: #d4af37; margin-bottom: 2rem;">FACTURE</h1>
-        
-        <div style="margin-bottom: 2rem;">
-          <strong>Client:</strong> ${entreprise}<br>
-          <strong>RIB:</strong> ${rib}<br>
-          <strong>Date:</strong> ${date}
-        </div>
-        
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 2rem;">
-          <thead>
-            <tr style="background: #f5f5f5; border-bottom: 2px solid #ddd;">
-              <th style="padding: 0.75rem; text-align: left;">Description</th>
-              <th style="padding: 0.75rem; text-align: center;">Quantité</th>
-              <th style="padding: 0.75rem; text-align: right;">Prix unitaire</th>
-              <th style="padding: 0.75rem; text-align: right;">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${reasons.map(r => `
-              <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding: 0.75rem;">${r.description || '-'}</td>
-                <td style="padding: 0.75rem; text-align: center;">${r.quantity}</td>
-                <td style="padding: 0.75rem; text-align: right;">${r.price.toFixed(2)} $</td>
-                <td style="padding: 0.75rem; text-align: right;">${(r.quantity * r.price).toFixed(2)} $</td>
-              </tr>
-            `).join('')}
-          </tbody>
-          <tfoot>
-            <tr style="background: #f5f5f5; font-weight: bold;">
-              <td colspan="3" style="padding: 0.75rem; text-align: right;">TOTAL :</td>
-              <td style="padding: 0.75rem; text-align: right; color: #d4af37;">${total.toFixed(2)} $</td>
-            </tr>
-          </tfoot>
-        </table>
-        
-        <div style="margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #ddd; font-size: 0.85rem; color: #666;">
-          <strong>Paleto Garage</strong> - Merci de votre confiance
-        </div>
-      </div>
-    `;
-  }
-  
-  async function generatePDF() {
-    try {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      
-      const entreprise = document.getElementById('entrepriseName').value || 'Nom de l\'entreprise';
-      const rib = document.getElementById('entrepriseRIB').value || 'RIB';
-      const date = document.getElementById('factureDate').value || new Date().toISOString().split('T')[0];
-      
-      let yPos = 20;
-      
-      // Logo
-      if (logoData) {
-        doc.addImage(logoData, 'PNG', 15, yPos, 40, 40);
-        yPos += 50;
-      }
-      
-      // Titre
-      doc.setFontSize(24);
-      doc.setTextColor(212, 175, 55);
-      doc.text('FACTURE', 15, yPos);
-      yPos += 15;
-      
-      // Infos client
-      doc.setFontSize(11);
-      doc.setTextColor(0, 0, 0);
-      doc.text(`Client: ${entreprise}`, 15, yPos);
-      yPos += 7;
-      doc.text(`RIB: ${rib}`, 15, yPos);
-      yPos += 7;
-      doc.text(`Date: ${date}`, 15, yPos);
-      yPos += 15;
-      
-      // Tableau
-      doc.setFontSize(10);
-      doc.text('Description', 15, yPos);
-      doc.text('Qté', 120, yPos);
-      doc.text('Prix unit.', 145, yPos);
-      doc.text('Total', 175, yPos);
-      yPos += 5;
-      
-      doc.line(15, yPos, 195, yPos);
-      yPos += 7;
-      
-      let total = 0;
-      reasons.forEach(r => {
-        const lineTotal = r.quantity * r.price;
-        total += lineTotal;
-        
-        doc.text(r.description || '-', 15, yPos);
-        doc.text(r.quantity.toString(), 120, yPos);
-        doc.text(`${r.price.toFixed(2)} $`, 145, yPos);
-        doc.text(`${lineTotal.toFixed(2)} $`, 175, yPos);
-        yPos += 7;
-      });
-      
-      yPos += 5;
-      doc.line(15, yPos, 195, yPos);
-      yPos += 7;
-      
-      doc.setFontSize(12);
-      doc.setFont(undefined, 'bold');
-      doc.text('TOTAL:', 145, yPos);
-      doc.setTextColor(212, 175, 55);
-      doc.text(`${total.toFixed(2)} $`, 175, yPos);
-      
-      // Pied de page
-      doc.setFontSize(9);
-      doc.setTextColor(100, 100, 100);
-      doc.text('Paleto Garage - Merci de votre confiance', 15, 280);
-      
-      doc.save(`Facture_${entreprise}_${date}.pdf`);
-      showToast('✅ Facture générée avec succès !', 'success');
-      
-    } catch (error) {
-      console.error('Erreur génération PDF:', error);
-      showToast('❌ Erreur lors de la génération du PDF', 'error');
-    }
-  }
-  
-  return {
-    init,
-    addReason,
-    removeReason,
-    updateReason,
-    generatePDF
-  };
-})();
-
-// Initialiser le module Factures quand l'onglet est activé
-const originalSwitchTab = switchTab;
-switchTab = function(tabName) {
-  originalSwitchTab(tabName);
-  if (tabName === 'factures' && currentUser && (currentUser.role === 'admin')) {
-    setTimeout(() => FacturesModule.init(), 100);
-  }
-};
-
+});
+</script>
 </body>
 </html>
