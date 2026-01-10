@@ -1287,37 +1287,6 @@ input[type="number"] {
       <div class="spinner-ring"></div>
       <div class="spinner-ring"></div>
       <div class="spinner-ring"></div>
-    </div>
-    <h2 class="loading-title">Paleto Garage</h2>
-    <p class="loading-text">Chargement en cours...</p>
-    <div class="loading-progress">
-      <div class="loading-progress-bar"></div>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <header>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="flex: 1;">
-        <h1>générer des factures</h1>
-        <p class="subtitle">Créez des factures paleto garage simplement</p>
-      </div>
-      <div class="theme-toggle-wrapper">
-        <span id="themeLabel" style="font-size: 0.85rem; color: var(--color-text-dim); font-weight: 500; display: inline-block; width: 95px; text-align: right;">Mode sombre</span>
-        <div class="theme-switch" onclick="toggleTheme()">
-          <div class="theme-slider">
-            <span class="theme-icon" id="themeIcon">🌙</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Bannière de configuration -->
-  <div class="config-banner" id="configBanner">
-    <strong>⚙️ Configuration requise :</strong> Veuillez renseigner votre ID Google Sheets dans le code (ligne ~660)
-  </div>
 
   <div class="main-grid">
     <!-- Panneau de formulaire -->
@@ -3062,15 +3031,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 </body>
 </html>
 <script>
-// Synchronisation du thème avec le parent
+// ==================== SYNCHRONISATION THEME AVEC PARENT ====================
 window.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'theme-change') {
     document.documentElement.setAttribute('data-theme', event.data.theme);
   }
 });
 
-// Au chargement, demander le thème actuel
-window.parent.postMessage({ type: 'get-theme' }, '*');
+// Demander le thème au chargement
+window.addEventListener('load', () => {
+  window.parent.postMessage({ type: 'get-theme' }, '*');
+});
 </script>
 </body>
 </html>
