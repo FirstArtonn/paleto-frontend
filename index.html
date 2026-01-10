@@ -1002,15 +1002,29 @@ function showApp() {
 
 // ==================== NAVIGATION ====================
 function switchTab(tabName) {
+  // Désactiver tous les nav-items
   document.querySelectorAll('.nav-item').forEach(item => {
     item.classList.remove('active');
   });
-  event.target.classList.add('active');
   
+  // Activer le bon nav-item
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const onclick = item.getAttribute('onclick');
+    if (onclick && onclick.includes("'" + tabName + "'")) {
+      item.classList.add('active');
+    }
+  });
+  
+  // Masquer tous les tabs
   document.querySelectorAll('.tab-content').forEach(tab => {
     tab.classList.remove('active');
   });
-  document.getElementById(`tab-${tabName}`).classList.add('active');
+  
+  // Afficher le bon tab
+  const targetTab = document.getElementById('tab-' + tabName);
+  if (targetTab) {
+    targetTab.classList.add('active');
+  }
 }
 
 // ==================== THEME ====================
