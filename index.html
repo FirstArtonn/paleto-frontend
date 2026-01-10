@@ -803,12 +803,8 @@ body.role-rh .nav-item.rh-only {
     <h1>PALETO GARAGE</h1>
     <div class="subtitle">Système de Gestion - By Artonn</div>
 
-    <nav class="navigation">
-      <div class="nav-item active" onclick="switchTab('accueil')">🏠 Accueil</div>
-      <div class="nav-item" onclick="switchTab('employes')">👥 Employés</div>
-      <div class="nav-item rh-only" onclick="switchTab('recrutement')">📋 Recrutement</div>
-      <div class="nav-item admin-only" onclick="switchTab('factures')">💰 Factures</div>
-      <div class="nav-item admin-only" onclick="switchTab('absence')">📅 Absence</div>
+    <nav class="navigation" id="mainNavigation">
+      <!-- Navigation générée dynamiquement -->
     </nav>
   </header>
 
@@ -853,6 +849,47 @@ body.role-rh .nav-item.rh-only {
       <div class="info-message">
         <h2>📅 Gestion des absences</h2>
         <p style="margin-top: 1rem;">Cette section est en cours de développement.</p>
+      </div>
+    </div>
+    <!-- PROFIL -->
+    <div class="tab-content" id="tab-profil">
+      <div class="info-message" id="profilContent">
+        <h2>👤 Mon Profil</h2>
+        <p style="margin-top: 1rem;">Chargement...</p>
+      </div>
+    </div>
+
+    <!-- PARTENARIATS -->
+    <div class="tab-content" id="tab-partenariats">
+      <div class="info-message">
+        <h2>🤝 Partenariats</h2>
+        <p style="margin-top: 1rem;">Section en cours de développement.</p>
+      </div>
+    </div>
+
+    <!-- BANQUE -->
+    <div class="tab-content" id="tab-banque">
+      <div class="info-message">
+        <h2>🏦 Banque</h2>
+        <p style="margin-top: 1rem;">Section en cours de développement.</p>
+      </div>
+    </div>
+
+    <!-- COMPTA -->
+    <div class="tab-content" id="tab-compta">
+      <div class="info-message">
+        <h2>📊 Comptabilité</h2>
+        <p style="margin-top: 1rem;">Section en cours de développement.</p>
+      </div>
+    </div>
+
+    <!-- LOGS -->
+    <div class="tab-content" id="tab-logs">
+      <div class="info-message">
+        <h2>📜 Historique</h2>
+        <div id="logsContainer" style="margin-top: 2rem;">
+          <p>Chargement des logs...</p>
+        </div>
       </div>
     </div>
   </div>
@@ -956,6 +993,9 @@ function showApp() {
   
   document.body.className = `role-${currentUser.role}`;
   
+  buildNavigation();
+  loadProfilPage();
+  loadLogsPage();
   loadEmployees();
   loadRecruits();
 }
@@ -1323,6 +1363,126 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+
+// ==================== SYSTÈME DE PERMISSIONS ====================
+const PERMISSIONS = {
+  "Patron": ["profil", "accueil", "employes", "recrutement", "absence", "factures", "partenariats", "banque", "compta", "logs"],
+  "Co Patron": ["profil", "accueil", "employes", "recrutement", "absence", "factures", "partenariats", "banque", "compta", "logs"],
+  "DRH": ["profil", "accueil", "employes", "recrutement", "absence", "factures", "banque", "logs"],
+  "Responsable D'atelier": ["profil", "accueil", "employes", "absence", "factures", "partenariats", "banque", "logs"],
+  "Responsable Evenementiel": ["profil", "accueil", "factures", "banque"],
+  "Asst Evenemtiel": ["profil", "accueil", "factures", "banque"],
+  "Chef d'atelier": ["profil", "accueil", "employes", "absence", "factures", "logs"],
+  "RH": ["profil", "accueil", "employes", "recrutement", "absence"],
+  "Confirmé": ["profil", "accueil"],
+  "Mécano": ["profil", "accueil"],
+  "Apprenti": ["profil", "accueil"],
+  "Stagiaire": ["profil", "accueil"]
+};
+
+const CATEGORY_ICONS = {
+  "profil": "👤",
+  "accueil": "🏠",
+  "employes": "👥",
+  "recrutement": "📋",
+  "absence": "📅",
+  "factures": "💰",
+  "partenariats": "🤝",
+  "banque": "🏦",
+  "compta": "📊",
+  "logs": "📜"
+};
+
+const CATEGORY_LABELS = {
+  "profil": "Profil",
+  "accueil": "Accueil",
+  "employes": "Employés",
+  "recrutement": "Recrutement",
+  "absence": "Absences",
+  "factures": "Factures",
+  "partenariats": "Partenariats",
+  "banque": "Banque",
+  "compta": "Compta",
+  "logs": "Logs"
+};
+
+let userCategories = [];
+
+function getUserCategories(grade) {
+  return PERMISSIONS[grade] || ["profil", "accueil"];
+}
+
+function buildNavigation() {
+  if (!currentUser || !currentUser.grade) {
+    console.log('❌ Pas de grade utilisateur');
+    userCategories = ["profil", "accueil"];
+  } else {
+    userCategories = getUserCategories(currentUser.grade);
+  }
+  
+  console.log('✅ Grade:', currentUser?.grade);
+  console.log('✅ Catégories:', userCategories);
+  
+  const nav = document.getElementById('mainNavigation');
+  if (!nav) return;
+  
+  nav.innerHTML = userCategories.map((cat, index) => {
+    const icon = CATEGORY_ICONS[cat] || "📄";
+    const label = CATEGORY_LABELS[cat] || cat;
+    const activeClass = index === 0 ? 'active' : '';
+    return `<div class="nav-item ${activeClass}" onclick="switchTab('${cat}')">${icon} ${label}</div>`;
+  }).join('');
+  
+  if (userCategories.length > 0) {
+    switchTab(userCategories[0]);
+  }
+}
+
+function loadProfilPage() {
+  if (!currentUser) return;
+  
+  const profilContent = document.getElementById('profilContent');
+  if (!profilContent) return;
+  
+  profilContent.innerHTML = `
+    <h2>👤 Mon Profil</h2>
+    <div style="margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+      <div style="text-align: center; margin-bottom: 2rem;">
+        <img src="${currentUser.avatar}" alt="Avatar" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--color-highlight);">
+      </div>
+      
+      <table class="details-table">
+        <tr><td><strong>Nom</strong></td><td>${currentUser.employeeName || currentUser.username}</td></tr>
+        <tr><td><strong>Grade</strong></td><td>${currentUser.grade || 'Non défini'}</td></tr>
+        <tr><td><strong>Discord</strong></td><td>${currentUser.username}#${currentUser.discriminator}</td></tr>
+        <tr><td><strong>ID Discord</strong></td><td>${currentUser.id}</td></tr>
+        <tr><td><strong>Rôle système</strong></td><td>${currentUser.role}</td></tr>
+        <tr><td><strong>Catégories accessibles</strong></td><td>${userCategories.length}</td></tr>
+      </table>
+      
+      <div style="margin-top: 2rem; text-align: center;">
+        <button class="logout-btn" onclick="logout()" style="display: inline-block;">
+          🚪 Déconnexion
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function loadLogsPage() {
+  const logsContainer = document.getElementById('logsContainer');
+  if (!logsContainer) return;
+  
+  logsContainer.innerHTML = `
+    <div style="text-align: center; padding: 2rem; background: rgba(233, 69, 96, 0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
+      <p><strong>📜 Historique des actions</strong></p>
+      <p style="margin-top: 1rem; color: var(--color-text-dim);">Aucun log pour le moment.</p>
+      <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-text-dim);">Les actions importantes seront enregistrées ici.</p>
+    </div>
+  `;
+}
+
 </script>
 </body>
 </html>
