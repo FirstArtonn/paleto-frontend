@@ -1577,13 +1577,13 @@ async function loadGoogleSheetsData() {
     };
     sheetData.contrats = ["Maintenance", "Réparation", "Service"];
     
-    document.getElementById('configBanner').style.display = 'block';
+    const banner = document.getElementById('configBanner'); if (banner) banner.style.display = 'block';
     return;
   }
 
   try {
     // Cacher la bannière si configuré
-    document.getElementById('configBanner').style.display = 'none';
+    const banner = document.getElementById('configBanner'); if (banner) banner.style.display = 'none';
     
     // URL de l'API Google Sheets - Récupérer colonnes A à G
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}!A2:G?key=${API_KEY}`;
