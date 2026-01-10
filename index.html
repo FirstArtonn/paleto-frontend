@@ -720,21 +720,45 @@ body.role-rh .nav-item.rh-only {
   }
 }
 
-/* Iframe fullscreen sans bords */
+
+/* Retirer le padding du container pour l'onglet factures */
+.content-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+#tab-factures .content-container,
+#tab-factures.content-container {
+  padding: 0;
+  max-width: 100%;
+}
+
+/* ==================== IFRAME FULLSCREEN ==================== */
+#tab-factures {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
 .iframe-container {
   width: 100%;
-  height: calc(100vh - 300px);
+  height: calc(100vh - 250px);
+  min-height: 800px;
   background: transparent;
   border: none;
   overflow: hidden;
   margin: 0;
   padding: 0;
+  border-radius: 0;
 }
 
 .iframe-container iframe {
   width: 100%;
   height: 100%;
   border: none;
+  display: block;
   overflow: auto;
 }
   </style>
@@ -1255,7 +1279,8 @@ document.getElementById('employeeModal').addEventListener('click', (e) => {
   }
 });
 
-// ==================== THEME AVEC SYNC IFRAME ====================
+
+// ==================== COMMUNICATION IFRAME ====================
 function toggleTheme() {
   const html = document.documentElement;
   const currentTheme = html.getAttribute('data-theme');
@@ -1266,40 +1291,35 @@ function toggleTheme() {
   const icon = document.querySelector('.theme-icon');
   icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
   
-  // Envoyer le thème à l'iframe
-  const iframe = document.querySelector('.iframe-container iframe');
+  // Envoyer à l'iframe
+  sendThemeToIframe(newTheme);
+}
+
+function sendThemeToIframe(theme) {
+  const iframe = document.querySelector('#tab-factures iframe');
   if (iframe && iframe.contentWindow) {
     iframe.contentWindow.postMessage({ 
       type: 'theme-change', 
-      theme: newTheme 
+      theme: theme 
     }, '*');
   }
 }
 
-// Écouter les demandes de thème de l'iframe
+// Écouter les demandes de l'iframe
 window.addEventListener('message', (event) => {
   if (event.data && event.data.type === 'get-theme') {
     const currentTheme = document.documentElement.getAttribute('data-theme') || '';
-    const iframe = document.querySelector('.iframe-container iframe');
-    if (iframe && iframe.contentWindow) {
-      iframe.contentWindow.postMessage({ 
-        type: 'theme-change', 
-        theme: currentTheme 
-      }, '*');
-    }
+    sendThemeToIframe(currentTheme);
   }
 });
 
-// Au chargement de l'iframe, envoyer le thème actuel
+// Envoyer le theme quand l'iframe charge
 document.addEventListener('DOMContentLoaded', () => {
-  const iframe = document.querySelector('.iframe-container iframe');
+  const iframe = document.querySelector('#tab-factures iframe');
   if (iframe) {
     iframe.addEventListener('load', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme') || '';
-      iframe.contentWindow.postMessage({ 
-        type: 'theme-change', 
-        theme: currentTheme 
-      }, '*');
+      sendThemeToIframe(currentTheme);
     });
   }
 });
