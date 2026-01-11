@@ -991,6 +991,8 @@ let currentUser = null;
 let allEmployees = [];
 let filteredEmployees = [];
 let allRecruits = [];
+let logsAutoRefreshInterval = null;
+
 let filteredRecruits = [];
 
 // ==================== AUTH ====================
@@ -1636,6 +1638,7 @@ async function logAction(action) {
 }
 
 async function loadLogs() {
+  const now = new Date().toLocaleTimeString('fr-FR');
   const container = document.getElementById('logsContainer');
   if (!container) return;
   
@@ -1652,7 +1655,11 @@ async function loadLogs() {
     }
     
     const logs = data.values.slice(1).reverse();
-    let html = '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(233,69,96,0.1);">';
+    let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">';
+    html += '<h3 style="margin:0;">📜 Historique des actions</h3>';
+    html += '<span style="color:var(--color-text-dim);font-size:0.9rem;">🔄 Mise à jour : ' + now + '</span>';
+    html += '</div>';
+    html += '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(233,69,96,0.1);">';
     html += '<th style="padding:1rem;text-align:left;">Utilisateur</th>';
     html += '<th style="padding:1rem;text-align:left;">Date & Heure</th>';
     html += '<th style="padding:1rem;text-align:left;">Action</th></tr></thead><tbody>';
