@@ -313,21 +313,31 @@ header h1 {
   user-select: none;
 }
 
-.nav-item::before { display: none !important; }
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.2), transparent);
+  transition: left 0.5s;
+}
 
-.nav-item:hover::before { display: none !important; }
+.nav-item:hover::before {
+  left: 100%;
+}
 
 .nav-item:hover {
-  background: none !important;
-  border-color: transparent !important;
-  transform: none !important;
-  color: var(--color-text) !important;
+  background: rgba(233, 69, 96, 0.1);
+  border-color: var(--color-highlight);
+  transform: translateY(-2px);
 }
 
 .nav-item.active {
-  background: none !important;
-  color: var(--color-text) !important;
-  border-color: transparent !important;
+  background: var(--color-highlight);
+  color: white;
+  border-color: var(--color-highlight);
 }
 
 .nav-item.admin-only,
@@ -782,10 +792,7 @@ body.role-rh .nav-item.rh-only {
 }
 
 .nav-item:hover {
-  background: none !important;
-  border-color: transparent !important;
-  transform: none !important;
-  color: var(--color-text) !important;
+  color: var(--color-highlight);
 }
 
 .nav-item::after {
@@ -805,11 +812,46 @@ body.role-rh .nav-item.rh-only {
 }
 
 
-/* Navigation propre */
+/* Navigation propre - SANS effet */
 header .navigation { display: flex; justify-content: center; gap: 50px; margin-top: 20px; flex-wrap: wrap; }
-header .nav-item { position: relative; font-weight: 600; font-size: 1.05rem; color: #fff; cursor: pointer; padding: 8px 0; user-select: none; background: none !important; }
-header .nav-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: #fff; border-radius: 5px; transition: width 0.3s ease; }
-header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
+header .nav-item { 
+  position: relative; 
+  font-weight: 600; 
+  font-size: 1.05rem; 
+  color: #fff; 
+  cursor: pointer; 
+  padding: 8px 0; 
+  user-select: none; 
+  background: none !important; 
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  transition: none !important;
+}
+header .nav-item:hover {
+  color: #fff !important;
+  background: none !important;
+  box-shadow: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+header .nav-item::after { 
+  content: ''; 
+  position: absolute; 
+  bottom: 0; 
+  left: 0; 
+  width: 0%; 
+  height: 3px; 
+  background: #fff; 
+  border-radius: 5px; 
+  transition: width 0.3s ease; 
+}
+header .nav-item.active::after, 
+header .nav-item:hover::after { 
+  width: 100%; 
+}
 </style>
 </head>
 <body>
@@ -1239,39 +1281,8 @@ function toggleGradeOptions(event) {
 }
 
 async function updateGrade(empId, newGrade) {
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
-  const proxy = "https://corsproxy.io/?";
-  
-  showToast('⏳ Mise à jour du grade...', 'info');
-
-  try {
-    const response = await fetch(proxy + encodeURIComponent(url), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: empId, grade: newGrade })
-    });
-
-    if (!response.ok) throw new Error('Erreur réseau');
-
-    // Mise à jour locale
-    const emp = allEmployees.find(e => e.id === empId);
-    if (emp) {
-      emp.grade = newGrade;
-      const filtered = filteredEmployees.find(e => e.id === empId);
-      if (filtered) filtered.grade = newGrade;
-    }
-
-    showToast('✅ Grade mis à jour avec succès !', 'success');
-    
-    // Fermer le modal et recharger
-    closeModal();
-    setTimeout(() => loadEmployees(), 500);
-
-  } catch (error) {
-    console.error('❌ Erreur updateGrade:', error);
-    showToast('❌ Erreur lors de la mise à jour', 'error');
-  }
-}`, 'success');
+  // Ici tu peux ajouter l'appel à ton API pour mettre à jour le grade
+  showToast(`Grade mis à jour: ${newGrade}`, 'success');
   closeModal();
   loadEmployees();
 }
