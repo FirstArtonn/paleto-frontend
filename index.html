@@ -1763,6 +1763,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
+
+// Ajuster automatiquement la hauteur de l'iframe
+function autoResizeIframe() {
+  const iframe = document.querySelector('#tab-factures iframe');
+  if (!iframe) return;
+  
+  iframe.addEventListener('load', () => {
+    try {
+      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+      const height = iframeDoc.body.scrollHeight;
+      iframe.style.height = height + 'px';
+      console.log('✅ Iframe height:', height);
+    } catch (e) {
+      console.log('⚠️ Cannot access iframe content (CORS)');
+      iframe.style.height = '100vh';
+    }
+  });
+}
+
+// Lancer au chargement
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', autoResizeIframe);
+} else {
+  autoResizeIframe();
+}
+
+
+
+// Écouter les messages de hauteur de l'iframe
+window.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'resize-iframe') {
+    const iframe = document.querySelector('#tab-factures iframe');
+    if (iframe) {
+      iframe.style.height = event.data.height + 'px';
+      console.log('✅ Iframe resized to:', event.data.height);
+    }
+  }
+});
+
 </script>
 </body>
 </html>
