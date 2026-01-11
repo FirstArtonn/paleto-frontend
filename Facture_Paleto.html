@@ -3080,9 +3080,29 @@ window.addEventListener('message', (event) => {
   }
 });
 
-// Demander le thème au chargement
+// Envoyer la hauteur au parent
+function sendHeight() {
+  const height = document.body.scrollHeight;
+  window.parent.postMessage({ 
+    type: 'resize-iframe', 
+    height: height 
+  }, '*');
+}
+
+// Envoyer au chargement et quand le contenu change
 window.addEventListener('load', () => {
   window.parent.postMessage({ type: 'get-theme' }, '*');
+  setTimeout(sendHeight, 100);
+  setTimeout(sendHeight, 500);
+  setTimeout(sendHeight, 1000);
+});
+
+// Observer les changements de contenu
+const observer = new MutationObserver(sendHeight);
+observer.observe(document.body, { 
+  childList: true, 
+  subtree: true, 
+  attributes: true 
 });
 </script>
 </body>
