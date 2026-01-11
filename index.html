@@ -313,31 +313,21 @@ header h1 {
   user-select: none;
 }
 
-.nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.2), transparent);
-  transition: left 0.5s;
-}
+.nav-item::before { display: none !important; }
 
-.nav-item:hover::before {
-  left: 100%;
-}
+.nav-item:hover::before { display: none !important; }
 
 .nav-item:hover {
-  background: rgba(233, 69, 96, 0.1);
-  border-color: var(--color-highlight);
-  transform: translateY(-2px);
+  background: none !important;
+  border-color: transparent !important;
+  transform: none !important;
+  color: var(--color-text) !important;
 }
 
 .nav-item.active {
-  background: var(--color-highlight);
-  color: white;
-  border-color: var(--color-highlight);
+  background: none !important;
+  color: var(--color-text) !important;
+  border-color: transparent !important;
 }
 
 .nav-item.admin-only,
@@ -792,7 +782,10 @@ body.role-rh .nav-item.rh-only {
 }
 
 .nav-item:hover {
-  color: var(--color-highlight);
+  background: none !important;
+  border-color: transparent !important;
+  transform: none !important;
+  color: var(--color-text) !important;
 }
 
 .nav-item::after {
@@ -1246,8 +1239,39 @@ function toggleGradeOptions(event) {
 }
 
 async function updateGrade(empId, newGrade) {
-  // Ici tu peux ajouter l'appel à ton API pour mettre à jour le grade
-  showToast(`Grade mis à jour: ${newGrade}`, 'success');
+  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const proxy = "https://corsproxy.io/?";
+  
+  showToast('⏳ Mise à jour du grade...', 'info');
+
+  try {
+    const response = await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: empId, grade: newGrade })
+    });
+
+    if (!response.ok) throw new Error('Erreur réseau');
+
+    // Mise à jour locale
+    const emp = allEmployees.find(e => e.id === empId);
+    if (emp) {
+      emp.grade = newGrade;
+      const filtered = filteredEmployees.find(e => e.id === empId);
+      if (filtered) filtered.grade = newGrade;
+    }
+
+    showToast('✅ Grade mis à jour avec succès !', 'success');
+    
+    // Fermer le modal et recharger
+    closeModal();
+    setTimeout(() => loadEmployees(), 500);
+
+  } catch (error) {
+    console.error('❌ Erreur updateGrade:', error);
+    showToast('❌ Erreur lors de la mise à jour', 'error');
+  }
+}`, 'success');
   closeModal();
   loadEmployees();
 }
