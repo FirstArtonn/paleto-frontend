@@ -1270,6 +1270,11 @@ async function updateGrade(empId, newGrade) {
     });
 
     const emp = allEmployees.find(e => e.id === empId);
+    
+    // Capturer l'ancien grade AVANT modification
+    const oldGrade = emp ? emp.grade : 'Inconnu';
+    const empName = emp ? emp.nom : 'Inconnu';
+    
     if (emp) {
       emp.grade = newGrade;
       const filtered = filteredEmployees.find(e => e.id === empId);
@@ -1278,7 +1283,8 @@ async function updateGrade(empId, newGrade) {
 
     showToast('✅ Grade mis à jour !', 'success');
     
-    logAction(`Modification du grade de l'employé ID ${empId} → ${newGrade}`);
+    // Log avec ancien et nouveau grade
+    logAction(`Modification du grade de l'employé ID ${empId} (${empName}) : ${oldGrade} → ${newGrade}`);
     
     closeModal();
     setTimeout(() => loadEmployees(), 1000);
