@@ -812,100 +812,10 @@ body.role-rh .nav-item.rh-only {
 }
 
 
-/* Navigation propre avec soulignement - FORCÉ */
-header .navigation {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 50px !important;
-  margin-top: 20px !important;
-  flex-wrap: wrap !important;
-}
 
-header .nav-item {
-  position: relative !important;
-  font-weight: 600 !important;
-  font-size: 1.05rem !important;
-  color: #fff !important;
-  cursor: pointer !important;
-  padding: 8px 0 !important;
-  user-select: none !important;
-  background: none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  outline: none !important;
-  text-shadow: none !important;
-  filter: none !important;
-  backdrop-filter: none !important;
-  transition: none !important;
-}
-
-header .nav-item:hover {
-  background: none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  color: #fff !important;
-  transform: none !important;
-  filter: none !important;
-  opacity: 1 !important;
-}
-
-header .nav-item::before {
-  display: none !important;
-}
-
-header .nav-item::after {
-  content: '' !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 0% !important;
-  height: 3px !important;
-  background: #fff !important;
-  border-radius: 5px !important;
-  transition: width 0.3s ease !important;
-}
-
-header .nav-item.active::after,
-header .nav-item:hover::after {
-  width: 100% !important;
-}
-
-/* Iframe fullscreen sans scroll */
-#tab-factures {
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-.iframe-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  height: 100vh;
-  min-height: 800px;
-  border: none;
-  overflow: hidden;
-  background: transparent;
-}
-
-.iframe-container iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-  background: transparent;
-}
+/* CSS FACTURES */
 
 
-
-/* === CSS FACTURES === */
-
-body {
-  background: transparent !important;
-  margin: 0 !important;
-  padding: 20px !important;
-  overflow-x: hidden !important;
-}
 
 .container {
   background: transparent !important;
@@ -993,15 +903,7 @@ body, .form-panel, .preview-panel, .custom-input,
   font-size: 14px;
 }
 
-body {
-  font-family: 'Outfit', sans-serif;
-  background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-secondary) 100%);
-  color: var(--color-text);
-  min-height: 100vh;
-  padding: 2rem;
-  position: relative;
-  overflow-x: hidden;
-}
+
 
 body::before {
   content: '';
@@ -1741,9 +1643,7 @@ input[type="number"] {
    📱 MOBILE RESPONSIVE
    ======================================== */
 @media (max-width: 768px) {
-  body {
-    background: var(--color-bg);
-  }
+  
   
   .container {
     padding: 0;
@@ -2373,7 +2273,6 @@ const SHEET_NAME = 'Info facture';
 
 // 🔑 Clé API Google (vous devez créer une dans Google Cloud Console)
 // Instructions : https://developers.google.com/sheets/api/quickstart/js
-const API_KEY = 'AIzaSyDQzvChjm5Qx6iM4s_al4Qpy9ameiGlubQ'; // À remplacer !
 
 // 🔗 URL du Apps Script pour la synchronisation automatique
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyIb6-0HCtcWL_Z7GDLPna-zXQXOCmzjA9E8QlOiBhxjJjSaLuhgf2aotF1hxQljLM/exec';
@@ -2800,7 +2699,7 @@ async function promptAddNewEnterprise(entrepriseName) {
       
       <div style="display: flex; gap: 1rem;">
         <button onclick="cancelAddEnterprise()" style="flex: 1; padding: 0.8rem; background: rgba(255, 68, 68, 0.2); color: #ff4444; border: 1px solid #ff4444; border-radius: 8px; cursor: pointer; font-weight: 600;">Annuler</button>
-        <button onclick="confirmAddEnterprise('${entrepriseName.replace(/'/g, "\'")}', document.getElementById('newEntrepriseRIB').value)" style="flex: 1; padding: 0.8rem; background: linear-gradient(135deg, #d14561 0%, #b93650 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Ajouter</button>
+        <button onclick="confirmAddEnterprise('${entrepriseName.replace(/'/g, "\\'")}', document.getElementById('newEntrepriseRIB').value)" style="flex: 1; padding: 0.8rem; background: linear-gradient(135deg, #d14561 0%, #b93650 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Ajouter</button>
       </div>
     </div>
   `;
@@ -3052,12 +2951,9 @@ function renderPreview() {
     const totalLigne = qte * prix;
     totalGlobal += totalLigne;
 
-    txtRaison.textContent += desc + '
-';
-    txtQuantite.textContent += qte + '
-';
-    txtPrix.textContent += prix.toFixed(0) + '$
-';
+    txtRaison.textContent += desc + '\n';
+    txtQuantite.textContent += qte + '\n';
+    txtPrix.textContent += prix.toFixed(0) + '$\n';
   });
 
   txtDate.textContent = "Date : " + date;
@@ -3336,8 +3232,7 @@ async function downloadInvoiceImage() {
       ctx.fillStyle = '#111';
       ctx.textAlign = align;
 
-      const lines = text.split('
-');
+      const lines = text.split('\n');
       lines.forEach((line, index) => {
         const lineY = y + (index * (fontSize + 4)) + fontSize;
         let lineX = x;
@@ -3487,8 +3382,7 @@ async function sendToDiscord() {
       ctx.textAlign = align;
 
       // Gérer le texte multiligne
-      const lines = text.split('
-');
+      const lines = text.split('\n');
       lines.forEach((line, index) => {
         const lineY = y + (index * (fontSize + 4)) + fontSize;
         let lineX = x;
@@ -3533,8 +3427,7 @@ async function sendToDiscord() {
       const prix = parseFloat(line.querySelector('.reason-price').value) || 0;
       totalGlobal += qte * prix;
       if (desc) {
-        details += `${desc} (${qte}x ${prix}$)
-`;
+        details += `${desc} (${qte}x ${prix}$)\n`;
       }
     });
 
@@ -3651,9 +3544,7 @@ async function sendAllInvoices() {
   }
   
   // Demander confirmation
-  if (!confirm(`Voulez-vous envoyer ${rowsToProcess.length} facture(s) sur Discord ?
-
-Cela va générer et envoyer une facture pour chaque ligne du Sheet ayant un montant.`)) {
+  if (!confirm(`Voulez-vous envoyer ${rowsToProcess.length} facture(s) sur Discord ?\n\nCela va générer et envoyer une facture pour chaque ligne du Sheet ayant un montant.`)) {
     return;
   }
   
@@ -3770,8 +3661,7 @@ async function generateAndSendInvoiceFromRow(rowData) {
       console.warn(`Element ${elementId} not found, using default width`);
     }
     
-    const lines = text.split('
-');
+    const lines = text.split('\n');
     lines.forEach((line, index) => {
       const lineY = y + (index * (size + 4)) + size;
       let lineX = x;
@@ -4003,7 +3893,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }, 500);
 });
-</script>
+</script
+    </div>
+
+    <!-- ABSENCE -->
+    <div class="tab-content" id="tab-absence">
+      <div class="info-message">
+        <h2>📅 Gestion des absences</h2>
+        <p style="margin-top: 1rem;">Cette section est en cours de développement.</p>
+      </div>
+    </div>
+    <!-- PROFIL -->
+    <div class="tab-content" id="tab-profil">
+      <div class="info-message" id="profilContent">
+        <h2>👤 Mon Profil</h2>
+        <p style="margin-top: 1rem;">Chargement...</p>
+      </div>
     </div>
 
     <!-- PARTENARIATS -->
@@ -4037,45 +3942,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         <div id="logsContainer" style="margin-top: 2rem;">
           <p>Chargement des logs...</p>
         </div>
-      </div>
-    </div>
-
-    <!-- PROFIL -->
-    <div class="tab-content" id="tab-profil">
-      <div class="info-message" id="profilContent">
-        <h2>👤 Mon Profil</h2>
-      </div>
-    </div>
-
-    <!-- PARTENARIATS -->
-    <div class="tab-content" id="tab-partenariats">
-      <div class="info-message">
-        <h2>🤝 Partenariats</h2>
-        <p>Section en développement.</p>
-      </div>
-    </div>
-
-    <!-- BANQUE -->
-    <div class="tab-content" id="tab-banque">
-      <div class="info-message">
-        <h2>🏦 Banque</h2>
-        <p>Section en développement.</p>
-      </div>
-    </div>
-
-    <!-- COMPTA -->
-    <div class="tab-content" id="tab-compta">
-      <div class="info-message">
-        <h2>📊 Comptabilité</h2>
-        <p>Section en développement.</p>
-      </div>
-    </div>
-
-    <!-- LOGS -->
-    <div class="tab-content" id="tab-logs">
-      <div class="info-message">
-        <h2>📜 Historique</h2>
-        <div id="logsContainer"></div>
       </div>
     </div>
   </div>
@@ -4687,149 +4553,19 @@ function loadLogsPage() {
 
 
 
-const PERMISSIONS_CONFIG = {
-  "Patron": ["profil","accueil","employes","recrutement","absence","factures","partenariats","banque","compta","logs"],
-  "Co Patron": ["profil","accueil","employes","recrutement","absence","factures","partenariats","banque","compta","logs"],
-  "DRH": ["profil","accueil","employes","recrutement","absence","factures","banque","logs"],
-  "Responsable D'atelier": ["profil","accueil","employes","absence","factures","partenariats","banque","logs"],
-  "Responsable Evenementiel": ["profil","accueil","factures","banque"],
-  "Asst Evenemtiel": ["profil","accueil","factures","banque"],
-  "Chef d'atelier": ["profil","accueil","employes","absence","factures","logs"],
-  "RH": ["profil","accueil","employes","recrutement","absence"],
-  "Confirmé": ["profil","accueil"],
-  "Mécano": ["profil","accueil"],
-  "Apprenti": ["profil","accueil"],
-  "Stagiaire": ["profil","accueil"]
-};
-
-const CAT_ICONS = {"profil":"👤","accueil":"🏠","employes":"👥","recrutement":"📋","absence":"📅","factures":"💰","partenariats":"🤝","banque":"🏦","compta":"📊","logs":"📜"};
-const CAT_LABELS = {"profil":"Profil","accueil":"Accueil","employes":"Employés","recrutement":"Recrutement","absence":"Absences","factures":"Factures","partenariats":"Partenariats","banque":"Banque","compta":"Compta","logs":"Logs"};
-
-let userCats = [];
-
-function buildNavigation() {
-  userCats = PERMISSIONS_CONFIG[currentUser?.grade] || ["profil","accueil"];
-  const nav = document.getElementById('mainNavigation');
-  if (!nav) return;
-  
-  nav.innerHTML = userCats.map((c,i) => 
-    `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${CAT_ICONS[c]} ${CAT_LABELS[c]}</div>`
-  ).join('');
-  
-  if (userCats[0]) switchTab(userCats[0]);
-}
-
-function loadProfilPage() {
-  const el = document.getElementById('profilContent');
-  if (!el || !currentUser) return;
-  el.innerHTML = `
-    <h2>👤 ${currentUser.employeeName}</h2>
-    <div style="text-align:center;margin:2rem 0">
-      <img src="${currentUser.avatar}" style="width:120px;height:120px;border-radius:50%;border:4px solid var(--color-highlight)">
-    </div>
-    <table class="details-table">
-      <tr><td>Grade</td><td>${currentUser.grade||'-'}</td></tr>
-      <tr><td>Discord</td><td>${currentUser.username}#${currentUser.discriminator}</td></tr>
-      <tr><td>Catégories</td><td>${userCats.length}</td></tr>
-    </table>
-  `;
-}
-
-
-
-// Synchronisation du thème avec l'iframe
-function sendThemeToIframe(theme) {
-  const iframe = document.querySelector('#tab-factures iframe');
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage({ 
-      type: 'theme-change', 
-      theme: theme 
-    }, '*');
-  }
-}
-
-// Écouter les demandes de thème de l'iframe
-window.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'get-theme') {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || '';
-    sendThemeToIframe(currentTheme);
-  }
-});
-
-// Modifier toggleTheme pour envoyer à l'iframe
-const originalToggleTheme = toggleTheme;
-toggleTheme = function() {
-  originalToggleTheme();
-  const newTheme = document.documentElement.getAttribute('data-theme') || '';
-  sendThemeToIframe(newTheme);
-};
-
-// Envoyer le thème quand l'iframe charge
-document.addEventListener('DOMContentLoaded', () => {
-  const iframe = document.querySelector('#tab-factures iframe');
-  if (iframe) {
-    iframe.addEventListener('load', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || '';
-      sendThemeToIframe(currentTheme);
-    });
-  }
-});
-
-
-
-// Ajuster automatiquement la hauteur de l'iframe
-function autoResizeIframe() {
-  const iframe = document.querySelector('#tab-factures iframe');
-  if (!iframe) return;
-  
-  iframe.addEventListener('load', () => {
-    try {
-      const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-      const height = iframeDoc.body.scrollHeight;
-      iframe.style.height = height + 'px';
-      console.log('✅ Iframe height:', height);
-    } catch (e) {
-      console.log('⚠️ Cannot access iframe content (CORS)');
-      iframe.style.height = '100vh';
-    }
-  });
-}
-
-// Lancer au chargement
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', autoResizeIframe);
-} else {
-  autoResizeIframe();
-}
-
-
-
-// Écouter les messages de hauteur de l'iframe
-window.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'resize-iframe') {
-    const iframe = document.querySelector('#tab-factures iframe');
-    if (iframe) {
-      iframe.style.height = event.data.height + 'px';
-      console.log('✅ Iframe resized to:', event.data.height);
-    }
-  }
-});
-
-
-
-// === JAVASCRIPT FACTURES ===
+// === JS FACTURES ===
 
 /* ========================================
    📊 CONFIGURATION GOOGLE SHEETS 
    ======================================== */
 
 // ⚙️ IMPORTANT : Remplacez par l'ID de votre Google Sheet
-const SPREADSHEET_ID = '19YnTEHpGQSoqMbInvK29HWsPBXzoexYcqzRVDJjKsyI';
+const FACTURE_SPREADSHEET_ID = '19YnTEHpGQSoqMbInvK29HWsPBXzoexYcqzRVDJjKsyI';
 const SHEET_NAME = 'Info facture';
 
 // 🔑 Clé API Google (vous devez créer une dans Google Cloud Console)
 // Instructions : https://developers.google.com/sheets/api/quickstart/js
-const API_KEY = 'AIzaSyDQzvChjm5Qx6iM4s_al4Qpy9ameiGlubQ'; // À remplacer !
+ // À remplacer !
 
 // 🔗 URL du Apps Script pour la synchronisation automatique
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyIb6-0HCtcWL_Z7GDLPna-zXQXOCmzjA9E8QlOiBhxjJjSaLuhgf2aotF1hxQljLM/exec';
@@ -6339,8 +6075,8 @@ async function generateAndSendInvoiceFromRow(rowData) {
 }
 
 function loadTheme() {
-  const savedTheme = localStorage.getItem('invoice-theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  
   
   const icon = document.getElementById('themeIcon');
   const label = document.getElementById('themeLabel');
@@ -6437,6 +6173,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }, 500);
 });
+
+
+
+const PERMISSIONS_CONFIG = {
+  "Patron": ["profil","accueil","employes","recrutement","absence","factures","partenariats","banque","compta","logs"],
+  "Co Patron": ["profil","accueil","employes","recrutement","absence","factures","partenariats","banque","compta","logs"],
+  "DRH": ["profil","accueil","employes","recrutement","absence","factures","banque","logs"],
+  "Responsable D'atelier": ["profil","accueil","employes","absence","factures","partenariats","banque","logs"],
+  "Responsable Evenementiel": ["profil","accueil","factures","banque"],
+  "Asst Evenemtiel": ["profil","accueil","factures","banque"],
+  "Chef d'atelier": ["profil","accueil","employes","absence","factures","logs"],
+  "RH": ["profil","accueil","employes","recrutement","absence"],
+  "Confirmé": ["profil","accueil"],
+  "Mécano": ["profil","accueil"],
+  "Apprenti": ["profil","accueil"],
+  "Stagiaire": ["profil","accueil"]
+};
+
+const CAT_ICONS = {"profil":"👤","accueil":"🏠","employes":"👥","recrutement":"📋","absence":"📅","factures":"💰","partenariats":"🤝","banque":"🏦","compta":"📊","logs":"📜"};
+const CAT_LABELS = {"profil":"Profil","accueil":"Accueil","employes":"Employés","recrutement":"Recrutement","absence":"Absences","factures":"Factures","partenariats":"Partenariats","banque":"Banque","compta":"Compta","logs":"Logs"};
+
+let userCats = [];
+
+function buildNavigation() {
+  userCats = PERMISSIONS_CONFIG[currentUser?.grade] || ["profil","accueil"];
+  const nav = document.getElementById('mainNavigation');
+  if (!nav) return;
+  nav.innerHTML = userCats.map((c,i) => 
+    `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${CAT_ICONS[c]} ${CAT_LABELS[c]}</div>`
+  ).join('');
+  if (userCats[0]) switchTab(userCats[0]);
+}
+
+function loadProfilPage() {
+  const el = document.getElementById('profilContent');
+  if (!el || !currentUser) return;
+  el.innerHTML = `
+    <h2>👤 ${currentUser.employeeName}</h2>
+    <div style="text-align:center;margin:2rem 0">
+      <img src="${currentUser.avatar}" style="width:120px;height:120px;border-radius:50%;border:4px solid var(--color-highlight)">
+    </div>
+    <table class="details-table">
+      <tr><td>Grade</td><td>${currentUser.grade||'-'}</td></tr>
+      <tr><td>Discord</td><td>${currentUser.username}#${currentUser.discriminator}</td></tr>
+      <tr><td>Catégories</td><td>${userCats.length}</td></tr>
+    </table>
+  `;
+}
 
 </script>
 </body>
