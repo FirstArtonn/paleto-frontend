@@ -973,6 +973,36 @@ const GRADES = [
   "Chef d'atelier", "Confirmé", "Mécano", "Apprenti", "Stagiaire"
 ];
 
+// Hiérarchie des grades (du plus haut au plus bas)
+const GRADE_HIERARCHY = [
+  "Patron",
+  "Co Patron",
+  "DRH",
+  "RH",
+  "Responsable D'atelier",
+  "Responsable Evenementiel",
+  "Asst Evenemtiel",
+  "Chef d'atelier",
+  "Confirmé",
+  "Mécano",
+  "Apprenti",
+  "Stagiaire"
+];
+
+function getGradeLevel(grade) {
+  const index = GRADE_HIERARCHY.indexOf(grade);
+  return index === -1 ? 999 : index; // 999 = grade inconnu (le plus bas)
+}
+
+function canAssignGrade(userGrade, targetGrade) {
+  const userLevel = getGradeLevel(userGrade);
+  const targetLevel = getGradeLevel(targetGrade);
+  
+  // L'utilisateur peut assigner un grade seulement s'il est INFÉRIEUR au sien
+  return targetLevel > userLevel;
+}
+
+
 let currentUser = null;
 let allEmployees = [];
 let filteredEmployees = [];
@@ -1239,6 +1269,12 @@ function toggleGradeOptions(event) {
 }
 
 async function updateGrade(empId, newGrade) {
+  // Vérifier si l'utilisateur peut assigner ce grade
+  if (!canAssignGrade(currentUser.grade, newGrade)) {
+    showToast('❌ Vous ne pouvez pas assigner un grade égal ou supérieur au vôtre', 'error');
+    return;
+  }
+  
   const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
   const proxy = "https://corsproxy.io/?";
   
