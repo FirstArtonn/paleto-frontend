@@ -1717,7 +1717,6 @@ async function loadLogs() {
   if (!container) return;
   
   try {
-    container.innerHTML = '<div style="text-align:center;padding:2rem;">⏳ Chargement...</div>';
     
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${LOGS_SHEET_ID}/values/Logs!A:C?key=${API_KEY}`;
     const response = await fetch(url);
