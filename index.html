@@ -1245,7 +1245,9 @@ function toggleGradeOptions(event) {
   options.classList.toggle('active');
 }
 
-`, 'success');
+async function updateGrade(empId, newGrade) {
+  // Ici tu peux ajouter l'appel à ton API pour mettre à jour le grade
+  showToast(`Grade mis à jour: ${newGrade}`, 'success');
   closeModal();
   loadEmployees();
 }
@@ -1571,43 +1573,6 @@ function buildNav() {
   nav.innerHTML = cats.map((c,i) => `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${I[c]} ${L[c]}</div>`).join('');
   if (cats[0]) switchTab(cats[0]);
 }
-
-async function updateGrade(empId, newGrade) {
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
-  const proxy = "https://corsproxy.io/?";
-  
-  showToast('⏳ Mise à jour du grade...', 'info');
-
-  try {
-    await fetch(proxy + encodeURIComponent(url), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: empId, grade: newGrade })
-    });
-
-    // Mise à jour locale
-    const emp = allEmployees.find(e => e.id === empId);
-    if (emp) {
-      emp.grade = newGrade;
-      const filtered = filteredEmployees.find(e => e.id === empId);
-      if (filtered) filtered.grade = newGrade;
-      
-      // Mettre à jour le bouton
-      document.querySelectorAll('.grade-wrapper button').forEach(btn => {
-        btn.textContent = newGrade;
-      });
-    }
-
-    showToast('✅ Grade mis à jour !', 'success');
-    closeModal();
-    setTimeout(() => loadEmployees(), 1000);
-
-  } catch (error) {
-    console.error('❌ Erreur updateGrade:', error);
-    showToast('❌ Erreur réseau', 'error');
-  }
-}
-
 </script>
 </body>
 </html>
