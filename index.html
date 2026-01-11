@@ -1602,6 +1602,7 @@ function buildNav() {
 
 
 async function logAction(action) {
+  console.log('🔵 logAction appelé avec:', action);
   const url = "https://script.google.com/macros/s/AKfycbwHrdDmiXxypByJtfkkopKOrBegvU1q-0Lrhrk5Ufph_1KeDRJqTWdyOkdvXa7i3W4/exec";
   const proxy = "https://corsproxy.io/?";
   
@@ -1623,7 +1624,8 @@ async function logAction(action) {
       })
     });
   } catch (error) {
-    console.error('❌ Erreur log:', error);
+    console.error('❌ Erreur logAction:', error);
+    console.error('❌ Détails:', { action, url: proxy + encodeURIComponent(url) });
   }
 }
 
