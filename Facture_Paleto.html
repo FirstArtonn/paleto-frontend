@@ -3,11 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Paleto Garage - Gestion</title>
+<title>Paleto Garage</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
+body {
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 20px !important;
+  overflow-x: hidden !important;
+}
+
+.container {
+  background: transparent !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
 :root {
   --color-primary: #1a1a2e;
   --color-secondary: #16213e;
@@ -40,12 +54,62 @@
   box-sizing: border-box;
 }
 
+/* Smooth transitions for theme switching */
+body, .form-panel, .preview-panel, .custom-input, header {
+  transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Theme Toggle Switch */
+.theme-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.theme-switch {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: var(--color-border);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.theme-switch:hover {
+  background: var(--color-highlight);
+}
+
+.theme-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+[data-theme="light"] .theme-slider {
+  transform: translateX(30px);
+}
+
+.theme-icon {
+  font-size: 14px;
+}
+
 body {
   font-family: 'Outfit', sans-serif;
   background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-secondary) 100%);
   color: var(--color-text);
   min-height: 100vh;
-  transition: background 0.3s ease, color 0.3s ease;
+  padding: 2rem;
+  position: relative;
   overflow-x: hidden;
 }
 
@@ -61,892 +125,2953 @@ body::before {
     radial-gradient(circle at 80% 80%, rgba(15, 52, 96, 0.15) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
+  transition: opacity 0.3s ease;
 }
 
-
-/* Navigation - SEULEMENT soulignement */
-.navigation {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  margin-top: 20px;
-  flex-wrap: wrap;
+[data-theme="light"] body::before {
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
 }
 
-.nav-item {
-  position: relative;
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #fff;
-  cursor: pointer;
-  padding: 8px 0;
-  transition: none;
-  user-select: none;
-  background: none;
-  border: none;
-}
-
-.nav-item:hover {
-  color: #fff;
-  background: none;
-  transform: none;
-}
-
-.nav-item::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: #fff;
-  border-radius: 5px;
-  transition: width 0.3s ease;
-}
-
-.nav-item.active::after {
-  width: 100%;
-}
-
-.nav-item:hover::after {
-  width: 100%;
-}
-.content-container {
+.container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
   position: relative;
   z-index: 1;
 }
 
-
-/* Navigation - SEULEMENT soulignement */
-.navigation {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  margin-top: 20px;
-  flex-wrap: wrap;
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+  animation: fadeInDown 0.8s ease-out;
+  padding: 2rem 2rem 1rem 2rem;
+  background: rgba(26, 26, 46, 0.3);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid var(--color-border);
 }
 
-.nav-item {
+[data-theme="light"] header {
+  background: rgba(248, 250, 252, 0.8);
+}
+
+h1 {
+  font-family: Impact, 'Arial Black', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 400;
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-highlight) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+[data-theme="light"] h1 {
+  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--color-text-dim);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.main-grid {
+  display: grid;
+  grid-template-columns: 450px 1fr;
+  gap: 2rem;
+  animation: fadeIn 1s ease-out 0.2s both;
+}
+
+.form-panel {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(30px);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+}
+
+[data-theme="light"] .form-panel {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.section-title {
+  font-family: Impact, 'Arial Black', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 400;
+  color: var(--color-gold);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--color-border);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+[data-theme="light"] .section-title {
+  color: #6366f1;
+}
+
+.input-group {
+  margin-bottom: 1.2rem;
   position: relative;
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #fff;
-  cursor: pointer;
-  padding: 8px 0;
-  transition: none;
-  user-select: none;
-  background: none;
-  border: none;
 }
 
-.nav-item:hover {
-  color: #fff;
-  background: none;
-  transform: none;
+label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-dim);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
-.nav-item::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: #fff;
-  border-radius: 5px;
-  transition: width 0.3s ease;
-}
-
-.nav-item.active::after {
+.custom-input {
   width: 100%;
-}
-
-.nav-item:hover::after {
-  width: 100%;
-}
-.navigation {
-  display: flex;
-  justify-content: center;
-  gap: 50px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-  background: none !important;
-  border: none !important;
-  padding: 0 !important;
-}
-
-.nav-item {
-  position: relative;
-  font-weight: 600;
-  font-size: 1.05rem;
+  padding: 1rem 1.3rem;
+  background: rgba(15, 52, 96, 0.25);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
   color: var(--color-text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.custom-input:focus {
+  border-color: var(--color-highlight);
+  background: rgba(15, 52, 96, 0.35);
+  box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.15);
+}
+
+[data-theme="light"] .custom-input {
+  background: rgba(99, 102, 241, 0.05);
+  border-color: var(--color-border);
+}
+
+[data-theme="light"] .custom-input:focus {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.08);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+}
+
+.custom-input::placeholder {
+  color: rgba(160, 160, 168, 0.5);
+}
+
+input[type="file"].custom-input {
+  padding: 0.6rem;
   cursor: pointer;
-  padding: 8px 0;
-  background: none !important;
-  border: none !important;
-  transition: color 0.3s ease;
-  user-select: none;
 }
 
-.nav-item:hover {
-  color: var(--color-highlight);
-}
-
-.nav-item::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
+input[type="file"].custom-input::file-selector-button {
+  padding: 0.5rem 1rem;
   background: var(--color-highlight);
-  border-radius: 5px;
-  transition: width 0.3s ease;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  margin-right: 1rem;
+  transition: background 0.3s ease;
 }
 
-.nav-item.active::after {
+input[type="file"].custom-input::file-selector-button:hover {
+  background: #c83653;
+}
+
+.reason-line {
+  display: grid;
+  grid-template-columns: 1fr 80px 140px 52px;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+  align-items: center;
+}
+
+.reason-line input {
+  padding: 1rem 0.8rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.reason-line input:first-child {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text);
+  padding: 1rem 1.2rem;
+}
+
+/* Masquer les flèches des inputs number */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Ajouter le symbole $ au champ prix */
+.reason-line input.reason-price {
+  position: relative;
+  padding-right: 2rem;
+}
+
+.reason-line {
+  position: relative;
+}
+
+.reason-line .reason-price-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.reason-line .reason-price-wrapper::after {
+  content: '$';
+  position: absolute;
+  right: 1rem;
+  color: var(--color-text-dim);
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
   width: 100%;
 }
 
+.btn-primary {
+  background: linear-gradient(135deg, #d14561 0%, #b93650 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(209, 69, 97, 0.2);
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #e94560 0%, #c83653 100%);
+  box-shadow: 0 6px 16px rgba(209, 69, 97, 0.25);
+}
+
+[data-theme="light"] .btn-primary {
+  background: linear-gradient(135deg, #6b70d4 0%, #7b82e0 100%);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+[data-theme="light"] .btn-primary:hover {
+  background: linear-gradient(135deg, #6366f1 0%, #8b8ff6 100%);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.2);
+}
+
+.btn-secondary {
+  background: rgba(15, 52, 96, 0.25);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  margin-top: 0.5rem;
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: rgba(15, 52, 96, 0.35);
+  border-color: rgba(209, 69, 97, 0.5);
+}
+
+[data-theme="light"] .btn-secondary {
+  background: rgba(99, 102, 241, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="light"] .btn-secondary:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.btn-icon {
+  background: rgba(233, 69, 96, 0.1);
+  border: 1px solid var(--color-highlight);
+  color: var(--color-highlight);
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.btn-remove {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+.btn-remove:hover {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+[data-theme="light"] .btn-remove {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="light"] .btn-remove:hover {
+  background: #ef4444;
+  color: white;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+}
+
+.invoice-number-badge {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-gold);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+[data-theme="light"] .invoice-number-badge {
+  background: rgba(99, 102, 241, 0.08);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="light"] .invoice-number-badge strong {
+  color: #4f46e5;
+}
+
+.preview-panel {
+  background: rgba(26, 26, 46, 0.5);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .preview-panel {
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+}
+
+.preview-controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.preview-controls .btn {
+  width: auto;
+  flex: 1;
+}
+
+#invoice-preview-wrap {
+  width: 794px;
+  height: 1123px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: white;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+  transform-origin: top center;
+}
+
+[data-theme="light"] #invoice-preview-wrap {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.invoice-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 1;
+  background-image: url("https://firstartonn.github.io/facturetest/Facture%20Paleto%20Garage%20(63).png");
+}
+
+.draggable {
+  position: absolute;
+  cursor: move;
+  user-select: none;
+  z-index: 10;
+  color: #111;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.001);
+  min-width: 120px;
+  text-align: left;
+  white-space: pre-line;
+  padding: 2px 4px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+
+.draggable > span {
+  display: block;
+  width: 100%;
+  word-break: break-word;
+  white-space: pre-line;
+}
+
+.draggable:hover {
+  outline: 2px dashed var(--color-highlight);
+  background: rgba(233, 69, 96, 0.05);
+}
+
+.draggable.selected {
+  outline: 2px solid var(--color-highlight);
+  background: rgba(233, 69, 96, 0.1);
+  box-shadow: 0 0 20px rgba(233, 69, 96, 0.3);
+}
+
+/* Style spécifique pour le numéro de facture */
+#txtNumeroFacture {
+  font-family: 'Roboto', sans-serif;
+  font-size: 31.8px;
+  font-weight: 700;
+}
+
+.autocomplete-list {
+  position: absolute;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: none;
+  max-height: 250px;
+  overflow-y: auto;
+  backdrop-filter: blur(30px);
+  margin-top: 4px;
+  width: 100%;
+  animation: slideDown 0.2s ease-out;
+}
+
+[data-theme="light"] .autocomplete-list {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.autocomplete-list div {
+  padding: 1rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.autocomplete-list div::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: var(--color-highlight);
+  transform: scaleY(0);
+  transition: transform 0.2s ease;
+}
+
+.autocomplete-list div:hover::before {
+  transform: scaleY(1);
+}
+
+.autocomplete-list div:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-list div:hover {
+  background: rgba(233, 69, 96, 0.1);
+  color: var(--color-highlight);
+  padding-left: 1.5rem;
+}
+
+[data-theme="light"] .autocomplete-list div:hover {
+  background: rgba(99, 102, 241, 0.08);
+  color: #6366f1;
+}
+
+.context-menu {
+  position: absolute;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 2000;
+  min-width: 220px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+
+.context-menu div {
+  padding: 0.9rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.9rem;
+}
+
+.context-menu div:last-child {
+  border-bottom: none;
+}
+
+.context-menu div:hover {
+  background: var(--color-highlight);
+  color: white;
+}
+
+.help-text {
+  font-size: 0.8rem;
+  color: var(--color-text-dim);
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(15, 52, 96, 0.2);
+  border-radius: 8px;
+  border-left: 3px solid var(--color-gold);
+  line-height: 1.6;
+}
+
+[data-theme="light"] .help-text {
+  background: rgba(99, 102, 241, 0.05);
+  border-left-color: #8b5cf6;
+}
+
+.help-text strong {
+  color: var(--color-gold);
+}
+
+[data-theme="light"] .help-text strong {
+  color: #8b5cf6;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.8rem;
+  background: rgba(15, 52, 96, 0.25);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 1rem;
+  font-family: 'Outfit', sans-serif;
+}
+
+[data-theme="light"] .modal-input {
+  background: rgba(99, 102, 241, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+[data-theme="light"] .modal-input:focus {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.4);
+  outline: none;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 10000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: var(--color-surface);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  max-width: 500px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.modal-content h2 {
+  font-family: 'Cormorant Garamond', serif;
+  color: var(--color-gold);
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.modal-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.auto-fill-badge {
+  color: var(--color-gold);
+  font-size: 0.75rem;
+  display: none;
+  margin-left: 0.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.config-banner {
+  background: rgba(212, 175, 55, 0.1);
+  border: 2px solid var(--color-gold);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+[data-theme="light"] .config-banner {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: #8b5cf6;
+}
+
+.config-banner strong {
+  color: var(--color-gold);
+}
+
+[data-theme="light"] .config-banner strong {
+  color: #8b5cf6;
+}
+
+.discord-status {
+  margin-top: 0.8rem;
+  padding: 0.8rem;
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--color-gold);
+  display: none;
+}
+
+[data-theme="light"] .discord-status {
+  background: rgba(99, 102, 241, 0.08);
+  color: #8b5cf6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--color-border);
+  border-top-color: var(--color-highlight);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 1rem auto;
+}
+
+@media (max-width: 1200px) {
+  .main-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-panel {
+    position: relative;
+    top: 0;
+  }
+  
+  #invoice-preview-wrap {
+    transform: scale(0.8);
+    transform-origin: top center;
+  }
+}
+
+/* ========================================
+   📱 MOBILE RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+  body {
+    background: var(--color-bg);
+  }
+  
+  .container {
+    padding: 0;
+    max-width: 100%;
+  }
+  
+  /* Header mobile élégant */
+  header {
+    padding: 1.5rem 1rem;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 0;
+  }
+  
+  header > div {
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100%;
+    text-align: center;
+  }
+  
+  header > div > div:first-child {
+    width: 100%;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 1.8rem !important;
+    margin-bottom: 0.5rem;
+    font-family: 'Impact', sans-serif !important;
+  }
+  
+  .subtitle {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  
+  .theme-toggle-wrapper {
+    width: auto;
+    justify-content: center;
+    margin-top: 0;
+    gap: 0.75rem;
+  }
+  
+  /* Main grid simplifié */
+  .main-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  
+  /* Panels */
+  .form-panel {
+    padding: 1.5rem 1rem;
+    border-radius: 20px;
+    position: relative;
+    max-height: none;
+    overflow: visible;
+    margin: 1rem;
+  }
+  
+  .preview-panel {
+    display: none !important;
+  }
+  
+  /* Sections plus compactes */
+  .form-section {
+    margin-bottom: 2rem;
+    padding: 0;
+  }
+  
+  .section-title {
+    font-size: 1.4rem !important;
+    margin-bottom: 1rem;
+    text-align: left;
+    font-family: 'Impact', sans-serif !important;
+  }
+  
+  /* Input groups optimisés */
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  
+  .input-group label {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .custom-input {
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  /* Description field (first input) stays left aligned */
+  .reason-line input:first-child {
+    text-align: left;
+  }
+  
+  /* Autocomplete mobile friendly */
+  .autocomplete-list {
+    max-height: 250px;
+    font-size: 1rem;
+  }
+  
+  .autocomplete-list div {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+  
+  /* Détails de facturation optimisé */
+  .reason-line {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: rgba(15, 52, 96, 0.15);
+    border-radius: 12px;
+    margin-bottom: 1rem;
+  }
+  
+  [data-theme="light"] .reason-line {
+    background: rgba(99, 102, 241, 0.05);
+  }
+  
+  .reason-line input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .reason-line .btn-remove {
+    width: 100%;
+    height: 52px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+  }
+  
+  /* Boutons mobiles optimisés */
+  .btn {
+    width: 100%;
+    padding: 1.1rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+  }
+  
+  .btn-secondary {
+    margin-top: 0.75rem;
+  }
+  
+  /* Preview responsive */
+  #invoice-preview-wrap {
+    transform: scale(0.85);
+    transform-origin: top center;
+    margin: 0 auto;
+    width: fit-content;
+  }
+  
+  /* Badges mobiles */
+  .invoice-number-badge {
+    font-size: 0.9rem;
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+  }
+  
+  /* Help text mobile */
+  .help-text {
+    font-size: 0.8rem;
+    padding: 1rem;
+    border-radius: 10px;
+    line-height: 1.6;
+  }
+  
+  /* Config banner mobile */
+  .config-banner {
+    font-size: 0.85rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+  }
+  
+  /* Discord status mobile */
+  .discord-status {
+    font-size: 0.9rem;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  /* Loading screen mobile */
+  .loading-spinner {
+    width: 90px;
+    height: 90px;
+  }
+  
+  .loading-title {
+    font-size: 1.6rem;
+  }
+  
+  .loading-text {
+    font-size: 0.95rem;
+  }
+  
+  .loading-content {
+    padding: 1.5rem;
+  }
+  
+  /* Modal mobile */
+  .modal-input {
+    font-size: 1rem;
+    padding: 1rem;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0;
+  }
+  
+  header {
+    padding: 1.25rem 1rem;
+  }
+  
+  h1 {
+    font-size: 1.6rem !important;
+    letter-spacing: 1px;
+  }
+  
+  .subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .section-title {
+    font-size: 1.25rem !important;
+  }
+  
+  .form-panel {
+    padding: 1.25rem 1rem;
+  }
+  
+  .preview-panel {
+    padding: 1rem;
+  }
+  
+  .custom-input {
+    padding: 0.95rem;
+    font-size: 0.95rem;
+  }
+  
+  .btn {
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+  
+  #invoice-preview-wrap {
+    transform: scale(0.75);
+    margin: 0 auto;
+  }
+  
+  .reason-line {
+    padding: 0.85rem;
+    gap: 0.65rem;
+  }
+  
+  .loading-spinner {
+    width: 70px;
+    height: 70px;
+  }
+  
+  .loading-title {
+    font-size: 1.4rem;
+  }
+  
+  .loading-text {
+    font-size: 0.9rem;
+  }
+  
+  .loading-content {
+    padding: 1.25rem;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-accent);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-highlight);
+}
+
+/* ========================================
+   🔄 LOADING SCREEN
+   ======================================== */
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loading-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loading-content {
+  text-align: center;
+  max-width: 400px;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 2rem;
+}
+
+.spinner-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 4px solid transparent;
+  border-top-color: var(--color-highlight);
+  border-radius: 50%;
+  animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+}
+
+.spinner-ring:nth-child(2) {
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+  border-top-color: var(--color-gold);
+  animation-delay: -0.5s;
+  animation-duration: 2s;
+}
+
+.spinner-ring:nth-child(3) {
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+  border-top-color: var(--color-highlight);
+  animation-delay: -1s;
+  animation-duration: 2.5s;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-title {
+  font-family: 'Impact', sans-serif;
+  font-size: 2rem;
+  background: linear-gradient(135deg, var(--color-highlight) 0%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.loading-text {
+  color: var(--color-text-dim);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.loading-progress {
+  width: 100%;
+  height: 4px;
+  background: rgba(15, 52, 96, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+[data-theme="light"] .loading-progress {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+.loading-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-highlight) 0%, var(--color-gold) 100%);
+  border-radius: 2px;
+  animation: progressBar 2s ease-in-out infinite;
+}
+
+@keyframes progressBar {
+  0% {
+    width: 0%;
+    transform: translateX(0);
+  }
+  50% {
+    width: 70%;
+    transform: translateX(0);
+  }
+  100% {
+    width: 100%;
+    transform: translateX(100%);
+  }
+}
 </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
-<div class="login-container" id="loginContainer">
-  <div class="login-card">
-    <h1>PALETO GARAGE</h1>
-    <p>Connectez-vous avec Discord pour accéder au système de gestion</p>
-    
-    <button class="discord-login-btn" onclick="loginWithDiscord()">
-      <svg viewBox="0 0 127.14 96.36" fill="currentColor">
-        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
-      </svg>
-      Se connecter avec Discord
-    </button>
-
-    <div class="login-info">
-      <strong>ℹ️ Information</strong><br>
-      Votre ID Discord doit être dans la liste des employés pour accéder à cette application.
+<!-- Écran de chargement -->
+<div id="loadingScreen" class="loading-screen">
+  <div class="loading-content">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+    </div>
+    <h2 class="loading-title">Paleto Garage</h2>
+    <p class="loading-text">Chargement en cours...</p>
+    <div class="loading-progress">
+      <div class="loading-progress-bar"></div>
     </div>
   </div>
 </div>
 
-<!-- MAIN APP -->
-<div id="mainApp" style="display: none;">
+<div class="container">
   <header>
-    <div class="user-profile" id="userProfile">
-      <img id="userAvatar" src="" alt="Avatar">
-      <span class="username" id="userName"></span>
-      <button class="logout-btn" onclick="logout()">Déconnexion</button>
-    </div>
-
-    <div class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">
-      <div class="theme-slider">
-        <span class="theme-icon">🌙</span>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="flex: 1;">
+        <h1>générer des factures</h1>
+        <p class="subtitle">Créez des factures paleto garage simplement</p>
+      </div>
+      <div class="theme-toggle-wrapper">
+        <span id="themeLabel" style="font-size: 0.85rem; color: var(--color-text-dim); font-weight: 500; display: inline-block; width: 95px; text-align: right;">Mode sombre</span>
+        <div class="theme-switch" onclick="toggleTheme()">
+          <div class="theme-slider">
+            <span class="theme-icon" id="themeIcon">🌙</span>
+          </div>
+        </div>
       </div>
     </div>
-
-    <h1>PALETO GARAGE</h1>
-    <div class="subtitle">Système de Gestion - By Artonn</div>
-
-    <nav class="navigation" id="mainNavigation">
-      <!-- Navigation générée dynamiquement -->
-    </nav>
   </header>
 
-  <div class="content-container">
-    <!-- ACCUEIL -->
-    <div class="tab-content active" id="tab-accueil">
-      <div class="info-message">
-        <h2>👋 Bienvenue <span id="welcomeName"></span></h2>
-        <p style="margin-top: 1rem;">Utilisez le menu ci-dessus pour naviguer entre les différentes sections.</p>
-        <div style="margin-top: 2rem; padding: 2rem; background: rgba(233, 69, 96, 0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
-          <strong>Vos permissions :</strong>
-          <p id="userPermissions" style="margin-top: 1rem;"></p>
+  <!-- Bannière de configuration -->
+  <div class="config-banner" id="configBanner">
+    <strong>⚙️ Configuration requise :</strong> Veuillez renseigner votre ID Google Sheets dans le code (ligne ~660)
+  </div>
+
+  <div class="main-grid">
+    <!-- Panneau de formulaire -->
+    <div class="form-panel">
+      <div class="form-section">
+        <h2 class="section-title">Informations</h2>
+        
+        <div class="input-group">
+          <label for="entreprise">Nom de l'entreprise</label>
+          <input id="entreprise" class="custom-input" placeholder="Commencez à taper..." autocomplete="off">
+          <div id="entrepriseList" class="autocomplete-list"></div>
+        </div>
+
+        <div class="input-group">
+          <label for="compte">
+            Compte 
+            <span id="compteAutoFill" class="auto-fill-badge">✨ Rempli automatiquement</span>
+          </label>
+          <input id="compte" class="custom-input" placeholder="Auto-rempli selon l'entreprise..." autocomplete="off">
+          <div id="compteList" class="autocomplete-list"></div>
+        </div>
+
+        <div class="input-group">
+          <label for="contrat">Type de contrat</label>
+          <input id="contrat" class="custom-input" placeholder="Commencez à taper..." autocomplete="off">
+          <div id="contratList" class="autocomplete-list"></div>
         </div>
       </div>
-    </div>
 
-    <!-- EMPLOYÉS -->
-    <div class="tab-content" id="tab-employes">
-      <div class="search-container">
-        <input type="text" class="search-input" id="searchBar" placeholder="🔍 Rechercher un employé...">
-      </div>
-      <div class="employee-grid" id="employeeList"></div>
-    </div>
 
-    <!-- RECRUTEMENT -->
-    <div class="tab-content" id="tab-recrutement">
-      <div class="search-container">
-        <input type="text" class="search-input" id="searchBarRecruit" placeholder="🔍 Rechercher un candidat...">
-      </div>
-      <div class="employee-grid" id="recruitList"></div>
-    </div>
 
-    <!-- FACTURES -->
-    <div class="tab-content" id="tab-factures">
-      <div class="iframe-container">
-        <iframe src="Facture_Paleto.html"></iframe>
+      <div class="form-section">
+        <h2 class="section-title">Détails de facturation</h2>
+        <div id="reasons-container"></div>
+        <button type="button" class="btn btn-secondary" onclick="addReason()">
+          ➕ Ajouter une ligne
+        </button>
       </div>
-    </div>
 
-    <!-- ABSENCE -->
-    <div class="tab-content" id="tab-absence">
-      <div class="info-message">
-        <h2>📅 Gestion des absences</h2>
-        <p style="margin-top: 1rem;">Cette section est en cours de développement.</p>
+      <div class="form-section">
+        <button class="btn btn-primary" onclick="downloadInvoiceImage()">
+          📥 Télécharger PNG
+        </button>
+        <button class="btn btn-secondary" onclick="savePositions()">
+          💾 Sauvegarder positions
+        </button>
       </div>
-    </div>
-    <!-- PROFIL -->
-    <div class="tab-content" id="tab-profil">
-      <div class="info-message" id="profilContent">
-        <h2>👤 Mon Profil</h2>
-        <p style="margin-top: 1rem;">Chargement...</p>
-      </div>
-    </div>
 
-    <!-- PARTENARIATS -->
-    <div class="tab-content" id="tab-partenariats">
-      <div class="info-message">
-        <h2>🤝 Partenariats</h2>
-        <p style="margin-top: 1rem;">Section en cours de développement.</p>
+      <div class="form-section">
+        <h2 class="section-title">Envoi Discord</h2>
+        <button class="btn btn-primary" onclick="sendToDiscord()">
+          📤 Envoyer cette facture
+        </button>
+        <button class="btn btn-secondary" onclick="sendAllInvoices()">
+          📤 Envoyer toutes les factures (Sheet)
+        </button>
+        <div id="discordStatus" class="discord-status">
+          ⏳ En cours d'envoi...
+        </div>
+        <div style="margin-top:0.8rem;font-size:0.8rem;color:var(--color-text-dim);text-align:center;">
+          💡 Le webhook Discord est récupéré depuis la colonne C du Sheet
+        </div>
       </div>
-    </div>
 
-    <!-- BANQUE -->
-    <div class="tab-content" id="tab-banque">
-      <div class="info-message">
-        <h2>🏦 Banque</h2>
-        <p style="margin-top: 1rem;">Section en cours de développement.</p>
+      <div class="invoice-number-badge" style="margin-bottom: 1.5rem;">
+        📋 Numéro actuel : <strong id="currentInvoiceNumber">F2601-0239</strong>
+      </div>
+
+      <div class="help-text">
+        <strong>💡 Astuces :</strong><br>
+        • Le <strong>compte</strong> se remplit automatiquement selon l'entreprise<br>
+        • L'aperçu se met à jour <strong>en temps réel</strong><br>
+        • Clic droit sur les éléments pour les aligner<br>
+        • Flèches clavier pour déplacer (Shift = rapide)
       </div>
     </div>
 
-    <!-- COMPTA -->
-    <div class="tab-content" id="tab-compta">
-      <div class="info-message">
-        <h2>📊 Comptabilité</h2>
-        <p style="margin-top: 1rem;">Section en cours de développement.</p>
-      </div>
-    </div>
+    <!-- Panneau d'aperçu -->
+    <div class="preview-panel">
 
-    <!-- LOGS -->
-    <div class="tab-content" id="tab-logs">
-      <div class="info-message">
-        <h2>📜 Historique</h2>
-        <div id="logsContainer" style="margin-top: 2rem;">
-          <p>Chargement des logs...</p>
+      <div id="invoice-preview-wrap">
+        <div id="invoice">
+          <div class="invoice-bg" id="invoiceBg"></div>
+
+          <div class="draggable" id="txtNumeroFacture" style="left:50px;top:50px;"><span>F2601-0239</span></div>
+          <div class="draggable" id="txtDate" style="left:50px;top:100px;"><span>06/01/2026</span></div>
+          <div class="draggable" id="txtEntreprise" style="left:50px;top:150px;"><span>Entreprise</span></div>
+          <div class="draggable" id="txtCompte" style="left:50px;top:200px;"><span>Compte</span></div>
+          <div class="draggable" id="txtContrat" style="left:50px;top:250px;"><span>Contrat</span></div>
+          <div class="draggable" id="txtRaison" style="left:50px;top:350px;"><span>Raison</span></div>
+          <div class="draggable" id="txtQuantite" style="left:400px;top:350px;"><span>Qté</span></div>
+          <div class="draggable" id="txtPrix" style="left:500px;top:350px;"><span>Prix</span></div>
+          <div class="draggable" id="txtTotal" style="left:600px;top:800px;"><span>Total: 0$</span></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- EMPLOYEE DETAILS MODAL -->
-<div class="modal" id="employeeModal">
+<!-- Modal de chargement -->
+<div id="loadingModal" class="modal">
   <div class="modal-content">
-    <div class="close-btn" onclick="closeModal()">✖</div>
-    <h2 id="modalTitle"></h2>
-    <table class="details-table" id="modalContent"></table>
+    <h2>⏳ Génération en cours...</h2>
+    <div class="spinner"></div>
+    <p>Veuillez patienter pendant la création de votre facture</p>
   </div>
 </div>
-
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
 
 <script>
-'use strict';
+/* ========================================
+   📊 CONFIGURATION GOOGLE SHEETS 
+   ======================================== */
 
-// ==================== CONFIG ====================
-const BACKEND_URL = "https://paleto-backend.vercel.app";
-const SHEET_ID = "17ZntDHZ8olidnCM1pig311AcjawM4l6HoRxSYFP7KGw";
-const API_KEY = "AIzaSyBtOfa8W5POpJ2KOZSKqxsC4CfZBkYG40E";
-const SHEET_EMPLOYEES = "Info Employé";
-const SHEET_RECRUITMENT = "Formulaire Info ";
+// ⚙️ IMPORTANT : Remplacez par l'ID de votre Google Sheet
+const SPREADSHEET_ID = '19YnTEHpGQSoqMbInvK29HWsPBXzoexYcqzRVDJjKsyI';
+const SHEET_NAME = 'Info facture';
 
-const GRADES = [
-  "Patron", "Co Patron", "DRH", "RH", "Responsable D'atelier",
-  "Chef d'atelier", "Confirmé", "Mécano", "Apprenti", "Stagiaire"
-];
+// 🔑 Clé API Google (vous devez créer une dans Google Cloud Console)
+// Instructions : https://developers.google.com/sheets/api/quickstart/js
+const API_KEY = 'AIzaSyDQzvChjm5Qx6iM4s_al4Qpy9ameiGlubQ'; // À remplacer !
 
-let currentUser = null;
-let allEmployees = [];
-let filteredEmployees = [];
-let allRecruits = [];
-let filteredRecruits = [];
+// 🔗 URL du Apps Script pour la synchronisation automatique
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyIb6-0HCtcWL_Z7GDLPna-zXQXOCmzjA9E8QlOiBhxjJjSaLuhgf2aotF1hxQljLM/exec';
 
-// ==================== AUTH ====================
-function loginWithDiscord() {
-  console.log('🔗 Connexion Discord...');
-  window.location.href = `${BACKEND_URL}/auth/discord`;
+/* ========================================
+   🔧 CODE FONCTIONNEL
+   ======================================== */
+
+
+let selectedEl = null;
+let sheetData = {
+  entreprises: {},
+  contrats: [],
+  fullData: [] // Stocker toutes les données complètes des lignes
+};
+
+function px(n) { return (Math.round(n)) + 'px'; }
+
+function showModal() {
+  document.getElementById('loadingModal').style.display = 'flex';
 }
 
-async function checkAuth() {
-  try {
-    console.log('🔍 Vérification auth...');
-    const response = await fetch(`${BACKEND_URL}/api/check-auth`, {
-      credentials: 'include'
-    });
-    
-    const data = await response.json();
-    console.log('📥 Réponse:', data);
-    
-    if (data.authenticated) {
-      currentUser = data.user;
-      showApp();
-    } else {
-      showLogin();
-    }
-  } catch (error) {
-    console.error('❌ Erreur auth:', error);
-    showLogin();
-  }
+function hideModal() {
+  document.getElementById('loadingModal').style.display = 'none';
 }
 
-async function logout() {
-  try {
-    await fetch(`${BACKEND_URL}/api/logout`, {
-      method: 'POST',
-      credentials: 'include'
-    });
-    currentUser = null;
-    showLogin();
-    showToast('👋 Déconnexion réussie', 'success');
-  } catch (error) {
-    console.error('❌ Erreur logout:', error);
-  }
-}
-
-function showLogin() {
-  document.getElementById('loginContainer').style.display = 'flex';
-  document.getElementById('mainApp').style.display = 'none';
-}
-
-function showApp() {
-  document.getElementById('loginContainer').style.display = 'none';
-  document.getElementById('mainApp').style.display = 'block';
+function showNotification(message, type = 'success') {
+  const notif = document.createElement('div');
+  const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️';
+  notif.textContent = `${icon} ${message}`;
   
-  document.getElementById('userAvatar').src = currentUser.avatar;
-  document.getElementById('userName').textContent = currentUser.employeeName || currentUser.username;
-  document.getElementById('welcomeName').textContent = currentUser.employeeName || currentUser.username;
+  // Styling selon le thème
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
   
-  const permissions = {
-    'admin': 'Administrateur - Accès complet',
-    'rh': 'Ressources Humaines - Accès aux employés et recrutement',
-    'employee': 'Employé - Consultation uniquement',
-    'visitor': 'Visiteur - Accès limité'
-  };
-  document.getElementById('userPermissions').textContent = permissions[currentUser.role];
-  
-  document.body.className = `role-${currentUser.role}`;
-  
-  buildNavigation();
-  loadProfilPage();
-  loadLogsPage();
-  loadEmployees();
-  loadRecruits();
-}
-
-// ==================== NAVIGATION ====================
-function switchTab(tabName) {
-  // Désactiver tous les nav-items
-  document.querySelectorAll('.nav-item').forEach(item => {
-    item.classList.remove('active');
-  });
-  
-  // Activer le bon nav-item
-  document.querySelectorAll('.nav-item').forEach(item => {
-    const onclick = item.getAttribute('onclick');
-    if (onclick && onclick.includes("'" + tabName + "'")) {
-      item.classList.add('active');
-    }
-  });
-  
-  // Masquer tous les tabs
-  document.querySelectorAll('.tab-content').forEach(tab => {
-    tab.classList.remove('active');
-  });
-  
-  // Afficher le bon tab
-  const targetTab = document.getElementById('tab-' + tabName);
-  if (targetTab) {
-    targetTab.classList.add('active');
-  }
-}
-
-// ==================== THEME ====================
-
-// Load saved theme
-const savedTheme = localStorage.getItem('theme');
-if (savedTheme) {
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  document.querySelector('.theme-icon').textContent = savedTheme === 'light' ? '☀️' : '🌙';
-}
-
-// ==================== EMPLOYEES ====================
-async function loadEmployees() {
-  const list = document.getElementById('employeeList');
-  
-  try {
-    list.innerHTML = '<div class="info-message">⏳ Chargement...</div>';
-    
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_EMPLOYEES)}?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    if (!data.values) {
-      list.innerHTML = '<div class="info-message">❌ Aucune donnée</div>';
-      return;
-    }
-
-    const rows = data.values;
-    let headerIndex = -1;
-    
-    for (let i = 0; i < rows.length; i++) {
-      if (rows[i] && rows[i].some(cell => 
-        cell && cell.toString().includes("Prénom / Nom")
-      )) {
-        headerIndex = i;
-        break;
-      }
-    }
-    
-    if (headerIndex === -1) {
-      list.innerHTML = '<div class="info-message">❌ En-tête introuvable</div>';
-      return;
-    }
-
-    const dataRows = rows.slice(headerIndex + 1);
-    const unique = new Set();
-
-    allEmployees = dataRows
-      .filter(row => {
-        const nom = row[2] ? row[2].toString().trim() : '';
-        return nom && nom !== "Prénom / Nom" && nom !== "Démission/Licenciement";
-      })
-      .map(r => ({
-        id: r[1] ? r[1].toString().trim() : '',
-        nom: r[2] ? r[2].toString().trim() : '',
-        rib: r[3] ? r[3].toString().trim() : '',
-        grade: r[4] ? r[4].toString().trim() : '',
-        tel: r[5] ? r[5].toString().trim() : '',
-        discord: r[6] ? r[6].toString().trim() : '',
-        gmail: r[8] ? r[8].toString().trim() : '',
-        diplome: r[9] ? r[9].toString().trim() : '',
-        entree: r[10] ? r[10].toString().trim() : '',
-        sortie: r[11] ? r[11].toString().trim() : '',
-        sanction: r[12] ? r[12].toString().trim() : '',
-        retrait: r[13] ? r[13].toString().trim() : ''
-      }))
-      .filter(e => {
-        if (!e.nom || unique.has(e.nom)) return false;
-        unique.add(e.nom);
-        return true;
-      });
-
-    filteredEmployees = [...allEmployees];
-    displayEmployees(filteredEmployees);
-
-  } catch (error) {
-    list.innerHTML = `<div class="info-message">❌ Erreur: ${error.message}</div>`;
-  }
-}
-
-function displayEmployees(employees) {
-  const list = document.getElementById('employeeList');
-  list.innerHTML = '';
-
-  if (employees.length === 0) {
-    list.innerHTML = '<div class="info-message">Aucun employé trouvé</div>';
-    return;
-  }
-
-  employees.forEach((emp, index) => {
-    const card = document.createElement('div');
-    card.className = 'employee-card';
-    
-    if (emp.sanction === 'Avertissement 1') card.classList.add('sanction-1');
-    if (emp.sanction === 'Avertissement 2') card.classList.add('sanction-2');
-    if (emp.sanction === 'Licenciement') card.classList.add('sanction-3');
-    
-    card.innerHTML = `
-      <div class="employee-name">${emp.nom}</div>
-      <div class="employee-grade">${emp.grade || 'Sans grade'}</div>
-    `;
-    
-    card.onclick = () => showEmployeeDetails(index);
-    list.appendChild(card);
-  });
-}
-
-function showEmployeeDetails(index) {
-  const emp = filteredEmployees[index];
-  const modal = document.getElementById('employeeModal');
-  const title = document.getElementById('modalTitle');
-  const content = document.getElementById('modalContent');
-  
-  title.textContent = `👤 ${emp.nom}`;
-  
-  let diplomeHTML = '<em>Aucun diplôme</em>';
-  if (emp.diplome) {
-    const links = emp.diplome.split(/\s+/).filter(l => l.startsWith('http'));
-    if (links.length > 0) {
-      diplomeHTML = links.map((link, i) => {
-        const label = links.length === 1 ? 'Diplôme' : `Diplôme ${i + 1}`;
-        return `<button class="diplome-btn" onclick="window.open('${link}', '_blank')">🎓 ${label}</button>`;
-      }).join('');
-    }
+  let bgColor, textColor;
+  if (type === 'error') {
+    bgColor = 'rgba(239, 68, 68, 0.95)';
+    textColor = '#ffffff';
+  } else if (type === 'warning') {
+    bgColor = isDark ? 'rgba(212, 175, 55, 0.95)' : 'rgba(245, 158, 11, 0.95)';
+    textColor = '#ffffff';
+  } else {
+    bgColor = isDark ? 'rgba(233, 69, 96, 0.95)' : 'rgba(99, 102, 241, 0.95)';
+    textColor = '#ffffff';
   }
   
-  let gradeHTML = emp.grade;
-  if (currentUser.role === 'admin' || currentUser.role === 'rh') {
-    gradeHTML = `
-      <div class="grade-selector">
-        <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner'}</button>
-        <div class="grade-options">
-          ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
-        </div>
-      </div>
-    `;
-  }
-  
-  content.innerHTML = `
-    <tr><td>ID Unique</td><td>${emp.id || '-'}</td></tr>
-    <tr><td>RIB</td><td>${emp.rib || '-'}</td></tr>
-    <tr><td>Grade</td><td>${gradeHTML}</td></tr>
-    <tr><td>Téléphone</td><td>${emp.tel || '-'}</td></tr>
-    <tr><td>Discord</td><td>${emp.discord || '-'}</td></tr>
-    <tr><td>Gmail</td><td>${emp.gmail || '-'}</td></tr>
-    <tr><td>🎓 Diplôme</td><td>${diplomeHTML}</td></tr>
-    <tr><td>Date d'entrée</td><td>${emp.entree || '-'}</td></tr>
-    <tr><td>Date de sortie</td><td>${emp.sortie || '-'}</td></tr>
-    <tr><td>Sanction</td><td>${emp.sanction || '-'}</td></tr>
-    <tr><td>Date retrait</td><td>${emp.retrait || '-'}</td></tr>
+  notif.style.cssText = `
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: ${bgColor};
+    padding: 1.2rem 2rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    z-index: 9999;
+    color: ${textColor};
+    font-weight: 600;
+    font-size: 1rem;
+    animation: slideInRight 0.4s ease;
+    border: 1px solid rgba(255,255,255,0.2);
+    max-width: 400px;
   `;
-  
-  modal.classList.add('active');
-}
-
-function toggleGradeOptions(event) {
-  event.stopPropagation();
-  const options = event.target.nextElementSibling;
-  options.classList.toggle('active');
-}
-
-async function updateGrade(empId, newGrade) {
-  // Ici tu peux ajouter l'appel à ton API pour mettre à jour le grade
-  showToast(`Grade mis à jour: ${newGrade}`, 'success');
-  closeModal();
-  loadEmployees();
-}
-
-function closeModal() {
-  document.getElementById('employeeModal').classList.remove('active');
-}
-
-// ==================== RECRUITS ====================
-async function loadRecruits() {
-  if (currentUser.role !== 'admin' && currentUser.role !== 'rh') return;
-  
-  const list = document.getElementById('recruitList');
-  
-  try {
-    list.innerHTML = '<div class="info-message">⏳ Chargement...</div>';
-    
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_RECRUITMENT)}?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    if (!data.values) {
-      list.innerHTML = '<div class="info-message">❌ Aucune donnée</div>';
-      return;
-    }
-
-    const rows = data.values;
-    let headerIndex = 0;
-    
-    const dataRows = rows.slice(headerIndex + 1);
-    const unique = new Set();
-
-    allRecruits = dataRows
-      .map(r => ({
-        id: r[3] ? r[3].toString().trim() : '',
-        nom: r[4] ? r[4].toString().trim() : '',
-        statut: r[26] ? r[26].toString().trim() : 'En attente'
-      }))
-      .filter(c => {
-        if (!c.nom || unique.has(c.nom)) return false;
-        unique.add(c.nom);
-        return true;
-      })
-      .reverse();
-
-    filteredRecruits = [...allRecruits];
-    displayRecruits(filteredRecruits);
-
-  } catch (error) {
-    list.innerHTML = `<div class="info-message">❌ Erreur: ${error.message}</div>`;
-  }
-}
-
-function displayRecruits(recruits) {
-  const list = document.getElementById('recruitList');
-  list.innerHTML = '';
-
-  if (recruits.length === 0) {
-    list.innerHTML = '<div class="info-message">Aucun candidat trouvé</div>';
-    return;
-  }
-
-  recruits.forEach(rec => {
-    const card = document.createElement('div');
-    card.className = 'employee-card';
-    
-    card.innerHTML = `
-      <div class="employee-name">${rec.nom}</div>
-      <div class="employee-grade">${rec.statut}</div>
-    `;
-    
-    list.appendChild(card);
-  });
-}
-
-// ==================== SEARCH ====================
-document.addEventListener('DOMContentLoaded', () => {
-  const searchBar = document.getElementById('searchBar');
-  if (searchBar) {
-    searchBar.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      filteredEmployees = allEmployees.filter(emp =>
-        emp.nom.toLowerCase().includes(query) ||
-        emp.grade.toLowerCase().includes(query)
-      );
-      displayEmployees(filteredEmployees);
-    });
-  }
-  
-  const searchBarRecruit = document.getElementById('searchBarRecruit');
-  if (searchBarRecruit) {
-    searchBarRecruit.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      filteredRecruits = allRecruits.filter(rec =>
-        rec.nom.toLowerCase().includes(query)
-      );
-      displayRecruits(filteredRecruits);
-    });
-  }
-});
-
-// ==================== TOAST ====================
-function showToast(message, type = 'success') {
-  const toast = document.getElementById('toast');
-  toast.textContent = message;
-  toast.className = `toast ${type} show`;
-  
+  document.body.appendChild(notif);
   setTimeout(() => {
-    toast.classList.remove('show');
+    notif.style.animation = 'slideOutRight 0.4s ease';
+    setTimeout(() => notif.remove(), 400);
   }, 3000);
 }
 
-// ==================== INIT ====================
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 App démarrage...');
+// Ajouter les animations CSS si elles n'existent pas
+if (!document.getElementById('notification-styles')) {
+  const style = document.createElement('style');
+  style.id = 'notification-styles';
+  style.textContent = `
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+    @keyframes slideOutRight {
+      from {
+        transform: translateX(0);
+        opacity: 1;
+      }
+      to {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+/* ---------- Config Sync with Google Sheets ---------- */
+async function loadConfigFromSheet() {
+  if (!APPS_SCRIPT_URL) {
+    console.log('📍 Mode local : utilisation du localStorage');
+    return false;
+  }
   
-  const params = new URLSearchParams(window.location.search);
-  const authStatus = params.get('auth');
-  const error = params.get('error');
+  try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?action=getConfig`);
+    const data = await response.json();
+    
+    if (data.success && data.config) {
+      // Charger le numéro de facture
+      if (data.config.invoice_number) {
+        localStorage.setItem('invoice_counter', data.config.invoice_number);
+        updateInvoiceNumber();
+      }
+      
+      // Charger les positions
+      if (data.config.positions && typeof data.config.positions === 'object') {
+        localStorage.setItem('invoice_positions', JSON.stringify(data.config.positions));
+        loadPositions();
+      }
+      
+      console.log('✅ Configuration chargée depuis Google Sheets');
+      return true;
+    }
+  } catch (error) {
+    console.error('❌ Erreur lors du chargement de la config:', error);
+  }
+  return false;
+}
+
+async function saveConfigToSheet(key, value) {
+  if (!APPS_SCRIPT_URL) {
+    console.log('📍 Mode local : sauvegarde dans localStorage uniquement');
+    return false;
+  }
   
-  if (authStatus === 'success') {
-    checkAuth();
-    window.history.replaceState({}, document.title, window.location.pathname);
-  } else if (error) {
-    const errors = {
-      'no_code': 'Code d\'autorisation manquant',
-      'not_employee': 'Votre ID Discord n\'est pas dans la liste des employés',
-      'auth_failed': 'Échec de l\'authentification',
-      'session_error': 'Erreur de création de session'
+  try {
+    const valueStr = typeof value === 'object' ? JSON.stringify(value) : value.toString();
+    const url = `${APPS_SCRIPT_URL}?action=saveConfig&key=${encodeURIComponent(key)}&value=${encodeURIComponent(valueStr)}`;
+    
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data.success) {
+      console.log(`✅ ${key} synchronisé avec Google Sheets`);
+      return true;
+    }
+  } catch (error) {
+    console.error(`❌ Erreur lors de la sauvegarde de ${key}:`, error);
+  }
+  return false;
+}
+
+/* ---------- Google Sheets API ---------- */
+async function loadGoogleSheetsData() {
+  // Vérifier si la clé API est configurée
+  if (API_KEY === 'VOTRE_CLE_API_ICI') {
+    console.warn('⚠️ Clé API non configurée - utilisation des données de test');
+    showNotification('Mode démo : configurez votre clé API pour charger vos données', 'warning');
+    
+    // Données de test
+    sheetData.entreprises = {
+      "Paleto Garage": "123456789",
+      "Los Santos Customs": "987654321",
+      "Bennys Original": "456789123"
     };
-    showToast(`❌ ${errors[error] || 'Erreur inconnue'}`, 'error');
-    showLogin();
+    sheetData.contrats = ["Maintenance", "Réparation", "Service"];
+    
+    document.getElementById('configBanner').style.display = 'block';
+    return;
+  }
+
+  try {
+    // Cacher la bannière si configuré
+    document.getElementById('configBanner').style.display = 'none';
+    
+    // URL de l'API Google Sheets - Récupérer colonnes A à G
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${SHEET_NAME}!A2:G?key=${API_KEY}`;
+    
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Erreur API: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    const rows = data.values || [];
+    
+    // Parser les données
+    const entreprisesMap = {};
+    const contratsSet = new Set();
+    const fullDataArray = [];
+    
+    rows.forEach(row => {
+      // Colonnes: A=details, B=typeContrat, C=webhook, D=entreprise, E=compte, F=montant, G=contrat(2)
+      const details = row[0] || '';
+      const typeContrat = row[1] || '';
+      const webhook = row[2] || '';
+      const entreprise = row[3] || '';
+      const compte = row[4] || '';
+      const montant = row[5] || '';
+      const contrat = row[6] || '';
+      
+      // Stocker les données complètes
+      if (entreprise) {
+        fullDataArray.push({
+          details: details,
+          typeContrat: typeContrat,
+          webhook: webhook,
+          entreprise: entreprise,
+          compte: compte,
+          montant: montant,
+          contrat: contrat
+        });
+      }
+      
+      // Map entreprise -> compte
+      if (entreprise && compte) {
+        entreprisesMap[entreprise] = compte;
+      }
+      
+      // Collecter les contrats uniques
+      if (typeContrat) {
+        contratsSet.add(typeContrat);
+      }
+      if (contrat) {
+        contratsSet.add(contrat);
+      }
+    });
+    
+    sheetData.entreprises = entreprisesMap;
+    sheetData.contrats = Array.from(contratsSet);
+    sheetData.fullData = fullDataArray;
+    
+    console.log('✅ Données chargées:', 
+      Object.keys(sheetData.entreprises).length, 'entreprises,',
+      sheetData.contrats.length, 'contrats'
+    );
+    
+    showNotification(`Données chargées: ${Object.keys(sheetData.entreprises).length} entreprises`);
+    
+  } catch (error) {
+    console.error('❌ Erreur lors du chargement des données:', error);
+    showNotification('Erreur de chargement des données - vérifiez la configuration', 'error');
+    
+    // Fallback sur données de test
+    sheetData.entreprises = {
+      "Paleto Garage": "123456789",
+      "Los Santos Customs": "987654321"
+    };
+    sheetData.contrats = ["Maintenance", "Réparation"];
+  }
+}
+
+/* ---------- Autocomplete avec données Google Sheets ---------- */
+function setupAutocomplete(inputId) {
+  const input = document.getElementById(inputId);
+  const listId = inputId + 'List';
+  const listContainer = document.getElementById(listId);
+  let isSelectingFromList = false;
+
+  input.addEventListener('input', () => {
+    const value = input.value.toLowerCase().trim();
+    listContainer.innerHTML = '';
+    
+    if (!value) {
+      listContainer.style.display = 'none';
+      return;
+    }
+
+    let filtered = [];
+    
+    if (inputId === 'entreprise') {
+      filtered = Object.keys(sheetData.entreprises).filter(item => 
+        item.toLowerCase().includes(value)
+      );
+    } else if (inputId === 'compte') {
+      filtered = Object.values(sheetData.entreprises).filter(item => 
+        item.toLowerCase().includes(value)
+      );
+    } else if (inputId === 'contrat') {
+      filtered = sheetData.contrats.filter(item => 
+        item.toLowerCase().includes(value)
+      );
+    }
+
+    if (filtered.length === 0) {
+      listContainer.style.display = 'none';
+      return;
+    }
+
+    filtered.forEach(item => {
+      const div = document.createElement('div');
+      div.textContent = item;
+      
+      // Utiliser mousedown au lieu de click pour éviter le blur
+      div.addEventListener('mousedown', (e) => {
+        e.preventDefault(); // Empêcher le blur
+        isSelectingFromList = true;
+        input.value = item;
+        listContainer.style.display = 'none';
+        
+        if (inputId === 'entreprise') {
+          handleEntrepriseChange();
+        } else {
+          // Pour les autres champs, mettre à jour l'aperçu
+          renderPreview();
+        }
+        
+        // Reset le flag après un court délai
+        setTimeout(() => {
+          isSelectingFromList = false;
+        }, 100);
+      });
+      listContainer.appendChild(div);
+    });
+
+    listContainer.style.display = 'block';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!input.contains(e.target) && !listContainer.contains(e.target)) {
+      listContainer.style.display = 'none';
+    }
+  });
+  
+  // Mise à jour en temps réel quand on tape
+  input.addEventListener('input', renderPreview);
+  
+  // Stocker le flag pour qu'il soit accessible
+  input._isSelectingFromList = () => isSelectingFromList;
+}
+
+/* ---------- Remplissage automatique du compte ---------- */
+let handleEntrepriseChangeTimeout = null;
+let lastEntrepriseCheck = '';
+
+function handleEntrepriseChange() {
+  const entreprise = document.getElementById('entreprise').value.trim();
+  const compteInput = document.getElementById('compte');
+  const badge = document.getElementById('compteAutoFill');
+  
+  if (!entreprise) return;
+  
+  // Protection contre les appels multiples pour la même valeur
+  if (lastEntrepriseCheck === entreprise) {
+    return;
+  }
+  lastEntrepriseCheck = entreprise;
+  
+  // Clear any pending timeout
+  if (handleEntrepriseChangeTimeout) {
+    clearTimeout(handleEntrepriseChangeTimeout);
+  }
+  
+  // Reset après 500ms
+  handleEntrepriseChangeTimeout = setTimeout(() => {
+    lastEntrepriseCheck = '';
+  }, 500);
+  
+  // Recherche insensible à la casse
+  const entrepriseLower = entreprise.toLowerCase();
+  let matchedKey = null;
+  
+  // Chercher une correspondance (insensible à la casse)
+  for (const key in sheetData.entreprises) {
+    if (key.toLowerCase() === entrepriseLower) {
+      matchedKey = key;
+      break;
+    }
+  }
+  
+  if (matchedKey) {
+    // Entreprise existante - remplir automatiquement
+    compteInput.value = sheetData.entreprises[matchedKey];
+    
+    // Corriger la casse dans le champ si nécessaire
+    if (entreprise !== matchedKey) {
+      document.getElementById('entreprise').value = matchedKey;
+    }
+    
+    badge.style.display = 'inline';
+    showNotification('Compte rempli automatiquement !');
+    setTimeout(() => {
+      badge.style.display = 'none';
+    }, 3000);
+    
+    // Mise à jour de l'aperçu
+    renderPreview();
   } else {
-    checkAuth();
+    // Nouvelle entreprise détectée - proposer de l'ajouter
+    promptAddNewEnterprise(entreprise);
+  }
+}
+
+async function promptAddNewEnterprise(entrepriseName) {
+  // Créer un modal personnalisé pour ajouter l'entreprise
+  const modal = document.createElement('div');
+  modal.style.cssText = `
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    backdrop-filter: blur(5px);
+  `;
+  
+  modal.innerHTML = `
+    <div style="background: var(--color-surface); padding: 2rem; border-radius: 16px; max-width: 500px; width: 90%; border: 1px solid var(--color-border);">
+      <h2 style="font-family: Impact, sans-serif; color: var(--color-gold); margin-bottom: 1rem; font-size: 1.8rem;">Nouvelle Entreprise</h2>
+      <p style="margin-bottom: 1.5rem; color: var(--color-text);">L'entreprise "<strong>${entrepriseName}</strong>" n'existe pas encore. Voulez-vous l'ajouter ?</p>
+      
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--color-text-dim); font-weight: 500;">RIB / Compte :</label>
+        <input type="text" id="newEntrepriseRIB" placeholder="Entrez le RIB" class="modal-input">
+      </div>
+      
+      <div style="display: flex; gap: 1rem;">
+        <button onclick="cancelAddEnterprise()" style="flex: 1; padding: 0.8rem; background: rgba(255, 68, 68, 0.2); color: #ff4444; border: 1px solid #ff4444; border-radius: 8px; cursor: pointer; font-weight: 600;">Annuler</button>
+        <button onclick="confirmAddEnterprise('${entrepriseName.replace(/'/g, "\\'")}', document.getElementById('newEntrepriseRIB').value)" style="flex: 1; padding: 0.8rem; background: linear-gradient(135deg, #d14561 0%, #b93650 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">Ajouter</button>
+      </div>
+    </div>
+  `;
+  
+  document.body.appendChild(modal);
+  document.getElementById('newEntrepriseRIB').focus();
+  
+  // Permettre d'ajouter avec Enter
+  document.getElementById('newEntrepriseRIB').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      confirmAddEnterprise(entrepriseName, e.target.value);
+    }
+  });
+}
+
+function cancelAddEnterprise() {
+  const modal = document.querySelector('div[style*="z-index: 10000"]');
+  if (modal) modal.remove();
+}
+
+async function confirmAddEnterprise(entrepriseName, rib) {
+  if (!rib || rib.trim() === '') {
+    showNotification('Veuillez entrer un RIB', 'error');
+    return;
+  }
+  
+  // Fermer le modal
+  cancelAddEnterprise();
+  
+  try {
+    // Ajouter à Google Sheets via Apps Script
+    const url = `${APPS_SCRIPT_URL}?action=addEnterprise&name=${encodeURIComponent(entrepriseName)}&rib=${encodeURIComponent(rib.trim())}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data.success) {
+      // Ajouter localement aussi
+      sheetData.entreprises[entrepriseName] = rib.trim();
+      
+      // Remplir le champ compte automatiquement
+      document.getElementById('compte').value = rib.trim();
+      
+      showNotification(`Entreprise "${entrepriseName}" ajoutée avec succès !`);
+      renderPreview();
+    } else {
+      showNotification('Erreur lors de l\'ajout de l\'entreprise', 'error');
+    }
+  } catch (error) {
+    console.error('Erreur:', error);
+    showNotification('Erreur lors de l\'ajout de l\'entreprise', 'error');
+  }
+}
+
+/* ---------- Reasons form ---------- */
+function addReason(description = "", quantite = 1, prix = 0) {
+  const container = document.getElementById("reasons-container");
+  const line = document.createElement("div");
+  line.className = "reason-line";
+
+  const descInput = document.createElement("input");
+  descInput.type = "text";
+  descInput.placeholder = "...";
+  descInput.value = description;
+  descInput.className = "custom-input reason-desc";
+
+  const qtyInput = document.createElement("input");
+  qtyInput.type = "number";
+  qtyInput.min = 1;
+  qtyInput.value = quantite;
+  qtyInput.className = "custom-input reason-qty";
+  qtyInput.placeholder = "Qté";
+
+  const priceInput = document.createElement("input");
+  priceInput.type = "number";
+  priceInput.step = 1;
+  priceInput.value = Math.round(prix);
+  priceInput.className = "custom-input reason-price";
+  priceInput.placeholder = "Prix";
+
+  // Wrapper pour ajouter le symbole $
+  const priceWrapper = document.createElement("div");
+  priceWrapper.className = "reason-price-wrapper";
+  priceWrapper.appendChild(priceInput);
+
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.className = "btn btn-icon btn-remove";
+  removeBtn.innerHTML = `
+    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="transition: transform 0.3s ease;">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+    </svg>
+  `;
+  removeBtn.onclick = () => {
+    line.remove();
+    renderPreview(); // Mise à jour après suppression
+  };
+
+  // Ajouter des listeners pour mise à jour temps réel
+  descInput.addEventListener('input', renderPreview);
+  qtyInput.addEventListener('input', renderPreview);
+  priceInput.addEventListener('input', renderPreview);
+  
+  // Support du scroll pour incrémenter/décrémenter la quantité
+  qtyInput.addEventListener('wheel', (e) => {
+    e.preventDefault(); // Empêcher le scroll de la page
+    const currentValue = parseInt(qtyInput.value) || 1;
+    
+    if (e.deltaY < 0) {
+      // Scroll vers le haut = augmenter
+      qtyInput.value = Math.max(1, currentValue + 1);
+    } else {
+      // Scroll vers le bas = diminuer
+      qtyInput.value = Math.max(1, currentValue - 1);
+    }
+    
+    // Déclencher l'événement input pour mettre à jour l'aperçu
+    qtyInput.dispatchEvent(new Event('input'));
+  });
+  
+  // Support du scroll pour incrémenter/décrémenter le prix
+  priceInput.addEventListener('wheel', (e) => {
+    e.preventDefault(); // Empêcher le scroll de la page
+    const currentValue = parseFloat(priceInput.value) || 0;
+    
+    if (e.deltaY < 0) {
+      // Scroll vers le haut = augmenter de 1
+      priceInput.value = Math.round(currentValue + 1);
+    } else {
+      // Scroll vers le bas = diminuer de 1
+      priceInput.value = Math.max(0, Math.round(currentValue - 1));
+    }
+    
+    // Déclencher l'événement input pour mettre à jour l'aperçu
+    priceInput.dispatchEvent(new Event('input'));
+  });
+
+  line.appendChild(descInput);
+  line.appendChild(qtyInput);
+  line.appendChild(priceWrapper);
+  line.appendChild(removeBtn);
+  container.appendChild(line);
+  
+  // Mise à jour après ajout
+  renderPreview();
+}
+
+/* ---------- Gestion du numéro de facture ---------- */
+function generateInvoiceNumber() {
+  // Récupérer le compteur actuel depuis localStorage
+  let invoiceCounter = parseInt(localStorage.getItem('invoice_counter') || '239');
+  
+  // Obtenir l'année et le mois actuels
+  const now = new Date();
+  const year = now.getFullYear().toString().slice(-2); // 2026 -> 26
+  const month = (now.getMonth() + 1).toString().padStart(2, '0'); // 01-12
+  
+  // Formater le compteur sur 4 chiffres
+  const counterStr = invoiceCounter.toString().padStart(4, '0');
+  
+  // Générer le numéro: F2601-0239
+  return `F${year}${month}-${counterStr}`;
+}
+
+function generateNextInvoiceNumber() {
+  // Incrémenter d'abord
+  let invoiceCounter = parseInt(localStorage.getItem('invoice_counter') || '239');
+  invoiceCounter++;
+  localStorage.setItem('invoice_counter', invoiceCounter.toString());
+  
+  // 🔄 SYNC AUTOMATIQUE avec Google Sheets
+  saveConfigToSheet('invoice_number', invoiceCounter.toString());
+  
+  // Obtenir l'année et le mois actuels
+  const now = new Date();
+  const year = now.getFullYear().toString().slice(-2);
+  const month = (now.getMonth() + 1).toString().padStart(2, '0');
+  
+  // Formater le compteur sur 4 chiffres
+  const counterStr = invoiceCounter.toString().padStart(4, '0');
+  
+  // Retourner le numéro avec le nouveau compteur
+  return `F${year}${month}-${counterStr}`;
+}
+
+function incrementInvoiceNumber() {
+  // Incrémenter le compteur
+  let invoiceCounter = parseInt(localStorage.getItem('invoice_counter') || '239');
+  invoiceCounter++;
+  localStorage.setItem('invoice_counter', invoiceCounter.toString());
+  
+  // 🔄 SYNC AUTOMATIQUE avec Google Sheets
+  saveConfigToSheet('invoice_number', invoiceCounter.toString());
+  
+  // Mettre à jour l'affichage
+  updateInvoiceNumber();
+  document.getElementById('currentInvoiceNumber').textContent = generateInvoiceNumber();
+  showNotification(`Nouvelle facture : ${generateInvoiceNumber()}`);
+}
+
+function updateInvoiceNumber() {
+  const txtNumeroFacture = document.getElementById('txtNumeroFacture').querySelector('span');
+  txtNumeroFacture.textContent = generateInvoiceNumber();
+  
+  // Mettre à jour aussi le badge si l'élément existe
+  const badge = document.getElementById('currentInvoiceNumber');
+  if (badge) {
+    badge.textContent = generateInvoiceNumber();
+  }
+}
+
+function resetInvoiceCounter() {
+  if (confirm('Voulez-vous vraiment réinitialiser le compteur de factures à 0 ?')) {
+    localStorage.setItem('invoice_counter', '0');
+    
+    // 🔄 SYNC AUTOMATIQUE avec Google Sheets
+    saveConfigToSheet('invoice_number', '0');
+    
+    updateInvoiceNumber();
+    showNotification('Compteur réinitialisé à 0');
+  }
+}
+
+/* ---------- Render preview ---------- */
+function renderPreview() {
+  const entreprise = document.getElementById('entreprise').value;
+  const compte = document.getElementById('compte').value;
+  const contrat = document.getElementById('contrat').value;
+  const date = new Date().toLocaleDateString('fr-FR');
+
+  const txtDate = document.getElementById('txtDate').querySelector('span');
+  const txtNumeroFacture = document.getElementById('txtNumeroFacture').querySelector('span');
+  const txtEntreprise = document.getElementById('txtEntreprise').querySelector('span');
+  const txtCompte = document.getElementById('txtCompte').querySelector('span');
+  const txtContrat = document.getElementById('txtContrat').querySelector('span');
+  const txtRaison = document.getElementById('txtRaison').querySelector('span');
+  const txtQuantite = document.getElementById('txtQuantite').querySelector('span');
+  const txtPrix = document.getElementById('txtPrix').querySelector('span');
+  const txtTotal = document.getElementById('txtTotal').querySelector('span');
+
+  txtRaison.textContent = '';
+  txtQuantite.textContent = '';
+  txtPrix.textContent = '';
+
+  let totalGlobal = 0;
+  document.querySelectorAll('.reason-line').forEach(line => {
+    const desc = line.querySelector('.reason-desc').value || '';
+    const qte = parseFloat(line.querySelector('.reason-qty').value) || 0;
+    const prix = parseFloat(line.querySelector('.reason-price').value) || 0;
+    const totalLigne = qte * prix;
+    totalGlobal += totalLigne;
+
+    txtRaison.textContent += desc + '\n';
+    txtQuantite.textContent += qte + '\n';
+    txtPrix.textContent += prix.toFixed(0) + '$\n';
+  });
+
+  txtDate.textContent = "Date : " + date;
+  txtNumeroFacture.textContent = generateInvoiceNumber();
+  txtEntreprise.textContent = "Entreprise: " + entreprise;
+  txtCompte.textContent = "Compte : " + compte;
+  txtContrat.textContent = contrat;
+  txtTotal.textContent = totalGlobal.toFixed(0) + "$";
+}
+
+/* ---------- Position save/load ---------- */
+function savePositions() {
+  const wrap = document.getElementById('invoice-preview-wrap');
+  const wrapRect = wrap.getBoundingClientRect();
+  const positions = {};
+  
+  document.querySelectorAll('.draggable').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const left = el.style.left && el.style.left !== '' ? el.style.left : px(rect.left - wrapRect.left);
+    const top = el.style.top && el.style.top !== '' ? el.style.top : px(rect.top - wrapRect.top);
+    const align = el.style.textAlign && el.style.textAlign !== '' ? el.style.textAlign : getComputedStyle(el).textAlign || 'left';
+
+    positions[el.id] = { left: left, top: top, textAlign: align };
+  });
+
+  localStorage.setItem('invoice_positions', JSON.stringify(positions));
+  
+  // 🔄 SYNC AUTOMATIQUE avec Google Sheets
+  saveConfigToSheet('positions', positions);
+  
+  showNotification('Positions sauvegardées et synchronisées !');
+}
+
+function loadPositions() {
+  const s = localStorage.getItem('invoice_positions');
+  if (!s) return;
+  
+  const positions = JSON.parse(s);
+  for (const id in positions) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const p = positions[id];
+    el.style.left = typeof p.left === 'number' ? px(p.left) : (p.left || '0px');
+    el.style.top = typeof p.top === 'number' ? px(p.top) : (p.top || '0px');
+    el.style.textAlign = p.textAlign || 'left';
+    const span = el.querySelector('span');
+    if (span) span.style.textAlign = p.textAlign || 'left';
+  }
+}
+
+/* ---------- Draggable with snap ---------- */
+function makeDraggable() {
+  const SNAP_DISTANCE = 6;
+  const wrap = document.getElementById('invoice-preview-wrap');
+
+  document.querySelectorAll('.draggable').forEach(el => {
+    if (!el.style.left || !el.style.top) {
+      const rect = el.getBoundingClientRect();
+      const wrapRect = wrap.getBoundingClientRect();
+      el.style.left = px(rect.left - wrapRect.left);
+      el.style.top = px(rect.top - wrapRect.top);
+    }
+
+    let isDragging = false;
+    let offsetX = 0, offsetY = 0;
+    let pointerId = null;
+
+    function startDrag(e) {
+      isDragging = true;
+      pointerId = e.pointerId;
+      el.setPointerCapture(pointerId);
+      const rect = el.getBoundingClientRect();
+      offsetX = e.clientX - rect.left;
+      offsetY = e.clientY - rect.top;
+      selectedEl = el;
+      document.querySelectorAll('.draggable').forEach(d => d.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function moveDrag(e) {
+      if (!isDragging) return;
+      const wrapRect = wrap.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      let x = e.clientX - wrapRect.left - offsetX;
+      let y = e.clientY - wrapRect.top - offsetY;
+
+      document.querySelectorAll('.draggable').forEach(other => {
+        if (other === el) return;
+        const oRect = other.getBoundingClientRect();
+        if (Math.abs((oRect.left - wrapRect.left) - x) < SNAP_DISTANCE) x = oRect.left - wrapRect.left;
+        if (Math.abs((oRect.right - wrapRect.left) - (x + elRect.width)) < SNAP_DISTANCE) x = oRect.right - wrapRect.left - elRect.width;
+        const oCenterX = (oRect.left + oRect.width / 2) - wrapRect.left;
+        const eCenterX = x + elRect.width / 2;
+        if (Math.abs(oCenterX - eCenterX) < SNAP_DISTANCE) x = oCenterX - elRect.width / 2;
+
+        if (Math.abs((oRect.top - wrapRect.top) - y) < SNAP_DISTANCE) y = oRect.top - wrapRect.top;
+        if (Math.abs((oRect.bottom - wrapRect.top) - (y + elRect.height)) < SNAP_DISTANCE) y = oRect.bottom - wrapRect.top - elRect.height;
+        const oCenterY = (oRect.top + oRect.height / 2) - wrapRect.top;
+        const eCenterY = y + elRect.height / 2;
+        if (Math.abs(oCenterY - eCenterY) < SNAP_DISTANCE) y = oCenterY - elRect.height / 2;
+      });
+
+      el.style.left = px(Math.max(0, Math.round(x)));
+      el.style.top = px(Math.max(0, Math.round(y)));
+    }
+
+    function stopDrag(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      try { el.releasePointerCapture(pointerId); } catch (e) { }
+      pointerId = null;
+    }
+
+    el.addEventListener('pointerdown', startDrag);
+    el.addEventListener('pointermove', moveDrag);
+    document.addEventListener('pointerup', stopDrag);
+    document.addEventListener('pointercancel', stopDrag);
+    el.addEventListener('dragstart', e => e.preventDefault());
+  });
+}
+
+/* ---------- Context menu ---------- */
+const contextMenu = document.createElement('div');
+contextMenu.className = 'context-menu';
+contextMenu.innerHTML = `
+  <div data-action="align-left">⬅️ Aligner à gauche</div>
+  <div data-action="align-center">🔹 Centrer</div>
+  <div data-action="align-right">➡️ Aligner à droite</div>
+  <div data-action="align-wider">⤴️ Allonger le bloc</div>
+  <div data-action="narrower">⤵️ Réduire le bloc</div>
+`;
+document.body.appendChild(contextMenu);
+
+document.addEventListener('contextmenu', e => {
+  if (e.target.closest('.draggable')) {
+    e.preventDefault();
+    selectedEl = e.target.closest('.draggable');
+    document.querySelectorAll('.draggable').forEach(d => d.classList.remove('selected'));
+    selectedEl.classList.add('selected');
+    contextMenu.style.display = 'block';
+    contextMenu.style.left = e.pageX + 'px';
+    contextMenu.style.top = e.pageY + 'px';
+  } else {
+    contextMenu.style.display = 'none';
   }
 });
 
-// Close modal on outside click
-document.getElementById('employeeModal').addEventListener('click', (e) => {
-  if (e.target.id === 'employeeModal') {
-    closeModal();
+contextMenu.addEventListener('click', e => {
+  if (!selectedEl) return;
+  const action = e.target.getAttribute('data-action');
+  switch (action) {
+    case 'align-left':
+      selectedEl.style.textAlign = 'left';
+      break;
+    case 'align-center':
+      selectedEl.style.textAlign = 'center';
+      break;
+    case 'align-right':
+      selectedEl.style.textAlign = 'right';
+      break;
+    case 'wider':
+      selectedEl.style.minWidth = (parseInt(getComputedStyle(selectedEl).minWidth || '120') + 20) + 'px';
+      break;
+    case 'narrower':
+      selectedEl.style.minWidth = Math.max(60, parseInt(getComputedStyle(selectedEl).minWidth || '120') - 20) + 'px';
+      break;
+  }
+  contextMenu.style.display = 'none';
+});
+
+document.addEventListener('click', e => {
+  if (!contextMenu.contains(e.target)) contextMenu.style.display = 'none';
+  const d = e.target.closest('.draggable');
+  if (d) {
+    selectedEl = d;
+    document.querySelectorAll('.draggable').forEach(x => x.classList.remove('selected'));
+    d.classList.add('selected');
   }
 });
 
+/* ---------- Keyboard nudging ---------- */
+document.addEventListener('keydown', e => {
+  if (!selectedEl) return;
+  const step = e.shiftKey ? 10 : 1;
+  const left = parseInt(selectedEl.style.left || 0);
+  const top = parseInt(selectedEl.style.top || 0);
+  switch (e.key) {
+    case 'ArrowUp':
+      e.preventDefault();
+      selectedEl.style.top = px(top - step);
+      break;
+    case 'ArrowDown':
+      e.preventDefault();
+      selectedEl.style.top = px(top + step);
+      break;
+    case 'ArrowLeft':
+      e.preventDefault();
+      selectedEl.style.left = px(left - step);
+      break;
+    case 'ArrowRight':
+      e.preventDefault();
+      selectedEl.style.left = px(left + step);
+      break;
+    default:
+      return;
+  }
+});
 
-// ==================== COMMUNICATION IFRAME ====================
+/* ---------- Download as Image (Canvas Method) ---------- */
+async function downloadInvoiceImage() {
+  showModal();
+
+  try {
+    // Générer le PROCHAIN numéro de facture et incrémenter
+    const newNumeroFacture = generateNextInvoiceNumber();
+    
+    // Mettre à jour l'aperçu avec ce nouveau numéro
+    const txtNumeroFacture = document.getElementById('txtNumeroFacture');
+    if (txtNumeroFacture) {
+      const span = txtNumeroFacture.querySelector('span');
+      if (span) {
+        span.textContent = newNumeroFacture;
+      }
+    }
+    
+    // Mettre à jour le badge
+    const badge = document.getElementById('currentInvoiceNumber');
+    if (badge) {
+      badge.textContent = generateInvoiceNumber();
+    }
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = 794;
+    canvas.height = 1123;
+    const ctx = canvas.getContext('2d');
+
+    const bgImg = new Image();
+    bgImg.crossOrigin = "anonymous";
+    bgImg.src = "https://firstartonn.github.io/facturetest/Facture%20Paleto%20Garage%20(63).png";
+    
+    await new Promise((resolve, reject) => {
+      bgImg.onload = resolve;
+      bgImg.onerror = reject;
+    });
+
+    ctx.drawImage(bgImg, 0, 0, 794, 1123);
+
+    document.querySelectorAll('.draggable').forEach(el => {
+      const span = el.querySelector('span');
+      if (!span) return;
+
+      const text = span.textContent;
+      const x = parseInt(el.style.left || 0);
+      const y = parseInt(el.style.top || 0);
+      
+      // Debug: afficher les positions
+      if (el.id === 'txtNumeroFacture') {
+        console.log(`📍 Position ${el.id}:`, { x, y, styleLeft: el.style.left, styleTop: el.style.top });
+      }
+      
+      // Gestion spéciale pour le numéro de facture (Roboto 31.8px)
+      let fontSize, fontFamily, fontWeight;
+      if (el.id === 'txtNumeroFacture') {
+        fontSize = 31.8;
+        fontFamily = 'Roboto';
+        fontWeight = '700';
+      } else {
+        fontSize = parseInt(getComputedStyle(el).fontSize || '16');
+        fontFamily = 'Arial';
+        fontWeight = getComputedStyle(el).fontWeight || '500';
+      }
+      
+      const align = el.style.textAlign || 'left';
+
+      ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}, sans-serif`;
+      ctx.fillStyle = '#111';
+      ctx.textAlign = align;
+
+      const lines = text.split('\n');
+      lines.forEach((line, index) => {
+        const lineY = y + (index * (fontSize + 4)) + fontSize;
+        let lineX = x;
+        
+        if (align === 'center') {
+          const width = parseInt(getComputedStyle(el).minWidth || '120');
+          lineX = x + width / 2;
+        } else if (align === 'right') {
+          const width = parseInt(getComputedStyle(el).minWidth || '120');
+          lineX = x + width;
+        }
+        
+        ctx.fillText(line, lineX, lineY);
+      });
+    });
+
+    canvas.toBlob(blob => {
+      hideModal();
+      
+      if (!blob) {
+        showNotification('Erreur lors de la génération', 'error');
+        return;
+      }
+
+      const fileName = 'facture_' + new Date().toISOString().slice(0, 10) + '.png';
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+      
+      showNotification('Facture téléchargée avec succès !');
+    }, 'image/png');
+
+  } catch (err) {
+    hideModal();
+    console.error('Erreur:', err);
+    showNotification('Erreur lors de la génération de l\'image', 'error');
+  }
+}
+
+/* ---------- Send to Discord ---------- */
+async function sendToDiscord() {
+  // Récupérer les données de la facture actuelle
+  const entreprise = document.getElementById('entreprise').value.trim();
+  const compte = document.getElementById('compte').value.trim();
+  const contrat = document.getElementById('contrat').value.trim();
+  
+  // Vérifier que l'entreprise est renseignée
+  if (!entreprise) {
+    showNotification('Veuillez sélectionner une entreprise', 'error');
+    return;
+  }
+  
+  // Chercher le webhook correspondant à cette entreprise dans les données du Sheet
+  let webhookUrl = null;
+  const matchingRow = sheetData.fullData.find(row => 
+    row.entreprise.toLowerCase() === entreprise.toLowerCase()
+  );
+  
+  if (matchingRow && matchingRow.webhook) {
+    webhookUrl = matchingRow.webhook;
+  }
+  
+  // Vérifier que le webhook est trouvé
+  if (!webhookUrl) {
+    showNotification('Aucun webhook Discord trouvé pour cette entreprise dans la colonne C du Sheet', 'error');
+    return;
+  }
+  
+  // Vérifier que c'est une URL Discord valide
+  if (!webhookUrl.includes('discord.com/api/webhooks/')) {
+    showNotification('URL de webhook Discord invalide dans le Sheet (colonne C)', 'error');
+    return;
+  }
+  
+  // Afficher le statut
+  const statusDiv = document.getElementById('discordStatus');
+  statusDiv.style.display = 'block';
+  statusDiv.innerHTML = '⏳ Génération de la facture...';
+  
+  try {
+    // Générer le PROCHAIN numéro de facture et incrémenter
+    const newNumeroFacture = generateNextInvoiceNumber();
+    
+    // Mettre à jour l'aperçu avec ce nouveau numéro
+    const txtNumeroFacture = document.getElementById('txtNumeroFacture');
+    if (txtNumeroFacture) {
+      const span = txtNumeroFacture.querySelector('span');
+      if (span) {
+        span.textContent = newNumeroFacture;
+      }
+    }
+    
+    // Mettre à jour le badge
+    const badge = document.getElementById('currentInvoiceNumber');
+    if (badge) {
+      badge.textContent = generateInvoiceNumber();
+    }
+    
+    // Générer l'image de la facture
+    const canvas = document.createElement('canvas');
+    canvas.width = 794;
+    canvas.height = 1123;
+    const ctx = canvas.getContext('2d');
+
+    // Charger l'image de fond
+    const bgImg = new Image();
+    bgImg.crossOrigin = "anonymous";
+    bgImg.src = "https://firstartonn.github.io/facturetest/Facture%20Paleto%20Garage%20(63).png";
+    
+    await new Promise((resolve, reject) => {
+      bgImg.onload = resolve;
+      bgImg.onerror = reject;
+    });
+
+    // Dessiner le fond
+    ctx.drawImage(bgImg, 0, 0, 794, 1123);
+
+    // Dessiner tous les éléments de texte
+    document.querySelectorAll('.draggable').forEach(el => {
+      const span = el.querySelector('span');
+      if (!span) return;
+
+      const text = span.textContent;
+      const x = parseInt(el.style.left || 0);
+      const y = parseInt(el.style.top || 0);
+      
+      // Gestion spéciale pour le numéro de facture (Roboto 31.8px)
+      let fontSize, fontFamily, fontWeight;
+      if (el.id === 'txtNumeroFacture') {
+        fontSize = 31.8;
+        fontFamily = 'Roboto';
+        fontWeight = '700';
+      } else {
+        fontSize = parseInt(getComputedStyle(el).fontSize || '16');
+        fontFamily = 'Arial';
+        fontWeight = getComputedStyle(el).fontWeight || '500';
+      }
+      
+      const align = el.style.textAlign || 'left';
+
+      ctx.font = `${fontWeight} ${fontSize}px ${fontFamily}, sans-serif`;
+      ctx.fillStyle = '#111';
+      ctx.textAlign = align;
+
+      // Gérer le texte multiligne
+      const lines = text.split('\n');
+      lines.forEach((line, index) => {
+        const lineY = y + (index * (fontSize + 4)) + fontSize;
+        let lineX = x;
+        
+        if (align === 'center') {
+          const width = parseInt(getComputedStyle(el).minWidth || '120');
+          lineX = x + width / 2;
+        } else if (align === 'right') {
+          const width = parseInt(getComputedStyle(el).minWidth || '120');
+          lineX = x + width;
+        }
+        
+        ctx.fillText(line, lineX, lineY);
+      });
+    });
+
+    statusDiv.innerHTML = '⏳ Conversion en image...';
+
+    // Convertir le canvas en blob
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    
+    if (!blob) {
+      throw new Error('Impossible de générer l\'image');
+    }
+
+    statusDiv.innerHTML = '⏳ Envoi sur Discord...';
+
+    // Récupérer les données de la facture
+    const entreprise = document.getElementById('entreprise').value;
+    const compte = document.getElementById('compte').value;
+    const contrat = document.getElementById('contrat').value;
+    // Utiliser le numéro déjà généré et incrémenté au début de la fonction
+    const numeroFacture = newNumeroFacture;
+    const date = new Date().toLocaleDateString('fr-FR');
+    
+    // Calculer le total
+    let totalGlobal = 0;
+    let details = '';
+    document.querySelectorAll('.reason-line').forEach(line => {
+      const desc = line.querySelector('.reason-desc').value || '';
+      const qte = parseFloat(line.querySelector('.reason-qty').value) || 0;
+      const prix = parseFloat(line.querySelector('.reason-price').value) || 0;
+      totalGlobal += qte * prix;
+      if (desc) {
+        details += `${desc} (${qte}x ${prix}$)\n`;
+      }
+    });
+
+    // Préparer le FormData pour envoyer l'image
+    const formData = new FormData();
+    
+    // Créer l'embed Discord
+    const embed = {
+      title: `📋 Nouvelle Facture - ${numeroFacture}`,
+      color: 15158332, // Rouge/rose (#E94560)
+      fields: [
+        {
+          name: '🏢 Entreprise',
+          value: entreprise || 'Non spécifié',
+          inline: true
+        },
+        {
+          name: '💳 Compte',
+          value: compte || 'Non spécifié',
+          inline: true
+        },
+        {
+          name: '💰 Montant Total',
+          value: `**${totalGlobal.toFixed(0)}$**`,
+          inline: true
+        },
+        {
+          name: '📅 Date',
+          value: date,
+          inline: true
+        }
+      ],
+      image: {
+        url: 'attachment://facture.png'
+      },
+      footer: {
+        text: `Facture PaletoGarage • ${numeroFacture}`
+      },
+      timestamp: new Date().toISOString()
+    };
+
+    // Créer le payload JSON
+    const payload = {
+      content: '**Paleto Garage**',
+      embeds: [embed],
+      username: 'Paleto Garage Facture',
+      avatar_url: 'https://i.goopics.net/ije8vu.png'
+    };
+
+    // Ajouter le JSON et le fichier au FormData
+    formData.append('payload_json', JSON.stringify(payload));
+    formData.append('files[0]', blob, 'facture.png');
+
+    // Envoyer à Discord
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (response.ok || response.status === 204) {
+      statusDiv.innerHTML = '✅ Facture envoyée avec succès sur Discord !';
+      statusDiv.style.background = 'rgba(87, 242, 135, 0.1)';
+      statusDiv.style.color = '#57F287';
+      showNotification('Facture envoyée sur Discord !');
+      
+      // Incrémenter le compteur
+      incrementInvoiceNumber();
+      
+      // Masquer le statut après 5 secondes
+      setTimeout(() => {
+        statusDiv.style.display = 'none';
+        const resetColors = getStatusColors('default');
+        statusDiv.style.background = resetColors.background;
+        statusDiv.style.color = resetColors.color;
+      }, 5000);
+    } else {
+      throw new Error(`Erreur Discord: ${response.status}`);
+    }
+
+  } catch (err) {
+    console.error('Erreur:', err);
+    statusDiv.innerHTML = '❌ Erreur lors de l\'envoi: ' + err.message;
+    statusDiv.style.background = 'rgba(255, 68, 68, 0.1)';
+    statusDiv.style.color = '#ff4444';
+    showNotification('Erreur lors de l\'envoi sur Discord', 'error');
+    
+    // Masquer après 5 secondes
+    setTimeout(() => {
+      statusDiv.style.display = 'none';
+      const resetColors = getStatusColors('default');
+      statusDiv.style.background = resetColors.background;
+      statusDiv.style.color = resetColors.color;
+    }, 5000);
+  }
+}
+
+/* ---------- Send All Invoices from Sheet ---------- */
+async function sendAllInvoices() {
+  // Vérifier qu'on a des données
+  if (!sheetData.fullData || sheetData.fullData.length === 0) {
+    showNotification('Aucune donnée chargée depuis le Sheet', 'error');
+    return;
+  }
+  
+  // Filtrer les lignes qui ont un montant (colonne F) et un webhook (colonne C)
+  const rowsToProcess = sheetData.fullData.filter(row => 
+    row.montant && row.montant.toString().trim() !== '' && 
+    row.webhook && row.webhook.includes('discord.com/api/webhooks/')
+  );
+  
+  if (rowsToProcess.length === 0) {
+    showNotification('Aucune facture à envoyer (vérifiez colonne F pour montants et colonne C pour webhooks)', 'error');
+    return;
+  }
+  
+  // Demander confirmation
+  if (!confirm(`Voulez-vous envoyer ${rowsToProcess.length} facture(s) sur Discord ?\n\nCela va générer et envoyer une facture pour chaque ligne du Sheet ayant un montant.`)) {
+    return;
+  }
+  
+  const statusDiv = document.getElementById('discordStatus');
+  statusDiv.style.display = 'block';
+  const defaultColors = getStatusColors('default');
+  statusDiv.style.background = defaultColors.background;
+  statusDiv.style.color = defaultColors.color;
+  
+  let successCount = 0;
+  let errorCount = 0;
+  
+  // Traiter chaque ligne
+  for (let i = 0; i < rowsToProcess.length; i++) {
+    const row = rowsToProcess[i];
+    
+    statusDiv.innerHTML = `⏳ Envoi ${i + 1}/${rowsToProcess.length} : ${row.entreprise}...`;
+    
+    try {
+      // Générer la facture pour cette ligne
+      await generateAndSendInvoiceFromRow(row);
+      successCount++;
+      
+      // Pause de 2 secondes entre chaque envoi pour éviter le rate limiting Discord
+      if (i < rowsToProcess.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+      
+    } catch (error) {
+      console.error(`❌ Erreur pour ${row.entreprise}:`, error);
+      console.error('Détails de la ligne:', row);
+      console.error('Message d\'erreur:', error.message);
+      console.error('Stack:', error.stack);
+      errorCount++;
+    }
+  }
+  
+  // Afficher le résumé
+  statusDiv.innerHTML = `✅ Terminé ! ${successCount} envoyées, ${errorCount} erreur(s)`;
+  statusDiv.style.background = successCount > 0 ? 'rgba(87, 242, 135, 0.1)' : 'rgba(255, 68, 68, 0.1)';
+  statusDiv.style.color = successCount > 0 ? '#57F287' : '#ff4444';
+  
+  showNotification(`Envoi terminé : ${successCount} réussie(s), ${errorCount} échouée(s)`);
+  
+  // Masquer après 8 secondes
+  setTimeout(() => {
+    statusDiv.style.display = 'none';
+    const resetColors = getStatusColors('default');
+    statusDiv.style.background = resetColors.background;
+    statusDiv.style.color = resetColors.color;
+  }, 8000);
+}
+
+/* ---------- Generate and send invoice from a Sheet row ---------- */
+async function generateAndSendInvoiceFromRow(rowData) {
+  // Créer le canvas
+  const canvas = document.createElement('canvas');
+  canvas.width = 794;
+  canvas.height = 1123;
+  const ctx = canvas.getContext('2d');
+
+  // Charger l'image de fond
+  const bgImg = new Image();
+  bgImg.crossOrigin = "anonymous";
+  bgImg.src = "https://firstartonn.github.io/facturetest/Facture%20Paleto%20Garage%20(63).png";
+  
+  await new Promise((resolve, reject) => {
+    bgImg.onload = resolve;
+    bgImg.onerror = reject;
+  });
+
+  // Dessiner le fond
+  ctx.drawImage(bgImg, 0, 0, 794, 1123);
+
+  // Générer le PROCHAIN numéro de facture (incrémente automatiquement)
+  const numeroFacture = generateNextInvoiceNumber();
+  const date = new Date().toLocaleDateString('fr-FR');
+
+  // Préparer les données de la facture depuis la ligne du Sheet
+  const details = rowData.details || 'Service';
+  const montant = parseFloat(rowData.montant) || 0;
+  
+  // Positions des éléments (utilisez les positions sauvegardées ou par défaut)
+  const positions = JSON.parse(localStorage.getItem('invoice_positions') || '{}');
+  
+  // Fonction helper pour dessiner du texte à une position
+  const drawText = (elementId, text, defaultX, defaultY, size = 16, font = 'Arial', weight = '500') => {
+    const pos = positions[elementId] || { left: defaultX + 'px', top: defaultY + 'px', textAlign: 'left' };
+    const x = parseInt(pos.left);
+    const y = parseInt(pos.top);
+    const align = pos.textAlign || 'left';
+    
+    // Gestion spéciale pour le numéro de facture
+    if (elementId === 'txtNumeroFacture') {
+      size = 31.8;
+      font = 'Roboto';
+      weight = '700';
+    }
+    
+    ctx.font = `${weight} ${size}px ${font}, sans-serif`;
+    ctx.fillStyle = '#111';
+    ctx.textAlign = align;
+    
+    // Récupérer la largeur du bloc depuis l'élément DOM si disponible
+    let width = 120; // Largeur par défaut
+    try {
+      const el = document.getElementById(elementId);
+      if (el) {
+        const computedWidth = parseInt(getComputedStyle(el).minWidth || '120');
+        width = computedWidth;
+      }
+    } catch (e) {
+      // Ignorer l'erreur si l'élément n'existe pas
+      console.warn(`Element ${elementId} not found, using default width`);
+    }
+    
+    const lines = text.split('\n');
+    lines.forEach((line, index) => {
+      const lineY = y + (index * (size + 4)) + size;
+      let lineX = x;
+      
+      // Calculer la position X en fonction de l'alignement
+      if (align === 'center') {
+        lineX = x + width / 2;
+      } else if (align === 'right') {
+        lineX = x + width;
+      }
+      
+      ctx.fillText(line, lineX, lineY);
+    });
+  };
+
+  // Dessiner tous les éléments de la facture
+  drawText('txtNumeroFacture', numeroFacture, 50, 50);
+  drawText('txtDate', `Date : ${date}`, 50, 100);
+  drawText('txtEntreprise', `Entreprise: ${rowData.entreprise}`, 50, 150);
+  drawText('txtCompte', `Compte : ${rowData.compte}`, 50, 200);
+  drawText('txtContrat', rowData.typeContrat || rowData.contrat || '', 50, 250);
+  drawText('txtRaison', details, 50, 350);
+  drawText('txtQuantite', '1', 400, 350);
+  drawText('txtPrix', `${montant.toFixed(0)}$`, 500, 350);
+  drawText('txtTotal', `${montant.toFixed(0)}$`, 600, 800);
+
+  // Convertir en blob
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+  
+  if (!blob) {
+    throw new Error('Impossible de générer l\'image');
+  }
+
+  // Préparer le FormData
+  const formData = new FormData();
+  
+  // Créer l'embed Discord
+  const embed = {
+    title: `📋 Nouvelle Facture - ${numeroFacture}`,
+    color: 15158332,
+    fields: [
+      {
+        name: '🏢 Entreprise',
+        value: rowData.entreprise || 'Non spécifié',
+        inline: true
+      },
+      {
+        name: '💳 Compte',
+        value: rowData.compte || 'Non spécifié',
+        inline: true
+      },
+      {
+        name: '💰 Montant Total',
+        value: `**${montant.toFixed(0)}$**`,
+        inline: true
+      },
+      {
+        name: '📅 Date',
+        value: date,
+        inline: true
+      }
+    ],
+    image: {
+      url: 'attachment://facture.png'
+    },
+    footer: {
+      text: `Facture générée automatiquement • ${numeroFacture}`
+    },
+    timestamp: new Date().toISOString()
+  };
+
+  // Créer le payload
+  const payload = {
+    content: '🔔 **<@&1444800010712518676>**',
+    embeds: [embed],
+    username: 'Paleto Garage Facture',
+    avatar_url: 'https://i.goopics.net/ije8vu.png'
+  };
+
+  formData.append('payload_json', JSON.stringify(payload));
+  formData.append('files[0]', blob, 'facture.png');
+
+  // Envoyer à Discord
+  const response = await fetch(rowData.webhook, {
+    method: 'POST',
+    body: formData
+  });
+
+  if (!response.ok && response.status !== 204) {
+    throw new Error(`Erreur Discord: ${response.status}`);
+  }
+
+  // Le compteur a déjà été incrémenté dans generateNextInvoiceNumber()
+  // Mettre à jour l'affichage du badge
+  const badge = document.getElementById('currentInvoiceNumber');
+  if (badge) {
+    badge.textContent = generateInvoiceNumber();
+  }
+  
+  // Mettre à jour l'aperçu avec le nouveau numéro
+  const txtNumeroFacture = document.getElementById('txtNumeroFacture');
+  if (txtNumeroFacture) {
+    const span = txtNumeroFacture.querySelector('span');
+    if (span) {
+      span.textContent = generateInvoiceNumber();
+    }
+  }
+  
+  return true;
+}
+
+/* ---------- Theme Toggle ---------- */
 function toggleTheme() {
   const html = document.documentElement;
   const currentTheme = html.getAttribute('data-theme');
-  const newTheme = currentTheme === 'light' ? '' : 'light';
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  
   html.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
+  localStorage.setItem('invoice-theme', newTheme);
   
-  const icon = document.querySelector('.theme-icon');
-  icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+  const icon = document.getElementById('themeIcon');
+  const label = document.getElementById('themeLabel');
   
-  // Envoyer à l'iframe
-  sendThemeToIframe(newTheme);
-}
-
-function sendThemeToIframe(theme) {
-  const iframe = document.querySelector('#tab-factures iframe');
-  if (iframe && iframe.contentWindow) {
-    iframe.contentWindow.postMessage({ 
-      type: 'theme-change', 
-      theme: theme 
-    }, '*');
+  if (icon) {
+    icon.textContent = newTheme === 'light' ? '☀️' : '🌙';
+  }
+  
+  if (label) {
+    label.textContent = newTheme === 'light' ? 'Mode clair' : 'Mode sombre';
   }
 }
 
-// Écouter les demandes de l'iframe
-window.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'get-theme') {
-    const currentTheme = document.documentElement.getAttribute('data-theme') || '';
-    sendThemeToIframe(currentTheme);
+function loadTheme() {
+  const savedTheme = localStorage.getItem('invoice-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  
+  const icon = document.getElementById('themeIcon');
+  const label = document.getElementById('themeLabel');
+  
+  if (icon) {
+    icon.textContent = savedTheme === 'light' ? '☀️' : '🌙';
   }
-});
-
-// Envoyer le theme quand l'iframe charge
-document.addEventListener('DOMContentLoaded', () => {
-  const iframe = document.querySelector('#tab-factures iframe');
-  if (iframe) {
-    iframe.addEventListener('load', () => {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || '';
-      sendThemeToIframe(currentTheme);
-    });
+  
+  if (label) {
+    label.textContent = savedTheme === 'light' ? 'Mode clair' : 'Mode sombre';
   }
-});
-
-
-// ==================== SYSTÈME DE PERMISSIONS ====================
-const PERMISSIONS = {
-  "Patron": ["profil", "accueil", "employes", "recrutement", "absence", "factures", "partenariats", "banque", "compta", "logs"],
-  "Co Patron": ["profil", "accueil", "employes", "recrutement", "absence", "factures", "partenariats", "banque", "compta", "logs"],
-  "DRH": ["profil", "accueil", "employes", "recrutement", "absence", "factures", "banque", "logs"],
-  "Responsable D'atelier": ["profil", "accueil", "employes", "absence", "factures", "partenariats", "banque", "logs"],
-  "Responsable Evenementiel": ["profil", "accueil", "factures", "banque"],
-  "Asst Evenemtiel": ["profil", "accueil", "factures", "banque"],
-  "Chef d'atelier": ["profil", "accueil", "employes", "absence", "factures", "logs"],
-  "RH": ["profil", "accueil", "employes", "recrutement", "absence"],
-  "Confirmé": ["profil", "accueil"],
-  "Mécano": ["profil", "accueil"],
-  "Apprenti": ["profil", "accueil"],
-  "Stagiaire": ["profil", "accueil"]
-};
-
-const CATEGORY_ICONS = {
-  "profil": "👤",
-  "accueil": "🏠",
-  "employes": "👥",
-  "recrutement": "📋",
-  "absence": "📅",
-  "factures": "💰",
-  "partenariats": "🤝",
-  "banque": "🏦",
-  "compta": "📊",
-  "logs": "📜"
-};
-
-const CATEGORY_LABELS = {
-  "profil": "Profil",
-  "accueil": "Accueil",
-  "employes": "Employés",
-  "recrutement": "Recrutement",
-  "absence": "Absences",
-  "factures": "Factures",
-  "partenariats": "Partenariats",
-  "banque": "Banque",
-  "compta": "Compta",
-  "logs": "Logs"
-};
-
-let userCategories = [];
-
-function getUserCategories(grade) {
-  return PERMISSIONS[grade] || ["profil", "accueil"];
 }
 
-function buildNavigation() {
-  if (!currentUser || !currentUser.grade) {
-    console.log('❌ Pas de grade utilisateur');
-    userCategories = ["profil", "accueil"];
+function getStatusColors(type = 'default') {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  
+  if (type === 'success') {
+    return {
+      background: 'rgba(87, 242, 135, 0.1)',
+      color: '#57F287'
+    };
+  } else if (type === 'error') {
+    return {
+      background: 'rgba(255, 68, 68, 0.1)',
+      color: '#ff4444'
+    };
   } else {
-    userCategories = getUserCategories(currentUser.grade);
-  }
-  
-  console.log('✅ Grade:', currentUser?.grade);
-  console.log('✅ Catégories:', userCategories);
-  
-  const nav = document.getElementById('mainNavigation');
-  if (!nav) return;
-  
-  nav.innerHTML = userCategories.map((cat, index) => {
-    const icon = CATEGORY_ICONS[cat] || "📄";
-    const label = CATEGORY_LABELS[cat] || cat;
-    const activeClass = index === 0 ? 'active' : '';
-    return `<div class="nav-item ${activeClass}" onclick="switchTab('${cat}')">${icon} ${label}</div>`;
-  }).join('');
-  
-  if (userCategories.length > 0) {
-    switchTab(userCategories[0]);
+    // default/warning
+    return {
+      background: isLight ? 'rgba(99, 102, 241, 0.08)' : 'rgba(212,175,55,0.1)',
+      color: isLight ? '#8b5cf6' : 'var(--color-gold)'
+    };
   }
 }
 
-function loadProfilPage() {
-  if (!currentUser) return;
+/* ---------- Init ---------- */
+document.addEventListener('DOMContentLoaded', async () => {
+  // Charger le thème sauvegardé
+  loadTheme();
   
-  const profilContent = document.getElementById('profilContent');
-  if (!profilContent) return;
+  // 🔄 CHARGER la config depuis Google Sheets (numéro + positions)
+  await loadConfigFromSheet();
   
-  profilContent.innerHTML = `
-    <h2>👤 Mon Profil</h2>
-    <div style="margin-top: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
-      <div style="text-align: center; margin-bottom: 2rem;">
-        <img src="${currentUser.avatar}" alt="Avatar" style="width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--color-highlight);">
-      </div>
-      
-      <table class="details-table">
-        <tr><td><strong>Nom</strong></td><td>${currentUser.employeeName || currentUser.username}</td></tr>
-        <tr><td><strong>Grade</strong></td><td>${currentUser.grade || 'Non défini'}</td></tr>
-        <tr><td><strong>Discord</strong></td><td>${currentUser.username}#${currentUser.discriminator}</td></tr>
-        <tr><td><strong>ID Discord</strong></td><td>${currentUser.id}</td></tr>
-        <tr><td><strong>Rôle système</strong></td><td>${currentUser.role}</td></tr>
-        <tr><td><strong>Catégories accessibles</strong></td><td>${userCategories.length}</td></tr>
-      </table>
-      
-      <div style="margin-top: 2rem; text-align: center;">
-        <button class="logout-btn" onclick="logout()" style="display: inline-block;">
-          🚪 Déconnexion
-        </button>
-      </div>
-    </div>
-  `;
-}
-
-function loadLogsPage() {
-  const logsContainer = document.getElementById('logsContainer');
-  if (!logsContainer) return;
+  if (!document.querySelectorAll('.reason-line').length) addReason();
   
-  logsContainer.innerHTML = `
-    <div style="text-align: center; padding: 2rem; background: rgba(233, 69, 96, 0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
-      <p><strong>📜 Historique des actions</strong></p>
-      <p style="margin-top: 1rem; color: var(--color-text-dim);">Aucun log pour le moment.</p>
-      <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-text-dim);">Les actions importantes seront enregistrées ici.</p>
-    </div>
-  `;
-}
-
+  // Charger les données depuis Google Sheets
+  await loadGoogleSheetsData();
+  
+  // Initialiser l'autocomplétion
+  setupAutocomplete('entreprise');
+  setupAutocomplete('compte');
+  setupAutocomplete('contrat');
+  
+  // Auto-fill sur blur/enter
+  const entrepriseInput = document.getElementById('entreprise');
+  
+  // Utiliser un délai sur blur pour laisser le temps au mousedown de se déclencher
+  entrepriseInput.addEventListener('blur', () => {
+    setTimeout(() => {
+      // Vérifier si on n'est pas en train de sélectionner depuis la liste
+      if (entrepriseInput._isSelectingFromList && entrepriseInput._isSelectingFromList()) {
+        return;
+      }
+      handleEntrepriseChange();
+    }, 150);
+  });
+  
+  entrepriseInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      handleEntrepriseChange();
+    }
+  });
+  
+  makeDraggable();
+  loadPositions();
+  
+  // Initialiser le numéro de facture
+  updateInvoiceNumber();
+  
+  // Rendu initial
+  renderPreview();
+  
+  console.log('✅ Générateur de factures chargé avec synchronisation!');
+  
+  // 🎉 Masquer l'écran de chargement avec un petit délai pour une transition fluide
+  setTimeout(() => {
+    const loadingScreen = document.getElementById('loadingScreen');
+    if (loadingScreen) {
+      loadingScreen.classList.add('hidden');
+      // Supprimer complètement après la transition
+      setTimeout(() => {
+        loadingScreen.remove();
+      }, 500);
+    }
+  }, 500);
+});
 </script>
 </body>
 </html>
