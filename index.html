@@ -1654,6 +1654,64 @@ async function logAction(action) {
 }
 
 async function loadLogs() {
+  const container = document.getElementById('logsContainer');
+  if (!container) return;
+  
+  const now = new Date().toLocaleTimeString('fr-FR');
+  
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${LOGS_SHEET_ID}/values/Logs!A:C?key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (!data.values || data.values.length <= 1) {
+      if (!container.innerHTML.includes('Aucun log')) {
+        container.innerHTML = '<p style="text-align:center;color:var(--color-text-dim);">Aucun log.</p>';
+      }
+      return;
+    }
+    
+    const logs = data.values.slice(1).reverse();
+    
+    // Créer le nouveau HTML
+    let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">';
+    html += '<h3 style="margin:0;">📜 Historique des actions</h3>';
+    html += '<span style="color:var(--color-text-dim);font-size:0.9rem;">🔄 Mise à jour : ' + now + '</span>';
+    html += '</div>';
+    html += '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(233,69,96,0.1);">';
+    html += '<th style="padding:1rem;text-align:left;">Utilisateur</th>';
+    html += '<th style="padding:1rem;text-align:left;">Date & Heure</th>';
+    html += '<th style="padding:1rem;text-align:left;">Action</th></tr></thead><tbody>';
+    
+    logs.forEach((log, i) => {
+      const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+      html += `<tr style="background:${bg};"><td style="padding:1rem;">${log[0]||'-'}</td>`;
+      html += `<td style="padding:1rem;font-size:0.9rem;">${log[1]||'-'}</td>`;
+      html += `<td style="padding:1rem;">${log[2]||'-'}</td></tr>`;
+    });
+    
+    html += '</tbody></table>';
+    
+    // Ne mettre à jour QUE si le contenu a changé (évite le clignotement)
+    if (container.innerHTML !== html) {
+      // Mettre à jour avec une transition douce
+      container.style.opacity = '0.7';
+      setTimeout(() => {
+        container.innerHTML = html;
+        container.style.opacity = '1';
+      }, 100);
+    } else {
+      // Juste mettre à jour l'heure sans recharger le tableau
+      const timeSpan = container.querySelector('span');
+      if (timeSpan) {
+        timeSpan.textContent = '🔄 Mise à jour : ' + now;
+      }
+    }
+    
+  } catch (error) {
+    console.error('❌ Erreur logs:', error);
+  }
+}
   const now = new Date().toLocaleTimeString('fr-FR');
   const container = document.getElementById('logsContainer');
   if (!container) return;
