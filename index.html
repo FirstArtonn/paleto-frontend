@@ -1723,6 +1723,46 @@ function loadProfilPage() {
   `;
 }
 
+
+
+// Synchronisation du thème avec l'iframe
+function sendThemeToIframe(theme) {
+  const iframe = document.querySelector('#tab-factures iframe');
+  if (iframe && iframe.contentWindow) {
+    iframe.contentWindow.postMessage({ 
+      type: 'theme-change', 
+      theme: theme 
+    }, '*');
+  }
+}
+
+// Écouter les demandes de thème de l'iframe
+window.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'get-theme') {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || '';
+    sendThemeToIframe(currentTheme);
+  }
+});
+
+// Modifier toggleTheme pour envoyer à l'iframe
+const originalToggleTheme = toggleTheme;
+toggleTheme = function() {
+  originalToggleTheme();
+  const newTheme = document.documentElement.getAttribute('data-theme') || '';
+  sendThemeToIframe(newTheme);
+};
+
+// Envoyer le thème quand l'iframe charge
+document.addEventListener('DOMContentLoaded', () => {
+  const iframe = document.querySelector('#tab-factures iframe');
+  if (iframe) {
+    iframe.addEventListener('load', () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || '';
+      sendThemeToIframe(currentTheme);
+    });
+  }
+});
+
 </script>
 </body>
 </html>
