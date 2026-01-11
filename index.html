@@ -810,6 +810,62 @@ header .navigation { display: flex; justify-content: center; gap: 50px; margin-t
 header .nav-item { position: relative; font-weight: 600; font-size: 1.05rem; color: #fff; cursor: pointer; padding: 8px 0; user-select: none; background: none !important; }
 header .nav-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: #fff; border-radius: 5px; transition: width 0.3s ease; }
 header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
+
+/* Grade wrapper dropdown */
+.grade-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.grade-wrapper button {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 200px;
+  text-align: left;
+}
+
+.grade-wrapper button:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.grade-wrapper ul {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(26,26,46,0.98);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  margin-top: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  z-index: 1000;
+  list-style: none;
+  padding: 0;
+}
+
+.grade-wrapper button:focus + ul,
+.grade-wrapper ul:hover {
+  display: block;
+}
+
+.grade-wrapper li {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: all 0.2s;
+}
+
+.grade-wrapper li:hover {
+  background: rgba(233,69,96,0.2);
+  color: var(--color-highlight);
+}
+
 </style>
 </head>
 <body>
@@ -1206,11 +1262,13 @@ function showEmployeeDetails(index) {
   let gradeHTML = emp.grade;
   if (currentUser.role === 'admin' || currentUser.role === 'rh') {
     gradeHTML = `
-      <div class="grade-selector">
-        <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner'}</button>
-        <div class="grade-options">
-          ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
-        </div>
+      <div class="grade-wrapper">
+        <button type="button">${emp.grade || 'Sélectionner'}</button>
+        <ul>
+          ${GRADES.map(g => `
+            <li onclick="updateGradeInSheet('${emp.id}','${g}')">${g}</li>
+          `).join('')}
+        </ul>
       </div>
     `;
   }
@@ -1238,7 +1296,7 @@ function toggleGradeOptions(event) {
   options.classList.toggle('active');
 }
 
-async function updateGrade(empId, newGrade) {
+async function updateGradeInSheet(empId, newGrade) {
   const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
   const proxy = "https://corsproxy.io/?";
   
@@ -1597,6 +1655,21 @@ function buildNav() {
   nav.innerHTML = cats.map((c,i) => `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${I[c]} ${L[c]}</div>`).join('');
   if (cats[0]) switchTab(cats[0]);
 }
+
+
+// Gestion du dropdown de grade
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.grade-wrapper button')) {
+    const wrapper = e.target.closest('.grade-wrapper');
+    const ul = wrapper.querySelector('ul');
+    ul.style.display = ul.style.display === 'block' ? 'none' : 'block';
+  } else {
+    document.querySelectorAll('.grade-wrapper ul').forEach(ul => {
+      ul.style.display = 'none';
+    });
+  }
+});
+
 </script>
 </body>
 </html>
