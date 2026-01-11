@@ -313,31 +313,21 @@ header h1 {
   user-select: none;
 }
 
-.nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.2), transparent);
-  transition: left 0.5s;
-}
+.nav-item::before { display: none !important; }
 
-.nav-item:hover::before {
-  left: 100%;
-}
+
 
 .nav-item:hover {
-  background: rgba(233, 69, 96, 0.1);
-  border-color: var(--color-highlight);
-  transform: translateY(-2px);
+  background: none !important;
+  border-color: transparent !important;
+  transform: none !important;
+  color: var(--color-text) !important;
 }
 
 .nav-item.active {
-  background: var(--color-highlight);
-  color: white;
-  border-color: var(--color-highlight);
+  background: none !important;
+  color: var(--color-text) !important;
+  border-color: transparent !important;
 }
 
 .nav-item.admin-only,
@@ -792,7 +782,10 @@ body.role-rh .nav-item.rh-only {
 }
 
 .nav-item:hover {
-  color: var(--color-highlight);
+  background: none !important;
+  border-color: transparent !important;
+  transform: none !important;
+  color: var(--color-text) !important;
 }
 
 .nav-item::after {
