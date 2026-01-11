@@ -1239,8 +1239,39 @@ function toggleGradeOptions(event) {
 }
 
 async function updateGrade(empId, newGrade) {
-  // Ici tu peux ajouter l'appel à ton API pour mettre à jour le grade
-  showToast(`Grade mis à jour: ${newGrade}`, 'success');
+  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const proxy = "https://corsproxy.io/?";
+  
+  showToast('⏳ Mise à jour du grade...', 'info');
+
+  try {
+    const response = await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id: empId, grade: newGrade })
+    });
+
+    if (!response.ok) throw new Error('Erreur réseau');
+
+    // Mise à jour locale
+    const emp = allEmployees.find(e => e.id === empId);
+    if (emp) {
+      emp.grade = newGrade;
+      const filtered = filteredEmployees.find(e => e.id === empId);
+      if (filtered) filtered.grade = newGrade;
+    }
+
+    showToast('✅ Grade mis à jour avec succès !', 'success');
+    
+    // Fermer le modal et recharger
+    closeModal();
+    setTimeout(() => loadEmployees(), 500);
+
+  } catch (error) {
+    console.error('❌ Erreur updateGrade:', error);
+    showToast('❌ Erreur lors de la mise à jour', 'error');
+  }
+}`, 'success');
   closeModal();
   loadEmployees();
 }
