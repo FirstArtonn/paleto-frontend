@@ -812,52 +812,11 @@ body.role-rh .nav-item.rh-only {
 }
 
 
-/* Navigation avec soulignement */
-header .navigation {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 50px !important;
-  margin-top: 20px !important;
-  flex-wrap: wrap !important;
-}
-
-header .nav-item {
-  position: relative !important;
-  font-weight: 600 !important;
-  font-size: 1.05rem !important;
-  color: #fff !important;
-  cursor: pointer !important;
-  padding: 8px 0 !important;
-  user-select: none !important;
-  background: none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  transition: none !important;
-}
-
-header .nav-item:hover {
-  background: none !important;
-  color: #fff !important;
-}
-
-header .nav-item::after {
-  content: '' !important;
-  position: absolute !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  width: 0% !important;
-  height: 3px !important;
-  background: #fff !important;
-  border-radius: 5px !important;
-  transition: width 0.3s ease !important;
-}
-
-header .nav-item.active::after,
-header .nav-item:hover::after {
-  width: 100% !important;
-}
-
+/* Navigation propre */
+header .navigation { display: flex; justify-content: center; gap: 50px; margin-top: 20px; flex-wrap: wrap; }
+header .nav-item { position: relative; font-weight: 600; font-size: 1.05rem; color: #fff; cursor: pointer; padding: 8px 0; user-select: none; background: none !important; }
+header .nav-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: #fff; border-radius: 5px; transition: width 0.3s ease; }
+header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
 </style>
 </head>
 <body>
@@ -989,44 +948,8 @@ header .nav-item:hover::after {
         </div>
       </div>
     </div>
+    <div class="tab-content" id="tab-profil"><div class="info-message"><h2>👤 Profil</h2></div></div>
 
-    <!-- PROFIL -->
-    <div class="tab-content" id="tab-profil">
-      <div class="info-message" id="profilContent">
-        <h2>👤 Mon Profil</h2>
-      </div>
-    </div>
-
-    <!-- PARTENARIATS -->
-    <div class="tab-content" id="tab-partenariats">
-      <div class="info-message">
-        <h2>🤝 Partenariats</h2>
-        <p>Section en développement.</p>
-      </div>
-    </div>
-
-    <!-- BANQUE -->
-    <div class="tab-content" id="tab-banque">
-      <div class="info-message">
-        <h2>🏦 Banque</h2>
-        <p>Section en développement.</p>
-      </div>
-    </div>
-
-    <!-- COMPTA -->
-    <div class="tab-content" id="tab-compta">
-      <div class="info-message">
-        <h2>📊 Comptabilité</h2>
-        <p>Section en développement.</p>
-      </div>
-    </div>
-
-    <!-- LOGS -->
-    <div class="tab-content" id="tab-logs">
-      <div class="info-message">
-        <h2>📜 Historique</h2>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1131,8 +1054,7 @@ function showApp() {
   buildNavigation();
   loadProfilPage();
   loadLogsPage();
-  buildNavigation();
-  loadProfilPage();
+  buildNav();
   loadEmployees();
   loadRecruits();
 }
@@ -1635,52 +1557,22 @@ function loadLogsPage() {
 }
 
 
-
-const PERMS = {
-  "Patron": ["profil","accueil","employes","recrutement","absence","factures","partenariats","banque","compta","logs"],
-  "Co Patron": ["profil","accueil","employes","recrutement","absence","factures","partenariats","banque","compta","logs"],
-  "DRH": ["profil","accueil","employes","recrutement","absence","factures","banque","logs"],
-  "Responsable D'atelier": ["profil","accueil","employes","absence","factures","partenariats","banque","logs"],
-  "Responsable Evenementiel": ["profil","accueil","factures","banque"],
-  "Asst Evenemtiel": ["profil","accueil","factures","banque"],
-  "Chef d'atelier": ["profil","accueil","employes","absence","factures","logs"],
-  "RH": ["profil","accueil","employes","recrutement","absence"],
-  "Confirmé": ["profil","accueil"],
-  "Mécano": ["profil","accueil"],
-  "Apprenti": ["profil","accueil"],
-  "Stagiaire": ["profil","accueil"]
+const P = {
+  "Patron": ["profil","accueil","employes","recrutement","absence","factures"],
+  "DRH": ["profil","accueil","employes","recrutement","absence","factures"],
+  "RH": ["profil","accueil","employes","recrutement"],
+  "Confirmé": ["profil","accueil"]
 };
+const I = {"profil":"👤","accueil":"🏠","employes":"👥","recrutement":"📋","absence":"📅","factures":"💰"};
+const L = {"profil":"Profil","accueil":"Accueil","employes":"Employés","recrutement":"Recrutement","absence":"Absences","factures":"Factures"};
 
-const ICONS = {"profil":"👤","accueil":"🏠","employes":"👥","recrutement":"📋","absence":"📅","factures":"💰","partenariats":"🤝","banque":"🏦","compta":"📊","logs":"📜"};
-const LABELS = {"profil":"Profil","accueil":"Accueil","employes":"Employés","recrutement":"Recrutement","absence":"Absences","factures":"Factures","partenariats":"Partenariats","banque":"Banque","compta":"Compta","logs":"Logs"};
-
-let userCats = [];
-
-function buildNavigation() {
-  userCats = PERMS[currentUser?.grade] || ["profil","accueil"];
-  const nav = document.getElementById('mainNavigation');
+function buildNav() {
+  const cats = P[currentUser?.grade] || ["profil","accueil"];
+  const nav = document.getElementById('mainNav');
   if (!nav) return;
-  nav.innerHTML = userCats.map((c,i) => 
-    `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${ICONS[c]} ${LABELS[c]}</div>`
-  ).join('');
-  if (userCats[0]) switchTab(userCats[0]);
+  nav.innerHTML = cats.map((c,i) => `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${I[c]} ${L[c]}</div>`).join('');
+  if (cats[0]) switchTab(cats[0]);
 }
-
-function loadProfilPage() {
-  const el = document.getElementById('profilContent');
-  if (!el || !currentUser) return;
-  el.innerHTML = `
-    <h2>👤 ${currentUser.employeeName}</h2>
-    <div style="text-align:center;margin:2rem">
-      <img src="${currentUser.avatar}" style="width:120px;height:120px;border-radius:50%;border:4px solid var(--color-highlight)">
-    </div>
-    <table class="details-table">
-      <tr><td>Grade</td><td>${currentUser.grade||'-'}</td></tr>
-      <tr><td>Discord</td><td>${currentUser.username}#${currentUser.discriminator}</td></tr>
-    </table>
-  `;
-}
-
 </script>
 </body>
 </html>
