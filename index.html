@@ -1093,6 +1093,22 @@ function switchTab(tabName) {
   if (targetTab) {
     targetTab.classList.add('active');
   }
+  
+  // Gérer l'auto-refresh des logs
+  if (logsAutoRefreshInterval) {
+    clearInterval(logsAutoRefreshInterval);
+    logsAutoRefreshInterval = null;
+    console.log('🔄 Auto-refresh logs arrêté');
+  }
+  
+  if (tabName === 'logs') {
+    loadLogs();
+    logsAutoRefreshInterval = setInterval(() => {
+      console.log('🔄 Rafraîchissement auto des logs...');
+      loadLogs();
+    }, 5000);
+    console.log('🔄 Auto-refresh logs activé (5s)');
+  }
 }
 
 // ==================== THEME ====================
