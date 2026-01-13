@@ -1293,20 +1293,15 @@ async function loadRecruits() {
     }
 
     const rows = data.values;
-    const dataRows = rows.slice(1); // Ignorer header
+    let headerIndex = 0;
+    
+    const dataRows = rows.slice(headerIndex + 1);
     const unique = new Set();
 
     allRecruits = dataRows
       .map(r => ({
         id: r[3] ? r[3].toString().trim() : '',
         nom: r[4] ? r[4].toString().trim() : '',
-        rib: r[5] ? r[5].toString().trim() : '',
-        gmail: r[6] ? r[6].toString().trim() : '',
-        tel: r[7] ? r[7].toString().trim() : '',
-        discord: r[8] ? r[8].toString().trim() : '',
-        permis: r[9] ? r[9].toString().trim() : '',
-        diplome: r[11] ? r[11].toString().trim() : '',
-        age: r[12] ? r[12].toString().trim() : '',
         motivations: r[14] ? r[14].toString().trim() : '',
         qualites: r[15] ? r[15].toString().trim() : '',
         pourquoi: r[23] ? r[23].toString().trim() : '',
@@ -1337,27 +1332,6 @@ function displayRecruits(recruits) {
     return;
   }
 
-  recruits.forEach((rec, index) => {
-    const card = document.createElement('div');
-    card.className = 'employee-card';
-    
-    // Couleur selon statut
-    if (rec.statut === 'Accepté') {
-      card.style.background = 'linear-gradient(145deg,#4CAF50,#45a049)';
-    } else if (rec.statut === 'Refusé') {
-      card.style.background = 'linear-gradient(145deg,#FF3333,#CC0000)';
-    }
-    
-    card.innerHTML = `
-      <div class="employee-name">${rec.nom}</div>
-      <div class="employee-grade">${rec.statut}</div>
-    `;
-    
-    card.addEventListener('click', () => showRecruitDetails(index));
-    list.appendChild(card);
-  });
-}
-
   recruits.forEach(rec => {
     const card = document.createElement('div');
     card.className = 'employee-card';
@@ -1367,6 +1341,7 @@ function displayRecruits(recruits) {
       <div class="employee-grade">${rec.statut}</div>
     `;
     
+    card.addEventListener('click', () => showRecruitDetails(rec));
     list.appendChild(card);
   });
 }
@@ -1662,9 +1637,7 @@ async function loadLogs() {
 
 
 
-function showRecruitDetails(index) {
-  const rec = filteredRecruits[index];
-  
+function showRecruitDetails(rec) {
   const modal = document.getElementById('employeeModal');
   const modalContent = document.getElementById('modalContent');
   
@@ -1674,13 +1647,6 @@ function showRecruitDetails(index) {
       <table class="details-table">
         <tr><td><strong>ID Discord</strong></td><td>${rec.id}</td></tr>
         <tr><td><strong>Nom</strong></td><td>${rec.nom}</td></tr>
-        <tr><td><strong>Âge</strong></td><td>${rec.age}</td></tr>
-        <tr><td><strong>Téléphone</strong></td><td>${rec.tel}</td></tr>
-        <tr><td><strong>Email</strong></td><td>${rec.gmail}</td></tr>
-        <tr><td><strong>Discord</strong></td><td>${rec.discord}</td></tr>
-        <tr><td><strong>RIB</strong></td><td>${rec.rib}</td></tr>
-        <tr><td><strong>Permis</strong></td><td>${rec.permis}</td></tr>
-        <tr><td><strong>Diplôme</strong></td><td>${rec.diplome}</td></tr>
         <tr><td><strong>Statut</strong></td><td>${rec.statut}</td></tr>
       </table>
       
