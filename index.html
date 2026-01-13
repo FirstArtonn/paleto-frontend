@@ -1349,6 +1349,7 @@ function displayRecruits(recruits) {
       <div class="employee-grade">${rec.statut}</div>
     `;
     
+    card.addEventListener('click', () => showRecruitDetails(rec));
     list.appendChild(card);
   });
 }
@@ -1618,9 +1619,9 @@ function showRecruitDetails(rec) {
   const modalContent = document.getElementById('modalContent');
   
   const jours = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
-  const dispoHTML = rec.dispo.map((d, i) => 
+  const dispoHTML = (rec.dispo && Array.isArray(rec.dispo)) ? rec.dispo.map((d, i) => 
     `<span style="display:inline-block;padding:0.3rem 0.6rem;margin:0.2rem;background:${d==='Oui'?'rgba(76,175,80,0.3)':'rgba(255,59,48,0.3)'};border-radius:6px;font-size:0.85rem;">${jours[i]}: ${d}</span>`
-  ).join('');
+  ).join('') : 'Non renseigné';
   
   modalContent.innerHTML = `
     <h2 style="margin-bottom:2rem;">📋 ${rec.nom}</h2>
