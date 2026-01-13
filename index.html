@@ -1300,13 +1300,21 @@ async function loadRecruits() {
 
     allRecruits = dataRows
       .map(r => ({
-        id: r[3] ? r[3].toString().trim() : '',
-        nom: r[4] ? r[4].toString().trim() : '',
-        motivations: r[14] ? r[14].toString().trim() : '',
-        qualites: r[15] ? r[15].toString().trim() : '',
-        pourquoi: r[23] ? r[23].toString().trim() : '',
-        mecano: r[25] ? r[25].toString().trim() : '',
-        statut: r[26] ? r[26].toString().trim() : 'En attente'
+        id: r[4] ? r[4].toString().trim() : '',
+        nom: r[5] ? r[5].toString().trim() : '',
+        rib: r[6] ? r[6].toString().trim() : '',
+        tel: r[8] ? r[8].toString().trim() : '',
+        discord: r[9] ? r[9].toString().trim() : '',
+        permis: r[10] ? r[10].toString().trim() : '',
+        diplome: r[12] ? r[12].toString().trim() : '',
+        carteId: r[14] ? r[14].toString().trim() : '',
+        motivations: r[15] ? r[15].toString().trim() : '',
+        qualites: r[16] ? r[16].toString().trim() : '',
+        dispo: [r[17], r[18], r[19], r[20], r[21], r[22], r[23]].map(d => d ? 'Oui' : 'Non'),
+        pourquoi: r[24] ? r[24].toString().trim() : '',
+        illegal: r[25] ? r[25].toString().trim() : '',
+        mecano: r[26] ? r[26].toString().trim() : '',
+        statut: r[27] ? r[27].toString().trim() : 'En attente'
       }))
       .filter(c => {
         if (!c.nom || unique.has(c.nom)) return false;
@@ -1641,8 +1649,58 @@ function showRecruitDetails(rec) {
   const modal = document.getElementById('employeeModal');
   const modalContent = document.getElementById('modalContent');
   
+  const jours = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+  const dispoHTML = rec.dispo.map((d, i) => 
+    `<span style="display:inline-block;padding:0.3rem 0.6rem;margin:0.2rem;background:${d==='Oui'?'rgba(76,175,80,0.3)':'rgba(255,59,48,0.3)'};border-radius:6px;font-size:0.85rem;">${jours[i]}: ${d}</span>`
+  ).join('');
+  
   modalContent.innerHTML = `
-    <h2>📋 Candidat: ${rec.nom}</h2>
+    <h2 style="margin-bottom:2rem;">📋 ${rec.nom}</h2>
+    
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem;">
+      <div>
+        <h3 style="font-size:0.9rem;color:var(--color-text-dim);margin-bottom:0.5rem;">📞 Contact</h3>
+        <p style="margin:0.3rem 0;"><strong>Tel:</strong> ${rec.tel || '-'}</p>
+        <p style="margin:0.3rem 0;"><strong>Discord:</strong> ${rec.discord || '-'}</p>
+        <p style="margin:0.3rem 0;"><strong>ID:</strong> ${rec.id || '-'}</p>
+      </div>
+      
+      <div>
+        <h3 style="font-size:0.9rem;color:var(--color-text-dim);margin-bottom:0.5rem;">📄 Infos</h3>
+        <p style="margin:0.3rem 0;"><strong>Permis:</strong> ${rec.permis || '-'}</p>
+        <p style="margin:0.3rem 0;"><strong>Diplôme:</strong> ${rec.diplome || '-'}</p>
+        <p style="margin:0.3rem 0;"><strong>Statut:</strong> <span style="color:${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3333':'#FFA500'};">${rec.statut}</span></p>
+      </div>
+    </div>
+    
+    <div style="margin-bottom:1.5rem;">
+      <h3 style="font-size:0.9rem;color:var(--color-text-dim);margin-bottom:0.5rem;">📅 Disponibilités</h3>
+      <div>${dispoHTML}</div>
+    </div>
+    
+    <div style="margin-bottom:1.5rem;">
+      <h3 style="font-size:0.9rem;color:var(--color-text-dim);margin-bottom:0.5rem;">💭 Motivations</h3>
+      <p style="background:rgba(255,255,255,0.05);padding:1rem;border-radius:8px;margin:0;font-size:0.95rem;line-height:1.5;">${rec.motivations || 'Non renseigné'}</p>
+    </div>
+    
+    <div style="margin-bottom:1.5rem;">
+      <h3 style="font-size:0.9rem;color:var(--color-text-dim);margin-bottom:0.5rem;">✨ Qualités / Défauts</h3>
+      <p style="background:rgba(255,255,255,0.05);padding:1rem;border-radius:8px;margin:0;font-size:0.95rem;line-height:1.5;">${rec.qualites || 'Non renseigné'}</p>
+    </div>
+    
+    <div style="margin-bottom:1.5rem;">
+      <h3 style="font-size:0.9rem;color:var(--color-text-dim);margin-bottom:0.5rem;">❓ Pourquoi vous ?</h3>
+      <p style="background:rgba(255,255,255,0.05);padding:1rem;border-radius:8px;margin:0;font-size:0.95rem;line-height:1.5;">${rec.pourquoi || 'Non renseigné'}</p>
+    </div>
+    
+    <div style="margin-bottom:1.5rem;">
+      <h3 style="font-size:0.9rem;color:var(--color-text-dim);margin-bottom:0.5rem;">🔧 C'est quoi un mécano pour vous ?</h3>
+      <p style="background:rgba(255,255,255,0.05);padding:1rem;border-radius:8px;margin:0;font-size:0.95rem;line-height:1.5;">${rec.mecano || 'Non renseigné'}</p>
+    </div>
+  `;
+  
+  modal.classList.add('active');
+}</h2>
     <div style="margin-top: 2rem;">
       <table class="details-table">
         <tr><td><strong>ID Discord</strong></td><td>${rec.id}</td></tr>
