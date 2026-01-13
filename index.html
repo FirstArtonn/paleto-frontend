@@ -1293,6 +1293,49 @@ async function loadRecruits() {
     }
 
     const rows = data.values;
+    const dataRows = rows.slice(1); // Ignorer header
+    const unique = new Set();
+
+    allRecruits = dataRows
+      .map(r => ({
+        id: r[3] ? r[3].toString().trim() : '',
+        nom: r[4] ? r[4].toString().trim() : '',
+        rib: r[5] ? r[5].toString().trim() : '',
+        gmail: r[6] ? r[6].toString().trim() : '',
+        tel: r[7] ? r[7].toString().trim() : '',
+        discord: r[8] ? r[8].toString().trim() : '',
+        permis: r[9] ? r[9].toString().trim() : '',
+        diplome: r[11] ? r[11].toString().trim() : '',
+        age: r[12] ? r[12].toString().trim() : '',
+        motivations: r[14] ? r[14].toString().trim() : '',
+        qualites: r[15] ? r[15].toString().trim() : '',
+        pourquoi: r[23] ? r[23].toString().trim() : '',
+        mecano: r[25] ? r[25].toString().trim() : '',
+        statut: r[26] ? r[26].toString().trim() : 'En attente'
+      }))
+      .filter(c => {
+        if (!c.nom || unique.has(c.nom)) return false;
+        unique.add(c.nom);
+        return true;
+      })
+      .reverse();
+
+    filteredRecruits = [...allRecruits];
+    displayRecruits(filteredRecruits);
+
+  } catch (error) {
+    list.innerHTML = `<div class="info-message">❌ Erreur: ${error.message}</div>`;
+  }
+}/values/${encodeURIComponent(SHEET_RECRUITMENT)}?key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (!data.values) {
+      list.innerHTML = '<div class="info-message">❌ Aucune donnée</div>';
+      return;
+    }
+
+    const rows = data.values;
     let headerIndex = 0;
     
     const dataRows = rows.slice(headerIndex + 1);
@@ -1327,6 +1370,27 @@ function displayRecruits(recruits) {
     list.innerHTML = '<div class="info-message">Aucun candidat trouvé</div>';
     return;
   }
+
+  recruits.forEach((rec, index) => {
+    const card = document.createElement('div');
+    card.className = 'employee-card';
+    
+    // Couleur selon statut
+    if (rec.statut === 'Accepté') {
+      card.style.background = 'linear-gradient(145deg,#4CAF50,#45a049)';
+    } else if (rec.statut === 'Refusé') {
+      card.style.background = 'linear-gradient(145deg,#FF3333,#CC0000)';
+    }
+    
+    card.innerHTML = `
+      <div class="employee-name">${rec.nom}</div>
+      <div class="employee-grade">${rec.statut}</div>
+    `;
+    
+    card.addEventListener('click', () => showRecruitDetails(index));
+    list.appendChild(card);
+  });
+}
 
   recruits.forEach(rec => {
     const card = document.createElement('div');
@@ -1630,6 +1694,54 @@ async function loadLogs() {
   }
 }
 
+
+
+function showRecruitDetails(index) {
+  const rec = filteredRecruits[index];
+  
+  const modal = document.getElementById('employeeModal');
+  const modalContent = document.getElementById('modalContent');
+  
+  modalContent.innerHTML = `
+    <h2>📋 Candidat: ${rec.nom}</h2>
+    <div style="margin-top: 2rem;">
+      <table class="details-table">
+        <tr><td><strong>ID Discord</strong></td><td>${rec.id}</td></tr>
+        <tr><td><strong>Nom</strong></td><td>${rec.nom}</td></tr>
+        <tr><td><strong>Âge</strong></td><td>${rec.age}</td></tr>
+        <tr><td><strong>Téléphone</strong></td><td>${rec.tel}</td></tr>
+        <tr><td><strong>Email</strong></td><td>${rec.gmail}</td></tr>
+        <tr><td><strong>Discord</strong></td><td>${rec.discord}</td></tr>
+        <tr><td><strong>RIB</strong></td><td>${rec.rib}</td></tr>
+        <tr><td><strong>Permis</strong></td><td>${rec.permis}</td></tr>
+        <tr><td><strong>Diplôme</strong></td><td>${rec.diplome}</td></tr>
+        <tr><td><strong>Statut</strong></td><td>${rec.statut}</td></tr>
+      </table>
+      
+      <div style="margin-top: 2rem;">
+        <h3>💭 Motivations</h3>
+        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.motivations || 'Non renseigné'}</p>
+      </div>
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>✨ Qualités</h3>
+        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.qualites || 'Non renseigné'}</p>
+      </div>
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>❓ Pourquoi nous ?</h3>
+        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.pourquoi || 'Non renseigné'}</p>
+      </div>
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>🔧 Connaissances mécano</h3>
+        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.mecano || 'Non renseigné'}</p>
+      </div>
+    </div>
+  `;
+  
+  modal.classList.add('active');
+}
 </script>
 </body>
 </html>
