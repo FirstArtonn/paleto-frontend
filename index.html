@@ -1038,11 +1038,24 @@ function showApp() {
   logAction("Connexion au système");
   
   buildNavigation();
-  loadProfilPage();
-  loadLogsPage();
-  buildNav();
-  loadEmployees();
-  loadRecruits();
+  
+  // Charger avec des délais pour éviter l'erreur 429
+  setTimeout(() => loadProfilPage(), 100);
+  setTimeout(() => loadLogsPage(), 2000);
+  
+  
+  // Charger employés et recrues avec délais
+  setTimeout(() => {
+    if (currentUser.role === 'admin' || currentUser.role === 'rh') {
+      loadEmployees();
+    }
+  }, 1000);
+  
+  setTimeout(() => {
+    if (currentUser.role === 'admin' || currentUser.role === 'rh') {
+      loadRecruits();
+    }
+  }, 3000);
 }
 
 // ==================== NAVIGATION ====================
@@ -1586,13 +1599,6 @@ const P = {
 const I = {"profil":"👤","accueil":"🏠","employes":"👥","recrutement":"📋","absence":"📅","factures":"💰"};
 const L = {"profil":"Profil","accueil":"Accueil","employes":"Employés","recrutement":"Recrutement","absence":"Absences","factures":"Factures"};
 
-function buildNav() {
-  const cats = P[currentUser?.grade] || ["profil","accueil"];
-  const nav = document.getElementById('mainNav');
-  if (!nav) return;
-  nav.innerHTML = cats.map((c,i) => `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${I[c]} ${L[c]}</div>`).join('');
-  if (cats[0]) switchTab(cats[0]);
-}
 
 
 async function logAction(action) {
