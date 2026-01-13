@@ -313,32 +313,13 @@ header h1 {
   user-select: none;
 }
 
-.nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(233, 69, 96, 0.2), transparent);
-  transition: left 0.5s;
-}
 
-.nav-item:hover::before {
-  left: 100%;
-}
 
-.nav-item:hover {
-  background: rgba(233, 69, 96, 0.1);
-  border-color: var(--color-highlight);
-  transform: translateY(-2px);
-}
 
-.nav-item.active {
-  background: var(--color-highlight);
-  color: white;
-  border-color: var(--color-highlight);
-}
+
+.nav-item:hover { background: none !important; transform: none !important; color: var(--color-text) !important; }
+
+.nav-item.active { background: none !important; color: var(--color-text) !important; }
 
 .nav-item.admin-only,
 .nav-item.rh-only {
@@ -791,9 +772,7 @@ body.role-rh .nav-item.rh-only {
   user-select: none;
 }
 
-.nav-item:hover {
-  color: var(--color-highlight);
-}
+.nav-item:hover { background: none !important; transform: none !important; color: var(--color-text) !important; }
 
 .nav-item::after {
   content: '';
@@ -974,16 +953,22 @@ const SHEET_ID = "17ZntDHZ8olidnCM1pig311AcjawM4l6HoRxSYFP7KGw";
 const API_KEY = "AIzaSyBtOfa8W5POpJ2KOZSKqxsC4CfZBkYG40E";
 const SHEET_EMPLOYEES = "Info Employé";
 const SHEET_RECRUITMENT = "Formulaire Info ";
+const LOGS_SHEET_ID = "19YnTEHpGQSoqMbInvK29HWsPBXzoexYcqzRVDJjKsyI";
 
 const GRADES = [
   "Patron", "Co Patron", "DRH", "RH", "Responsable D'atelier",
   "Chef d'atelier", "Confirmé", "Mécano", "Apprenti", "Stagiaire"
 ];
+const GRADE_HIERARCHY = ["Patron","Co Patron","DRH","RH","Responsable D'atelier","Responsable Evenementiel","Asst Evenemtiel","Chef d'atelier","Confirmé","Mécano","Apprenti","Stagiaire"];
+function getGradeLevel(grade) { const idx = GRADE_HIERARCHY.indexOf(grade); return idx === -1 ? 999 : idx; }
+function canAssignGrade(userGrade, targetGrade) { return getGradeLevel(targetGrade) > getGradeLevel(userGrade); }
+
 
 let currentUser = null;
 let allEmployees = [];
 let filteredEmployees = [];
 let allRecruits = [];
+let logsAutoRefreshInterval = null;
 let filteredRecruits = [];
 
 // ==================== AUTH ====================
@@ -1050,6 +1035,7 @@ function showApp() {
   document.getElementById('userPermissions').textContent = permissions[currentUser.role];
   
   document.body.className = `role-${currentUser.role}`;
+  logAction("Connexion au système");
   
   buildNavigation();
   loadProfilPage();
@@ -1249,30 +1235,41 @@ async function updateGrade(empId, newGrade) {
   const url = "https://script.google.com/macros/s/AKfycbwHrdDmiXxypByJtfkkopKOrBegvU1q-0Lrhrk5Ufph_1KeDRJqTWdyOkdvXa7i3W4/exec";
   const proxy = "https://corsproxy.io/?";
   
-  showToast('⏳ Mise à jour du grade...', 'info');
-
+  const emp = allEmployees.find(e => e.id === empId);
+  const oldGrade = emp ? emp.grade : 'Inconnu';
+  const empName = emp ? emp.nom : 'Inconnu';
+  
+  if (!canAssignGrade(currentUser.grade, newGrade)) {
+    showToast('❌ Vous ne pouvez pas assigner ce grade', 'error');
+    return;
+  }
+  
+  showToast('⏳ Mise à jour...', 'info');
+  
   try {
     await fetch(proxy + encodeURIComponent(url), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: empId, grade: newGrade })
     });
-
-    const emp = allEmployees.find(e => e.id === empId);
+    
     if (emp) {
       emp.grade = newGrade;
       const filtered = filteredEmployees.find(e => e.id === empId);
       if (filtered) filtered.grade = newGrade;
     }
-
-    showToast('✅ Grade mis à jour avec succès !', 'success');
+    
+    showToast('✅ Grade mis à jour !', 'success');
+    logAction(`Modification grade employé ID ${empId} (${empName}) : ${oldGrade} → ${newGrade}`);
     closeModal();
     setTimeout(() => loadEmployees(), 1000);
-
   } catch (error) {
-    console.error('❌ Erreur updateGrade:', error);
-    showToast('❌ Erreur lors de la mise à jour', 'error');
+    console.error('❌ Erreur:', error);
+    showToast('❌ Erreur', 'error');
   }
+}`, 'success');
+  closeModal();
+  loadEmployees();
 }
 
 function closeModal() {
@@ -1566,18 +1563,7 @@ function loadProfilPage() {
   `;
 }
 
-function loadLogsPage() {
-  const logsContainer = document.getElementById('logsContainer');
-  if (!logsContainer) return;
-  
-  logsContainer.innerHTML = `
-    <div style="text-align: center; padding: 2rem; background: rgba(233, 69, 96, 0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
-      <p><strong>📜 Historique des actions</strong></p>
-      <p style="margin-top: 1rem; color: var(--color-text-dim);">Aucun log pour le moment.</p>
-      <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--color-text-dim);">Les actions importantes seront enregistrées ici.</p>
-    </div>
-  `;
-}
+function loadLogsPage() { loadLogs(); }
 
 
 const P = {
@@ -1596,6 +1582,54 @@ function buildNav() {
   nav.innerHTML = cats.map((c,i) => `<div class="nav-item ${i===0?'active':''}" onclick="switchTab('${c}')">${I[c]} ${L[c]}</div>`).join('');
   if (cats[0]) switchTab(cats[0]);
 }
+
+
+async function logAction(action) {
+  const url = "https://script.google.com/macros/s/AKfycbwHrdDmiXxypByJtfkkopKOrBegvU1q-0Lrhrk5Ufph_1KeDRJqTWdyOkdvXa7i3W4/exec";
+  const proxy = "https://corsproxy.io/?";
+  const now = new Date();
+  const dateTime = now.toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  
+  try {
+    await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'log', prenomNom: currentUser?.employeeName || 'Inconnu', dateHeure: dateTime, action: action })
+    });
+  } catch (error) {
+    console.error('❌ Erreur log:', error);
+  }
+}
+
+async function loadLogs() {
+  const container = document.getElementById('logsContainer');
+  if (!container) return;
+  
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${LOGS_SHEET_ID}/values/Logs!A:C?key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const now = new Date().toLocaleTimeString('fr-FR');
+    
+    if (!data.values || data.values.length <= 1) {
+      container.innerHTML = '<p style="text-align:center;color:var(--color-text-dim);">Aucun log pour le moment.</p>';
+      return;
+    }
+    
+    const logs = data.values.slice(1).reverse();
+    let html = '<div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><h3 style="margin:0;">📜 Historique</h3><span style="color:var(--color-text-dim);font-size:0.9rem;">🔄 ' + now + '</span></div>';
+    html += '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(233,69,96,0.1);"><th style="padding:1rem;text-align:left;">Utilisateur</th><th style="padding:1rem;text-align:left;">Date & Heure</th><th style="padding:1rem;text-align:left;">Action</th></tr></thead><tbody>';
+    logs.forEach((log, i) => {
+      const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+      html += `<tr style="background:${bg};"><td style="padding:1rem;">${log[0]||'-'}</td><td style="padding:1rem;font-size:0.9rem;">${log[1]||'-'}</td><td style="padding:1rem;">${log[2]||'-'}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  } catch (error) {
+    console.error('❌ Erreur logs:', error);
+  }
+}
+
 </script>
 </body>
 </html>
