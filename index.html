@@ -1326,40 +1326,6 @@ async function loadRecruits() {
   } catch (error) {
     list.innerHTML = `<div class="info-message">❌ Erreur: ${error.message}</div>`;
   }
-}/values/${encodeURIComponent(SHEET_RECRUITMENT)}?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    if (!data.values) {
-      list.innerHTML = '<div class="info-message">❌ Aucune donnée</div>';
-      return;
-    }
-
-    const rows = data.values;
-    let headerIndex = 0;
-    
-    const dataRows = rows.slice(headerIndex + 1);
-    const unique = new Set();
-
-    allRecruits = dataRows
-      .map(r => ({
-        id: r[3] ? r[3].toString().trim() : '',
-        nom: r[4] ? r[4].toString().trim() : '',
-        statut: r[26] ? r[26].toString().trim() : 'En attente'
-      }))
-      .filter(c => {
-        if (!c.nom || unique.has(c.nom)) return false;
-        unique.add(c.nom);
-        return true;
-      })
-      .reverse();
-
-    filteredRecruits = [...allRecruits];
-    displayRecruits(filteredRecruits);
-
-  } catch (error) {
-    list.innerHTML = `<div class="info-message">❌ Erreur: ${error.message}</div>`;
-  }
 }
 
 function displayRecruits(recruits) {
