@@ -1349,7 +1349,6 @@ function displayRecruits(recruits) {
       <div class="employee-grade">${rec.statut}</div>
     `;
     
-    card.addEventListener('click', () => showRecruitDetails(rec));
     list.appendChild(card);
   });
 }
@@ -1614,37 +1613,6 @@ async function logAction(action) {
   }
 }
 
-async function loadLogs() {
-  const container = document.getElementById('logsContainer');
-  if (!container) return;
-  
-  try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${LOGS_SHEET_ID}/values/Logs!A:C?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    const now = new Date().toLocaleTimeString('fr-FR');
-    
-    if (!data.values || data.values.length <= 1) {
-      container.innerHTML = '<p style="text-align:center;color:var(--color-text-dim);">Aucun log pour le moment.</p>';
-      return;
-    }
-    
-    const logs = data.values.slice(1).reverse();
-    let html = '<div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><h3 style="margin:0;">📜 Historique</h3><span style="color:var(--color-text-dim);font-size:0.9rem;">🔄 ' + now + '</span></div>';
-    html += '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(233,69,96,0.1);"><th style="padding:1rem;text-align:left;">Utilisateur</th><th style="padding:1rem;text-align:left;">Date & Heure</th><th style="padding:1rem;text-align:left;">Action</th></tr></thead><tbody>';
-    logs.forEach((log, i) => {
-      const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
-      html += `<tr style="background:${bg};"><td style="padding:1rem;">${log[0]||'-'}</td><td style="padding:1rem;font-size:0.9rem;">${log[1]||'-'}</td><td style="padding:1rem;">${log[2]||'-'}</td></tr>`;
-    });
-    html += '</tbody></table>';
-    container.innerHTML = html;
-  } catch (error) {
-    console.error('❌ Erreur logs:', error);
-  }
-}
-
-
-
 function showRecruitDetails(rec) {
   const modal = document.getElementById('employeeModal');
   const modalContent = document.getElementById('modalContent');
@@ -1700,38 +1668,37 @@ function showRecruitDetails(rec) {
   `;
   
   modal.classList.add('active');
-}</h2>
-    <div style="margin-top: 2rem;">
-      <table class="details-table">
-        <tr><td><strong>ID Discord</strong></td><td>${rec.id}</td></tr>
-        <tr><td><strong>Nom</strong></td><td>${rec.nom}</td></tr>
-        <tr><td><strong>Statut</strong></td><td>${rec.statut}</td></tr>
-      </table>
-      
-      <div style="margin-top: 2rem;">
-        <h3>💭 Motivations</h3>
-        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.motivations || 'Non renseigné'}</p>
-      </div>
-      
-      <div style="margin-top: 1.5rem;">
-        <h3>✨ Qualités</h3>
-        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.qualites || 'Non renseigné'}</p>
-      </div>
-      
-      <div style="margin-top: 1.5rem;">
-        <h3>❓ Pourquoi nous ?</h3>
-        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.pourquoi || 'Non renseigné'}</p>
-      </div>
-      
-      <div style="margin-top: 1.5rem;">
-        <h3>🔧 Connaissances mécano</h3>
-        <p style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-top: 1rem;">${rec.mecano || 'Non renseigné'}</p>
-      </div>
-    </div>
-  `;
-  
-  modal.classList.add('active');
 }
+
+async function loadLogs() {
+  const container = document.getElementById('logsContainer');
+  if (!container) return;
+  
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${LOGS_SHEET_ID}/values/Logs!A:C?key=${API_KEY}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    const now = new Date().toLocaleTimeString('fr-FR');
+    
+    if (!data.values || data.values.length <= 1) {
+      container.innerHTML = '<p style="text-align:center;color:var(--color-text-dim);">Aucun log pour le moment.</p>';
+      return;
+    }
+    
+    const logs = data.values.slice(1).reverse();
+    let html = '<div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><h3 style="margin:0;">📜 Historique</h3><span style="color:var(--color-text-dim);font-size:0.9rem;">🔄 ' + now + '</span></div>';
+    html += '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(233,69,96,0.1);"><th style="padding:1rem;text-align:left;">Utilisateur</th><th style="padding:1rem;text-align:left;">Date & Heure</th><th style="padding:1rem;text-align:left;">Action</th></tr></thead><tbody>';
+    logs.forEach((log, i) => {
+      const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+      html += `<tr style="background:${bg};"><td style="padding:1rem;">${log[0]||'-'}</td><td style="padding:1rem;font-size:0.9rem;">${log[1]||'-'}</td><td style="padding:1rem;">${log[2]||'-'}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  } catch (error) {
+    console.error('❌ Erreur logs:', error);
+  }
+}
+
 </script>
 </body>
 </html>
