@@ -695,6 +695,42 @@ body.role-rh .nav-item.rh-only {
   color: var(--color-highlight);
 }
 
+/* CONTEXT MENU */
+#contextMenu {
+  position: fixed;
+  background: rgba(26, 26, 46, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.5rem 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  z-index: 10000;
+  display: none;
+}
+
+.context-menu-item {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--color-text);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.context-menu-item:hover {
+  background: rgba(233, 69, 96, 0.2);
+  color: var(--color-highlight);
+}
+
+.context-menu-separator {
+  height: 1px;
+  background: var(--color-border);
+  margin: 0.25rem 0;
+}
+
+
 /* TOAST */
 .toast {
   position: fixed;
@@ -1499,6 +1535,13 @@ function displayRecruits(recruits) {
     `;
     
     card.addEventListener('click', () => showRecruitDetails(rec));
+    
+    // Clic droit pour menu contextuel
+    card.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      showContextMenu(e, rec);
+    });
+    
     list.appendChild(card);
   });
 }
@@ -1514,7 +1557,17 @@ document.addEventListener('DOMContentLoaded', () => {
         emp.grade.toLowerCase().includes(query)
       );
       displayEmployees(filteredEmployees);
-    });
+    
+  
+  // Event listeners menu contextuel
+  document.getElementById('addApprenti')?.addEventListener('click', () => {
+    addRecruitAsEmployee('Apprenti');
+  });
+  
+  document.getElementById('addStagiaire')?.addEventListener('click', () => {
+    addRecruitAsEmployee('Stagiaire');
+  });
+});
   }
   
   const searchBarRecruit = document.getElementById('searchBarRecruit');
@@ -1912,6 +1965,88 @@ async function updateRecruitStatus(recruitId, newStatus) {
     showToast(`❌ Erreur: ${error.message}`, 'error');
   }
 }
+
+
+let currentRecruit = null;
+
+function showContextMenu(event, recruit) {
+  event.preventDefault();
+  event.stopPropagation();
+  
+  const menu = document.getElementById('contextMenu');
+  currentRecruit = recruit;
+  
+  // Positionner le menu
+  menu.style.left = event.pageX + 'px';
+  menu.style.top = event.pageY + 'px';
+  menu.style.display = 'block';
+  
+  // Fermer si clic ailleurs
+  setTimeout(() => {
+    document.addEventListener('click', function closeMenu() {
+      menu.style.display = 'none';
+      document.removeEventListener('click', closeMenu);
+    });
+  }, 10);
+}
+
+async function addRecruitAsEmployee(grade) {
+  if (!currentRecruit) return;
+  
+  const menu = document.getElementById('contextMenu');
+  menu.style.display = 'none';
+  
+  showToast('⏳ Ajout en cours...', 'info');
+  
+  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const proxy = "https://corsproxy.io/?";
+  
+  const today = new Date().toLocaleDateString('fr-FR');
+  
+  try {
+    const response = await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'addRecruitAsEmployee',
+        recruit: {
+          id: currentRecruit.id,
+          nom: currentRecruit.nom,
+          rib: currentRecruit.rib,
+          grade: grade,
+          tel: currentRecruit.tel,
+          discord: currentRecruit.discord,
+          permis: currentRecruit.permis,
+          gmail: currentRecruit.gmail || '',
+          diplome: currentRecruit.diplome,
+          dateEntree: today
+        }
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log('✅ Réponse addRecruitAsEmployee:', result);
+    
+    if (result.success === false) {
+      throw new Error(result.error || 'Erreur serveur');
+    }
+    
+    showToast(`✅ ${currentRecruit.nom} ajouté comme ${grade} !`, 'success');
+    logAction(`Ajout recrue ${currentRecruit.nom} (ID ${currentRecruit.id}) comme ${grade}`);
+    
+    // Rafraîchir les employés
+    setTimeout(() => loadEmployees(), 1000);
+    
+  } catch (error) {
+    console.error('❌ Erreur addRecruitAsEmployee:', error);
+    showToast(`❌ Erreur: ${error.message}`, 'error');
+  }
+}
+
 async function loadLogs() {
   const container = document.getElementById('logsContainer');
   if (!container) return;
@@ -1942,5 +2077,17 @@ async function loadLogs() {
 }
 
 </script>
+
+  <!-- CONTEXT MENU -->
+  <div id="contextMenu">
+    <div class="context-menu-item" id="addApprenti">
+      <span>🎓</span>
+      <span>Ajouter comme Apprenti</span>
+    </div>
+    <div class="context-menu-item" id="addStagiaire">
+      <span>📝</span>
+      <span>Ajouter comme Stagiaire</span>
+    </div>
+  </div>
 </body>
 </html>
