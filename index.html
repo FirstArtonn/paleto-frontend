@@ -1288,7 +1288,8 @@ async function loadEmployees() {
         entree: r[10] ? r[10].toString().trim() : '',
         sortie: r[11] ? r[11].toString().trim() : '',
         sanction: r[12] ? r[12].toString().trim() : '',
-        retrait: r[13] ? r[13].toString().trim() : ''
+        retrait: r[13] ? r[13].toString().trim() : '',
+        commentaires: r[28] ? r[28].toString().trim() : ''  // Colonne AC
       }))
       .filter(e => {
         if (!e.nom || unique.has(e.nom)) return false;
@@ -1375,6 +1376,42 @@ function showEmployeeDetails(index) {
     <tr><td>Sanction</td><td>${emp.sanction || '-'}</td></tr>
     <tr><td>Date retrait</td><td>${emp.retrait || '-'}</td></tr>
   `;
+  
+  // Ajouter section commentaires après le tableau
+  const commentsSection = document.createElement('div');
+  commentsSection.style.cssText = 'margin-top:2rem;padding-top:2rem;border-top:2px solid var(--color-border);';
+  
+  commentsSection.innerHTML = `
+    <h3 style="margin:0 0 1rem 0;font-size:1.2rem;color:var(--color-highlight);">💬 Commentaires</h3>
+    
+    <!-- Liste des commentaires -->
+    <div id="commentsList" style="max-height:200px;overflow-y:auto;margin-bottom:1rem;padding:0.5rem;background:rgba(0,0,0,0.2);border-radius:8px;">
+      ${emp.commentaires ? emp.commentaires.split('\n').filter(c => c.trim()).map(comment => `
+        <div style="padding:0.5rem;margin-bottom:0.5rem;background:rgba(255,255,255,0.05);border-left:3px solid var(--color-highlight);border-radius:4px;">
+          ${comment}
+        </div>
+      `).join('') : '<p style="color:var(--color-text-dim);font-style:italic;">Aucun commentaire</p>'}
+    </div>
+    
+    <!-- Zone de texte pour nouveau commentaire -->
+    <div style="display:flex;gap:0.5rem;align-items:flex-start;">
+      <textarea 
+        id="newComment" 
+        placeholder="Écrire un commentaire..."
+        style="flex:1;padding:0.75rem;background:rgba(255,255,255,0.05);border:1px solid var(--color-border);border-radius:8px;color:var(--color-text);font-family:inherit;resize:vertical;min-height:60px;"
+      ></textarea>
+      <button 
+        onclick="addComment('${emp.id}')"
+        style="padding:0.75rem 1.5rem;background:var(--color-highlight);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.2s;"
+        onmouseover="this.style.background='#ff6b8a'"
+        onmouseout="this.style.background='var(--color-highlight)'"
+      >
+        Envoyer
+      </button>
+    </div>
+  `;
+  
+  content.parentElement.appendChild(commentsSection);
   
   modal.classList.add('active');
 }
@@ -2047,6 +2084,68 @@ async function addRecruitAsEmployee(grade) {
     
   } catch (error) {
     console.error('❌ Erreur addRecruitAsEmployee:', error);
+    showToast(`❌ Erreur: ${error.message}`, 'error');
+  }
+}
+
+async function addComment(employeeId) {
+  const textarea = document.getElementById('newComment');
+  const commentText = textarea.value.trim();
+  
+  if (!commentText) {
+    showToast('❌ Le commentaire ne peut pas être vide', 'error');
+    return;
+  }
+  
+  console.log('🔵 addComment appelé:', { employeeId, commentText, user: currentUser.nom });
+  
+  showToast('⏳ Envoi du commentaire...', 'info');
+  
+  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const proxy = "https://corsproxy.io/?";
+  
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('fr-FR');
+  const timeStr = today.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+  
+  // Format: [Prénom] (JJ/MM/AAAA HH:MM) : Message
+  const formattedComment = `[${currentUser.nom}] (${dateStr} ${timeStr}) : ${commentText}`;
+  
+  try {
+    const response = await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'addComment',
+        employeeId: employeeId,
+        comment: formattedComment
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log('✅ Réponse addComment:', result);
+    
+    if (result.success === false) {
+      throw new Error(result.error || 'Erreur serveur');
+    }
+    
+    showToast('✅ Commentaire ajouté !', 'success');
+    textarea.value = '';
+    
+    logAction(`Commentaire ajouté pour employé ID ${employeeId}`);
+    
+    // Rafraîchir les employés
+    setTimeout(() => {
+      loadEmployees();
+      closeModal();
+    }, 1000);
+    
+  } catch (error) {
+    console.error('❌ Erreur addComment:', error);
     showToast(`❌ Erreur: ${error.message}`, 'error');
   }
 }
