@@ -1370,7 +1370,15 @@ async function loadRecruits() {
         carteId: r[14] ? r[14].toString().trim() : '',
         motivations: r[15] ? r[15].toString().trim() : '',
         qualites: r[16] ? r[16].toString().trim() : '',
-        dispo: [r[17], r[18], r[19], r[20], r[21], r[22], r[23]].map(d => d ? 'Oui' : 'Non'),
+        dispo: [
+          {jour: 'Lun', heures: r[17] ? r[17].toString().trim() : ''},
+          {jour: 'Mar', heures: r[18] ? r[18].toString().trim() : ''},
+          {jour: 'Mer', heures: r[19] ? r[19].toString().trim() : ''},
+          {jour: 'Jeu', heures: r[20] ? r[20].toString().trim() : ''},
+          {jour: 'Ven', heures: r[21] ? r[21].toString().trim() : ''},
+          {jour: 'Sam', heures: r[22] ? r[22].toString().trim() : ''},
+          {jour: 'Dim', heures: r[23] ? r[23].toString().trim() : ''}
+        ],
         pourquoi: r[24] ? r[24].toString().trim() : '',
         illegal: r[25] ? r[25].toString().trim() : '',
         mecano: r[26] ? r[26].toString().trim() : '',
@@ -1682,7 +1690,13 @@ function showRecruitDetails(rec) {
       <!-- Header -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:2px solid var(--color-border);">
         <h2 style="margin:0;font-size:1.8rem;">📋 ${rec.nom}</h2>
-        <span style="padding:0.5rem 1rem;background:${rec.statut==='Accepté'?'#4CAF5020':rec.statut==='Refusé'?'#FF333320':'#FFA50020'};color:${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3333':'#FFA500'};border:1px solid ${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3333':'#FFA500'};border-radius:12px;font-weight:600;font-size:0.9rem;">${rec.statut}</span>
+        <div style="position:relative;">
+          <select onchange="updateRecruitStatus('${rec.id}', this.value)" style="padding:0.5rem 1rem;background:${rec.statut==='Accepté'?'#4CAF5020':rec.statut==='Refusé'?'#FF333320':'#FFA50020'};color:${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3333':'#FFA500'};border:1px solid ${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3333':'#FFA500'};border-radius:12px;font-weight:600;font-size:0.9rem;cursor:pointer;">
+            <option value="En attente" ${rec.statut==='En attente'?'selected':''}>En attente</option>
+            <option value="Accepté" ${rec.statut==='Accepté'?'selected':''}>Accepté ✓</option>
+            <option value="Refusé" ${rec.statut==='Refusé'?'selected':''}>Refusé ✗</option>
+          </select>
+        </div>
       </div>
       
       <!-- Infos grid -->
@@ -1711,7 +1725,17 @@ function showRecruitDetails(rec) {
       <!-- Disponibilités -->
       <div style="background:rgba(255,255,255,0.03);padding:1.2rem;border-radius:12px;border:1px solid var(--color-border);">
         <h3 style="margin:0 0 1rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">📅 DISPONIBILITÉS</h3>
-        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">${(rec.dispo && Array.isArray(rec.dispo)) ? rec.dispo.map((d, i) => `<span style="display:inline-block;padding:0.4rem 0.8rem;background:${d==='Oui'?'rgba(76,175,80,0.2)':'rgba(255,59,48,0.2)'};border:1px solid ${d==='Oui'?'#4CAF50':'#FF3B30'};border-radius:8px;font-size:0.85rem;font-weight:500;">${['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'][i]}</span>`).join('') : '<p style="color:var(--color-text-dim);">Non renseigné</p>'}</div>
+        <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">${(rec.dispo && Array.isArray(rec.dispo)) ? rec.dispo.map((d) => {
+          const disponible = d.heures && d.heures.length > 0;
+          return `<span 
+            style="display:inline-block;padding:0.4rem 0.8rem;background:${disponible?'rgba(76,175,80,0.2)':'rgba(255,59,48,0.2)'};border:1px solid ${disponible?'#4CAF50':'#FF3B30'};border-radius:8px;font-size:0.85rem;font-weight:500;cursor:${disponible?'help':'default'};position:relative;"
+            title="${disponible ? d.heures : 'Indisponible'}"
+            onmouseover="this.querySelector('.tooltip').style.display='block'"
+            onmouseout="this.querySelector('.tooltip').style.display='none'">
+            ${d.jour}
+            ${disponible ? `<div class="tooltip" style="display:none;position:absolute;top:-35px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:0.4rem 0.8rem;border-radius:6px;white-space:nowrap;font-size:0.75rem;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,0.3);">${d.heures}</div>` : ''}
+          </span>`;
+        }).join('') : '<p style="color:var(--color-text-dim);">Non renseigné</p>'}</div>
       </div>
       
       <!-- Sections questions -->
@@ -1741,6 +1765,46 @@ function showRecruitDetails(rec) {
   modal.classList.add('active');
 }
 
+
+
+async function updateRecruitStatus(recruitId, newStatus) {
+  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const proxy = "https://corsproxy.io/?";
+  
+  showToast('⏳ Mise à jour du statut...', 'info');
+  
+  try {
+    const response = await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        type: 'updateRecruitStatus',
+        id: recruitId, 
+        status: newStatus 
+      })
+    });
+    
+    if (!response.ok) throw new Error('Erreur réseau');
+    
+    // Mise à jour locale
+    const rec = allRecruits.find(r => r.id === recruitId);
+    if (rec) {
+      rec.statut = newStatus;
+      const filtered = filteredRecruits.find(r => r.id === recruitId);
+      if (filtered) filtered.statut = newStatus;
+    }
+    
+    showToast('✅ Statut mis à jour !', 'success');
+    logAction(`Modification statut candidat ID ${recruitId} → ${newStatus}`);
+    
+    closeModal();
+    setTimeout(() => loadRecruits(), 500);
+    
+  } catch (error) {
+    console.error('❌ Erreur:', error);
+    showToast('❌ Erreur de mise à jour', 'error');
+  }
+}
 async function loadLogs() {
   const container = document.getElementById('logsContainer');
   if (!container) return;
