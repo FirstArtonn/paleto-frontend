@@ -695,6 +695,43 @@ body.role-rh .nav-item.rh-only {
   color: var(--color-highlight);
 }
 
+/* COMMENT BADGE */
+.comment-badge {
+  position: relative;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.comment-badge:hover::after {
+  content: attr(title);
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(26, 26, 46, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  max-width: 300px;
+  min-width: 200px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  z-index: 1000;
+  pointer-events: none;
+}
+
 /* CONTEXT MENU */
 #contextMenu {
   position: fixed;
@@ -1531,8 +1568,17 @@ function displayRecruits(recruits) {
     }
     
     card.innerHTML = `
-      <div class="employee-name">${rec.nom}</div>
-      <div class="employee-grade">${rec.statut}</div>
+      <div style="position:relative;">
+        <div class="employee-name">${rec.nom}</div>
+        <div class="employee-grade">${rec.statut}</div>
+        ${rec.commentaires ? `
+          <div 
+            class="comment-badge" 
+            title="${rec.commentaires.replace(/"/g, '&quot;')}"
+            style="position:absolute;top:0.5rem;right:0.5rem;width:24px;height:24px;background:var(--color-highlight);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;cursor:help;box-shadow:0 2px 8px rgba(0,0,0,0.3);"
+          >💬</div>
+        ` : ''}
+      </div>
     `;
     
     card.addEventListener('click', () => showRecruitDetails(rec));
@@ -1902,37 +1948,48 @@ function showRecruitDetails(rec) {
   `;
   
   // Ajouter section commentaires
-  // Créer la section commentaires
   const commentsSection = document.createElement('div');
   commentsSection.style.cssText = 'margin-top:2rem;padding-top:2rem;border-top:2px solid var(--color-border);';
   
   commentsSection.innerHTML = `
-    <h3 style="margin:0 0 1rem 0;font-size:1.2rem;color:var(--color-highlight);">💬 Commentaires internes</h3>
+    <h3 style="margin:0 0 1rem 0;font-size:1.2rem;color:var(--color-highlight);">💬 Commentaire interne</h3>
     
-    <!-- Liste des commentaires -->
-    <div id="commentsList" style="max-height:200px;overflow-y:auto;margin-bottom:1rem;padding:0.5rem;background:rgba(0,0,0,0.2);border-radius:8px;">
-      ${rec.commentaires ? rec.commentaires.split('\n').filter(c => c.trim()).map(comment => `
-        <div style="padding:0.5rem;margin-bottom:0.5rem;background:rgba(255,255,255,0.05);border-left:3px solid var(--color-highlight);border-radius:4px;">
-          ${comment}
+    <div style="position:relative;">
+      <!-- Zone de commentaire éditable -->
+      <div 
+        id="commentDisplay"
+        ondblclick="editComment('${rec.id}')"
+        style="padding:1rem;background:rgba(0,0,0,0.2);border:2px dashed var(--color-border);border-radius:8px;min-height:80px;cursor:pointer;transition:all 0.2s;color:${rec.commentaires ? 'var(--color-text)' : 'var(--color-text-dim)'};font-style:${rec.commentaires ? 'normal' : 'italic'};"
+        onmouseover="this.style.borderColor='var(--color-highlight)'"
+        onmouseout="this.style.borderColor='var(--color-border)'"
+      >${rec.commentaires || 'Double-cliquez pour ajouter un commentaire...'}</div>
+      
+      <!-- Zone d'édition (cachée par défaut) -->
+      <div id="commentEdit" style="display:none;">
+        <textarea 
+          id="commentTextarea"
+          style="width:100%;padding:1rem;background:rgba(255,255,255,0.05);border:2px solid var(--color-highlight);border-radius:8px;color:var(--color-text);font-family:inherit;resize:vertical;min-height:80px;box-sizing:border-box;"
+          placeholder="Écrire un commentaire interne..."
+        >${rec.commentaires || ''}</textarea>
+        <div style="margin-top:0.5rem;display:flex;gap:0.5rem;">
+          <button 
+            onclick="saveComment('${rec.id}')"
+            style="padding:0.5rem 1.5rem;background:var(--color-highlight);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.2s;"
+            onmouseover="this.style.background='#ff6b8a'"
+            onmouseout="this.style.background='var(--color-highlight)'"
+          >
+            ✓ Enregistrer
+          </button>
+          <button 
+            onclick="cancelEditComment()"
+            style="padding:0.5rem 1.5rem;background:rgba(255,255,255,0.1);color:var(--color-text);border:1px solid var(--color-border);border-radius:8px;cursor:pointer;transition:all 0.2s;"
+            onmouseover="this.style.background='rgba(255,255,255,0.15)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+          >
+            ✕ Annuler
+          </button>
         </div>
-      `).join('') : '<p style="color:var(--color-text-dim);font-style:italic;">Aucun commentaire</p>'}
-    </div>
-    
-    <!-- Zone de texte pour nouveau commentaire -->
-    <div style="display:flex;gap:0.5rem;align-items:flex-start;">
-      <textarea 
-        id="newComment" 
-        placeholder="Écrire un commentaire interne (notes RH, observations, etc.)..."
-        style="flex:1;padding:0.75rem;background:rgba(255,255,255,0.05);border:1px solid var(--color-border);border-radius:8px;color:var(--color-text);font-family:inherit;resize:vertical;min-height:60px;"
-      ></textarea>
-      <button 
-        onclick="addRecruitComment('${rec.id}')"
-        style="padding:0.75rem 1.5rem;background:var(--color-highlight);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.2s;"
-        onmouseover="this.style.background='#ff6b8a'"
-        onmouseout="this.style.background='var(--color-highlight)'"
-      >
-        Envoyer
-      </button>
+      </div>
     </div>
   `;
   
@@ -2089,37 +2146,37 @@ async function addRecruitAsEmployee(grade) {
   }
 }
 
-async function addRecruitComment(recruitId) {
-  const textarea = document.getElementById('newComment');
+// Fonctions pour gérer le commentaire éditable
+function editComment(recruitId) {
+  document.getElementById('commentDisplay').style.display = 'none';
+  document.getElementById('commentEdit').style.display = 'block';
+  document.getElementById('commentTextarea').focus();
+}
+
+function cancelEditComment() {
+  document.getElementById('commentDisplay').style.display = 'block';
+  document.getElementById('commentEdit').style.display = 'none';
+}
+
+async function saveComment(recruitId) {
+  const textarea = document.getElementById('commentTextarea');
   const commentText = textarea.value.trim();
   
-  if (!commentText) {
-    showToast('❌ Le commentaire ne peut pas être vide', 'error');
-    return;
-  }
+  console.log('🔵 saveComment appelé:', { recruitId, commentText });
   
-  console.log('🔵 addRecruitComment appelé:', { recruitId, commentText, user: currentUser.nom });
-  
-  showToast('⏳ Envoi du commentaire...', 'info');
+  showToast('⏳ Enregistrement...', 'info');
   
   const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
   const proxy = "https://corsproxy.io/?";
-  
-  const today = new Date();
-  const dateStr = today.toLocaleDateString('fr-FR');
-  const timeStr = today.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
-  
-  // Format: [Prénom] (JJ/MM/AAAA HH:MM) : Message
-  const formattedComment = `[${currentUser.nom}] (${dateStr} ${timeStr}) : ${commentText}`;
   
   try {
     const response = await fetch(proxy + encodeURIComponent(url), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        type: 'addRecruitComment',
+        type: 'updateRecruitComment',
         recruitId: recruitId,
-        comment: formattedComment
+        comment: commentText
       })
     });
     
@@ -2128,25 +2185,29 @@ async function addRecruitComment(recruitId) {
     }
     
     const result = await response.json();
-    console.log('✅ Réponse addRecruitComment:', result);
+    console.log('✅ Réponse saveComment:', result);
     
     if (result.success === false) {
       throw new Error(result.error || 'Erreur serveur');
     }
     
-    showToast('✅ Commentaire ajouté !', 'success');
-    textarea.value = '';
+    showToast('✅ Commentaire enregistré !', 'success');
     
-    logAction(`Commentaire ajouté pour candidat ID ${recruitId}`);
+    // Mettre à jour l'affichage
+    const display = document.getElementById('commentDisplay');
+    display.textContent = commentText || 'Double-cliquez pour ajouter un commentaire...';
+    display.style.color = commentText ? 'var(--color-text)' : 'var(--color-text-dim)';
+    display.style.fontStyle = commentText ? 'normal' : 'italic';
+    
+    cancelEditComment();
+    
+    logAction(`Commentaire modifié pour candidat ID ${recruitId}`);
     
     // Rafraîchir les recrues
-    setTimeout(() => {
-      loadRecruits();
-      closeModal();
-    }, 1000);
+    setTimeout(() => loadRecruits(), 1000);
     
   } catch (error) {
-    console.error('❌ Erreur addRecruitComment:', error);
+    console.error('❌ Erreur saveComment:', error);
     showToast(`❌ Erreur: ${error.message}`, 'error');
   }
 }
