@@ -697,25 +697,24 @@ body.role-rh .nav-item.rh-only {
 
 /* COMMENT BADGE */
 .comment-badge {
-  position: relative;
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-.comment-badge:hover::after {
-  content: attr(title);
   position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: 0.5rem;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 32px;
+  height: 32px;
+  cursor: help;
+  z-index: 10;
+}
+
+.comment-badge svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+}
+
+.comment-badge .tooltip {
+  display: none;
+  position: fixed;
   padding: 0.75rem 1rem;
   background: rgba(26, 26, 46, 0.98);
   backdrop-filter: blur(20px);
@@ -728,8 +727,12 @@ body.role-rh .nav-item.rh-only {
   max-width: 300px;
   min-width: 200px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-  z-index: 1000;
+  z-index: 10000;
   pointer-events: none;
+}
+
+.comment-badge:hover .tooltip {
+  display: block;
 }
 
 /* CONTEXT MENU */
@@ -1572,11 +1575,16 @@ function displayRecruits(recruits) {
         <div class="employee-name">${rec.nom}</div>
         <div class="employee-grade">${rec.statut}</div>
         ${rec.commentaires ? `
-          <div 
-            class="comment-badge" 
-            title="${rec.commentaires.replace(/"/g, '&quot;')}"
-            style="position:absolute;top:0.5rem;right:0.5rem;width:24px;height:24px;background:var(--color-highlight);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;cursor:help;box-shadow:0 2px 8px rgba(0,0,0,0.3);"
-          >💬</div>
+          <div class="comment-badge" onmouseenter="showCommentTooltip(event, this)" onmouseleave="hideCommentTooltip(this)">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22Z" 
+                    fill="var(--color-highlight)" stroke="var(--color-highlight)" stroke-width="1.5"/>
+              <circle cx="8" cy="12" r="1" fill="white"/>
+              <circle cx="12" cy="12" r="1" fill="white"/>
+              <circle cx="16" cy="12" r="1" fill="white"/>
+            </svg>
+            <div class="tooltip">${rec.commentaires.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
+          </div>
         ` : ''}
       </div>
     `;
@@ -2209,6 +2217,39 @@ async function saveComment(recruitId) {
   } catch (error) {
     console.error('❌ Erreur saveComment:', error);
     showToast(`❌ Erreur: ${error.message}`, 'error');
+  }
+}
+
+// Fonctions pour gérer le tooltip de commentaire
+function showCommentTooltip(event, badgeElement) {
+  const tooltip = badgeElement.querySelector('.tooltip');
+  if (!tooltip) return;
+  
+  // Positionner le tooltip en fixed par rapport à la position de la souris
+  const rect = badgeElement.getBoundingClientRect();
+  
+  // Position : en dessous à droite de la bulle
+  tooltip.style.top = (rect.bottom + 8) + 'px';
+  tooltip.style.right = (window.innerWidth - rect.right) + 'px';
+  tooltip.style.left = 'auto';
+  
+  // Si le tooltip dépasse en bas, le mettre au-dessus
+  setTimeout(() => {
+    const tooltipRect = tooltip.getBoundingClientRect();
+    if (tooltipRect.bottom > window.innerHeight - 10) {
+      tooltip.style.top = (rect.top - tooltipRect.height - 8) + 'px';
+    }
+  }, 10);
+}
+
+function hideCommentTooltip(badgeElement) {
+  const tooltip = badgeElement.querySelector('.tooltip');
+  if (tooltip) {
+    tooltip.style.display = 'none';
+    // Réinitialiser pour que le :hover CSS reprenne le contrôle
+    setTimeout(() => {
+      tooltip.style.display = '';
+    }, 100);
   }
 }
 
