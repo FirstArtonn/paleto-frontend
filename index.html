@@ -1559,17 +1559,6 @@ document.addEventListener('DOMContentLoaded', () => {
       displayEmployees(filteredEmployees);
     
   
-  // Event listeners menu contextuel
-  document.getElementById('addApprenti')?.addEventListener('click', () => {
-    addRecruitAsEmployee('Apprenti');
-  });
-  
-  document.getElementById('addStagiaire')?.addEventListener('click', () => {
-    addRecruitAsEmployee('Stagiaire');
-  });
-});
-  }
-  
   const searchBarRecruit = document.getElementById('searchBarRecruit');
   if (searchBarRecruit) {
     searchBarRecruit.addEventListener('input', (e) => {
@@ -1973,8 +1962,12 @@ function showContextMenu(event, recruit) {
   event.preventDefault();
   event.stopPropagation();
   
+  console.log('🔵 showContextMenu appelé:', recruit);
+  
   const menu = document.getElementById('contextMenu');
   currentRecruit = recruit;
+  
+  console.log('✅ currentRecruit défini:', currentRecruit);
   
   // Positionner le menu
   menu.style.left = event.pageX + 'px';
@@ -1983,19 +1976,29 @@ function showContextMenu(event, recruit) {
   
   // Fermer si clic ailleurs
   setTimeout(() => {
-    document.addEventListener('click', function closeMenu() {
-      menu.style.display = 'none';
-      document.removeEventListener('click', closeMenu);
+    document.addEventListener('click', function closeMenu(e) {
+      // Ne pas fermer si on clique sur le menu lui-même
+      if (!menu.contains(e.target)) {
+        menu.style.display = 'none';
+        document.removeEventListener('click', closeMenu);
+      }
     });
   }, 10);
 }
 
 async function addRecruitAsEmployee(grade) {
-  if (!currentRecruit) return;
+  console.log('🔵 addRecruitAsEmployee appelé:', { grade, currentRecruit });
+  
+  if (!currentRecruit) {
+    console.error('❌ currentRecruit est null/undefined !');
+    showToast('❌ Erreur: Aucun candidat sélectionné', 'error');
+    return;
+  }
   
   const menu = document.getElementById('contextMenu');
   menu.style.display = 'none';
   
+  console.log('📤 Envoi requête addRecruitAsEmployee:', { grade, recruit: currentRecruit });
   showToast('⏳ Ajout en cours...', 'info');
   
   const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
@@ -2080,11 +2083,11 @@ async function loadLogs() {
 
   <!-- CONTEXT MENU -->
   <div id="contextMenu">
-    <div class="context-menu-item" id="addApprenti">
+    <div class="context-menu-item" onclick="addRecruitAsEmployee('Apprenti')">
       <span>🎓</span>
       <span>Ajouter comme Apprenti</span>
     </div>
-    <div class="context-menu-item" id="addStagiaire">
+    <div class="context-menu-item" onclick="addRecruitAsEmployee('Stagiaire')">
       <span>📝</span>
       <span>Ajouter comme Stagiaire</span>
     </div>
