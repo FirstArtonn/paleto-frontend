@@ -1970,9 +1970,9 @@ function showContextMenu(event, recruit) {
   
   console.log('✅ currentRecruit défini:', currentRecruit);
   
-  // Positionner le menu
-  menu.style.left = event.pageX + 'px';
-  menu.style.top = event.pageY + 'px';
+  // Positionner le menu (utiliser clientX/Y pour position fixed)
+  menu.style.left = event.clientX + 'px';
+  menu.style.top = event.clientY + 'px';
   menu.style.display = 'block';
   
   // Fermer si clic ailleurs
