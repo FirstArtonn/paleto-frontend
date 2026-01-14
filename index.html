@@ -1708,12 +1708,34 @@ function showRecruitDetails(rec) {
       <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:2px solid var(--color-border);">
         <h2 style="margin:0;font-size:1.8rem;">📋 ${rec.nom}</h2>
         <div style="position:relative;">
-          <select onchange="updateRecruitStatus('${rec.id}', this.value)" style="padding:0.7rem 1.2rem;background:${rec.statut==='Accepté'?'rgba(76,175,80,0.15)':rec.statut==='Refusé'?'rgba(255,59,48,0.15)':rec.statut==='Blacklist'?'rgba(0,0,0,0.3)':'rgba(255,165,0,0.15)'};color:${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3B30':rec.statut==='Blacklist'?'#000':'#FFA500'};border:2px solid ${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3B30':rec.statut==='Blacklist'?'#000':'#FFA500'};border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s;">
-            <option value="En attente" ${rec.statut==='En attente'?'selected':''}>🕐 En attente</option>
-            <option value="Accepté" ${rec.statut==='Accepté'?'selected':''}>✅ Accepté</option>
-            <option value="Refusé" ${rec.statut==='Refusé'?'selected':''}>❌ Refusé</option>
-            <option value="Blacklist" ${rec.statut==='Blacklist'?'selected':''}>🚫 Blacklist</option>
-          </select>
+          <div style="position:relative;">
+          <div onclick="toggleStatusDropdown(this)" style="display:flex;align-items:center;gap:0.8rem;padding:0.8rem 1.2rem;background:${rec.statut==='Accepté'?'rgba(76,175,80,0.15)':rec.statut==='Refusé'?'rgba(255,59,48,0.15)':rec.statut==='Blacklist'?'rgba(0,0,0,0.3)':'rgba(255,165,0,0.15)'};border:2px solid ${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3B30':rec.statut==='Blacklist'?'#000':'#FFA500'};border-radius:12px;cursor:pointer;min-width:200px;transition:all 0.2s;">
+            <div style="flex:1;display:flex;align-items:center;gap:0.5rem;">
+              <span style="font-size:1.3rem;">${rec.statut==='Accepté'?'✅':rec.statut==='Refusé'?'❌':rec.statut==='Blacklist'?'🚫':'🕐'}</span>
+              <span style="font-weight:700;font-size:1rem;color:${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3B30':rec.statut==='Blacklist'?'#000':'#FFA500'};">${rec.statut}</span>
+            </div>
+            <span style="font-size:0.8rem;color:var(--color-text-dim);">▼</span>
+          </div>
+          
+          <div class="status-dropdown-menu" style="display:none;position:absolute;top:calc(100% + 5px);left:0;right:0;background:#16213e;border:2px solid var(--color-border);border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:1000;">
+            <div onclick="selectStatus('${rec.id}', 'En attente')" style="display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,165,0,0.2)'" onmouseout="this.style.background='transparent'">
+              <span style="font-size:1.3rem;">🕐</span>
+              <span style="font-weight:600;color:#FFA500;">En attente</span>
+            </div>
+            <div onclick="selectStatus('${rec.id}', 'Accepté')" style="display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(76,175,80,0.2)'" onmouseout="this.style.background='transparent'">
+              <span style="font-size:1.3rem;">✅</span>
+              <span style="font-weight:600;color:#4CAF50;">Accepté</span>
+            </div>
+            <div onclick="selectStatus('${rec.id}', 'Refusé')" style="display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,59,48,0.2)'" onmouseout="this.style.background='transparent'">
+              <span style="font-size:1.3rem;">❌</span>
+              <span style="font-weight:600;color:#FF3B30;">Refusé</span>
+            </div>
+            <div onclick="selectStatus('${rec.id}', 'Blacklist')" style="display:flex;align-items:center;gap:0.8rem;padding:1rem 1.2rem;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.3)'" onmouseout="this.style.background='transparent'">
+              <span style="font-size:1.3rem;">🚫</span>
+              <span style="font-weight:600;color:#888;">Blacklist</span>
+            </div>
+          </div>
+        </div>
         </div>
       </div>
       
@@ -1784,6 +1806,39 @@ function showRecruitDetails(rec) {
 }
 
 
+
+
+
+function toggleStatusDropdown(button) {
+  const menu = button.nextElementSibling;
+  const isOpen = menu.style.display === 'block';
+  
+  // Fermer tous les autres dropdowns
+  document.querySelectorAll('.status-dropdown-menu').forEach(m => m.style.display = 'none');
+  
+  // Toggle celui-ci
+  menu.style.display = isOpen ? 'none' : 'block';
+  
+  // Fermer si on clique ailleurs
+  if (!isOpen) {
+    setTimeout(() => {
+      document.addEventListener('click', function closeDropdown(e) {
+        if (!button.contains(e.target) && !menu.contains(e.target)) {
+          menu.style.display = 'none';
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+    }, 10);
+  }
+}
+
+function selectStatus(recruitId, newStatus) {
+  // Fermer le dropdown
+  document.querySelectorAll('.status-dropdown-menu').forEach(m => m.style.display = 'none');
+  
+  // Appeler la fonction de mise à jour
+  updateRecruitStatus(recruitId, newStatus);
+}
 
 async function updateRecruitStatus(recruitId, newStatus) {
   console.log('🔵 updateRecruitStatus appelé:', { recruitId, newStatus });
