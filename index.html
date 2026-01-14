@@ -1769,12 +1769,14 @@ function showRecruitDetails(rec) {
 
 
 async function updateRecruitStatus(recruitId, newStatus) {
+  console.log('🔵 updateRecruitStatus appelé:', { recruitId, newStatus });
   const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
   const proxy = "https://corsproxy.io/?";
   
   showToast('⏳ Mise à jour du statut...', 'info');
   
   try {
+    console.log('📤 Envoi requête:', { recruitId, newStatus, url });
     const response = await fetch(proxy + encodeURIComponent(url), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1811,8 +1813,9 @@ async function updateRecruitStatus(recruitId, newStatus) {
     setTimeout(() => loadRecruits(), 500);
     
   } catch (error) {
-    console.error('❌ Erreur:', error);
-    showToast('❌ Erreur de mise à jour', 'error');
+    console.error('❌ Erreur updateRecruitStatus:', error);
+    console.error('❌ ID:', recruitId, 'Nouveau statut:', newStatus);
+    showToast(`❌ Erreur: ${error.message}`, 'error');
   }
 }
 async function loadLogs() {
