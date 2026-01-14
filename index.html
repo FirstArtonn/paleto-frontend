@@ -1412,6 +1412,23 @@ function displayRecruits(recruits) {
     const card = document.createElement('div');
     card.className = 'employee-card';
     
+    // Coloriser selon le statut
+    if (rec.statut === 'Accepté') {
+      card.style.background = 'linear-gradient(145deg, rgba(76,175,80,0.2), rgba(76,175,80,0.1))';
+      card.style.borderLeft = '4px solid #4CAF50';
+    } else if (rec.statut === 'Refusé') {
+      card.style.background = 'linear-gradient(145deg, rgba(255,59,48,0.2), rgba(255,59,48,0.1))';
+      card.style.borderLeft = '4px solid #FF3B30';
+    } else if (rec.statut === 'Blacklist') {
+      card.style.background = 'linear-gradient(145deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3))';
+      card.style.borderLeft = '4px solid #000';
+      card.style.opacity = '0.7';
+    } else {
+      // En attente (par défaut)
+      card.style.background = 'linear-gradient(145deg, rgba(255,165,0,0.2), rgba(255,165,0,0.1))';
+      card.style.borderLeft = '4px solid #FFA500';
+    }
+    
     card.innerHTML = `
       <div class="employee-name">${rec.nom}</div>
       <div class="employee-grade">${rec.statut}</div>
@@ -1691,11 +1708,11 @@ function showRecruitDetails(rec) {
       <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:2px solid var(--color-border);">
         <h2 style="margin:0;font-size:1.8rem;">📋 ${rec.nom}</h2>
         <div style="position:relative;">
-          <select onchange="updateRecruitStatus('${rec.id}', this.value)" style="padding:0.5rem 1rem;background:${rec.statut==='Accepté'?'#4CAF5020':rec.statut==='Refusé'?'#FF333320':rec.statut==='Blacklist'?'#00000040':'#FFA50020'};color:${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3333':rec.statut==='Blacklist'?'#000':'#FFA500'};border:1px solid ${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3333':rec.statut==='Blacklist'?'#000':'#FFA500'};border-radius:12px;font-weight:600;font-size:0.9rem;cursor:pointer;">
-            <option value="En attente" ${rec.statut==='En attente'?'selected':''}>En attente</option>
-            <option value="Accepté" ${rec.statut==='Accepté'?'selected':''}>Accepté ✓</option>
-            <option value="Refusé" ${rec.statut==='Refusé'?'selected':''}>Refusé ✗</option>
-            <option value="Blacklist" ${rec.statut==='Blacklist'?'selected':''}>Blacklist 🚫</option>
+          <select onchange="updateRecruitStatus('${rec.id}', this.value)" style="padding:0.7rem 1.2rem;background:${rec.statut==='Accepté'?'rgba(76,175,80,0.15)':rec.statut==='Refusé'?'rgba(255,59,48,0.15)':rec.statut==='Blacklist'?'rgba(0,0,0,0.3)':'rgba(255,165,0,0.15)'};color:${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3B30':rec.statut==='Blacklist'?'#000':'#FFA500'};border:2px solid ${rec.statut==='Accepté'?'#4CAF50':rec.statut==='Refusé'?'#FF3B30':rec.statut==='Blacklist'?'#000':'#FFA500'};border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s;">
+            <option value="En attente" ${rec.statut==='En attente'?'selected':''}>🕐 En attente</option>
+            <option value="Accepté" ${rec.statut==='Accepté'?'selected':''}>✅ Accepté</option>
+            <option value="Refusé" ${rec.statut==='Refusé'?'selected':''}>❌ Refusé</option>
+            <option value="Blacklist" ${rec.statut==='Blacklist'?'selected':''}>🚫 Blacklist</option>
           </select>
         </div>
       </div>
