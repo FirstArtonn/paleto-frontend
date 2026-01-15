@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<!-- Version: PALETO GARAGE - Minimaliste Noir & Blanc -->
+<!-- Version: 2026-01-13-18:00 -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Paleto Garage - Gestion</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ==========================================
-   DESIGN ULTRA MINIMALISTE NOIR & BLANC
-   Basé sur le design d'ARTONN
-   ========================================== */
-
 :root {
-  --color-bg: #000000;
+  /* Couleurs minimalistes selon PNG */
+  --color-bg: #0a0a0f;
   --color-text: #ffffff;
   --color-border: #cccccc;
+  --color-text-dim: #999999;
+  
+  /* Couleurs des cards selon PNG */
+  --color-card-yellow: #f5ead5;
+  --color-card-orange: #f5d5c5;
+  --color-card-pink: #f5c5d5;
+  
+  /* Polices */
   --font-main: 'Oswald', sans-serif;
   --font-nav: 'Roboto', sans-serif;
+}
+
+[data-theme="light"] {
+  --color-bg: #0a0a0f;
+  --color-text: #ffffff;
+  --color-border: #cccccc;
+  --color-text-dim: #999999;
 }
 
 * {
@@ -37,42 +48,20 @@ body {
   position: relative;
 }
 
-/* Bordure blanche autour de tout l'écran */
+/* Bordure grise autour de l'écran selon PNG */
 body::before {
   content: '';
   position: fixed;
-  top: 10px;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  border: 3px solid var(--color-border);
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 2px solid var(--color-border);
   pointer-events: none;
   z-index: 9999;
 }
 
-/* ==========================================
-   SCROLLBAR BLANCHE À DROITE
-   ========================================== */
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: #000000;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #ffffff;
-  border-radius: 0;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #cccccc;
-}
-
-/* ==========================================
-   LOGIN PAGE
-   ========================================== */
+/* LOGIN PAGE */
 .login-container {
   display: flex;
   position: fixed;
@@ -83,52 +72,61 @@ body::before {
   justify-content: center;
   align-items: center;
   z-index: 9999;
-  background: #000000;
+  background: var(--color-bg);
 }
 
 .login-card {
-  background: #000000;
-  border: 2px solid #ffffff;
+  background: var(--color-bg);
+  backdrop-filter: none;
+  border: 2px solid var(--color-border);
+  border-radius: 0;
   padding: 60px;
+  box-shadow: none;
   text-align: center;
   max-width: 500px;
   width: 90%;
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .login-card h1 {
   font-family: var(--font-main);
-  font-size: 3.5rem;
+  font-size: 3rem;
   font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 20px;
-  letter-spacing: 0.05em;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
 }
 
 .login-card p {
-  color: #cccccc;
-  margin-bottom: 40px;
+  color: var(--color-text-dim);
+  margin-bottom: 2rem;
   font-size: 1rem;
-  font-weight: 300;
 }
 
 .discord-login-btn {
-  background: #ffffff;
-  color: #000000;
+  background: var(--color-text);
+  color: var(--color-bg);
   border: none;
   padding: 15px 40px;
+  border-radius: 0;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  transition: all 0.3s;
+  transition: opacity 0.2s;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
 
 .discord-login-btn:hover {
-  background: #cccccc;
+  opacity: 0.8;
 }
 
 .discord-login-btn svg {
@@ -137,117 +135,78 @@ body::before {
 }
 
 .login-info {
-  margin-top: 30px;
+  margin-top: 2rem;
   padding: 20px;
-  border: 1px solid #333333;
-  color: #999999;
+  background: transparent;
+  border-radius: 0;
+  border: 1px solid #333;
+  color: var(--color-text-dim);
   font-size: 0.85rem;
   line-height: 1.6;
 }
 
-/* ==========================================
-   HEADER - Design minimaliste
-   ========================================== */
+/* HEADER - Style PNG minimaliste */
 header {
+  background: transparent;
+  backdrop-filter: none;
+  border: none;
+  border-radius: 0;
+  padding: 30px 50px;
+  margin: 0;
   position: fixed;
   top: 20px;
   left: 20px;
   right: 20px;
-  background: transparent;
-  padding: 30px 40px;
   z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Logo PALETO GARAGE à gauche */
-.logo-section {
-  display: flex;
-  align-items: center;
-  gap: 15px;
+[data-theme="light"] header {
+  background: transparent;
 }
 
-.logo {
+header h1 {
   font-family: var(--font-main);
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.1em;
+  color: var(--color-text);
+  text-align: left;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
 }
 
-/* Toggle switch à côté du logo */
-.theme-toggle {
-  width: 50px;
-  height: 26px;
-  background: transparent;
-  border: 2px solid #ffffff;
-  border-radius: 20px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s;
+[data-theme="light"] header h1 {
+  background: none;
+  -webkit-background-clip: unset;
+  -webkit-text-fill-color: unset;
+  background-clip: unset;
+  color: var(--color-text);
 }
 
-.theme-slider {
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 18px;
-  height: 18px;
-  background: #ffffff;
-  border-radius: 50%;
-  transition: transform 0.3s;
+.subtitle {
+  display: none;
 }
 
-[data-theme="light"] .theme-slider {
-  transform: translateX(24px);
-}
-
-/* Navigation à droite - ultra minimaliste */
-nav {
-  display: flex;
-  gap: 40px;
-  align-items: center;
-}
-
-.nav-item {
-  position: relative;
-  font-size: 1.1rem;
-  font-weight: 400;
-  color: #ffffff;
-  text-decoration: none;
-  padding: 5px 0;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.nav-item:hover {
-  opacity: 0.7;
-}
-
-/* Soulignement blanc pour item actif */
-.nav-item.active {
-  font-weight: 500;
-}
-
-.nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #ffffff;
-}
-
-/* User profile - minimaliste */
+/* USER PROFILE */
 .user-profile {
+  position: absolute;
+  top: 2rem;
+  right: 8rem;
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 20px;
-  border: 1px solid #ffffff;
-  cursor: pointer;
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  border-radius: 50px;
   transition: all 0.3s;
 }
 
@@ -256,730 +215,71 @@ nav {
 }
 
 .user-profile img {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 1px solid #ffffff;
+  border: 2px solid var(--color-highlight);
 }
 
 .username {
-  font-size: 0.9rem;
-  font-weight: 400;
-  color: #ffffff;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
 .logout-btn {
-  background: transparent;
-  border: 1px solid #ffffff;
-  color: #ffffff;
-  padding: 6px 16px;
+  background: rgba(233, 69, 96, 0.2);
+  border: 1px solid var(--color-highlight);
+  color: var(--color-highlight);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 0.85rem;
-  font-weight: 400;
   transition: all 0.2s;
   margin-left: 8px;
 }
 
 .logout-btn:hover {
-  background: #ffffff;
-  color: #000000;
+  background: var(--color-highlight);
+  color: white;
 }
 
-/* ==========================================
-   TEXTE VERTICAL "ARTONN ILOW" À GAUCHE
-   ========================================== */
-.vertical-text {
-  position: fixed;
-  left: 40px;
-  top: 50%;
-  transform: translateY(-50%) rotate(-90deg);
-  transform-origin: center;
-  font-family: var(--font-main);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.2em;
-  z-index: 100;
-}
-
-/* ==========================================
-   FOOTER "SYSTÈME DE GESTION - BY ARTONN"
-   ========================================== */
-.footer-text {
-  position: fixed;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-nav);
-  font-size: 0.85rem;
-  font-weight: 300;
-  color: #666666;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  z-index: 100;
-}
-
-/* ==========================================
-   LOGO DISCORD BAS DROITE
-   ========================================== */
-.discord-icon {
-  position: fixed;
-  bottom: 40px;
-  right: 40px;
-  width: 40px;
-  height: 40px;
-  z-index: 100;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.3s;
-}
-
-.discord-icon:hover {
-  opacity: 1;
-}
-
-/* ==========================================
-   MAIN CONTENT AREA
-   ========================================== */
-main {
-  padding: 140px 80px 80px 150px;
-  min-height: 100vh;
-  position: relative;
-  z-index: 1;
-}
-
-.page {
-  display: none;
-}
-
-.page.active {
-  display: block;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Page Header */
-.page-header {
-  margin-bottom: 50px;
-}
-
-.page-title {
-  font-family: var(--font-main);
-  font-size: 3rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 10px;
-  letter-spacing: 0.05em;
-}
-
-.page-subtitle {
-  color: #999999;
-  font-size: 1rem;
-  font-weight: 300;
-}
-
-/* ==========================================
-   SEARCH BAR - Minimaliste
-   ========================================== */
-.search-container {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 40px;
-  align-items: center;
-}
-
-.search-bar {
-  flex: 1;
-  position: relative;
-  max-width: 800px;
-}
-
-.search-input {
-  width: 100%;
-  padding: 15px 20px 15px 55px;
-  background: transparent;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  font-size: 1rem;
-  transition: all 0.3s;
-  font-family: var(--font-nav);
-}
-
-.search-input::placeholder {
-  color: #666666;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  font-size: 0.9rem;
-}
-
-.search-input:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.search-icon {
+/* THEME TOGGLE */
+.theme-toggle {
   position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #ffffff;
-  width: 20px;
-  height: 20px;
-}
-
-.filter-btn {
-  padding: 15px 25px;
-  background: transparent;
-  border: 2px solid #ffffff;
-  color: #ffffff;
+  top: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 30px;
+  background: var(--color-border);
+  border-radius: 15px;
   cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  transition: background 0.3s;
 }
 
-.filter-btn:hover {
-  background: #ffffff;
-  color: #000000;
+.theme-toggle:hover {
+  background: var(--color-highlight);
 }
 
-.filter-btn svg {
-  fill: currentColor;
-}
-
-/* ==========================================
-   CARDS GRID - Minimaliste
-   ========================================== */
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 30px;
-}
-
-.recruit-card {
-  background: transparent;
-  border: 2px solid #ffffff;
-  padding: 30px;
-  transition: all 0.3s;
-  cursor: pointer;
-  position: relative;
-}
-
-.recruit-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-/* Barre de couleur en haut */
-.recruit-card::before {
-  content: '';
+.theme-slider {
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--card-color);
-}
-
-.recruit-card.card-yellow { --card-color: #FFD700; }
-.recruit-card.card-red { --card-color: #FF0000; }
-.recruit-card.card-white { --card-color: #ffffff; }
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 20px;
-}
-
-.card-name {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 5px;
-}
-
-.card-id {
-  font-size: 0.9rem;
-  color: #666666;
-  font-weight: 300;
-}
-
-.card-status {
-  padding: 6px 16px;
-  border: 1px solid;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.status-en-attente {
-  color: #FFD700;
-  border-color: #FFD700;
-}
-
-.status-accepte {
-  color: #00FF00;
-  border-color: #00FF00;
-}
-
-.status-refuse {
-  color: #FF0000;
-  border-color: #FF0000;
-}
-
-.card-info {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.info-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.9rem;
-  color: #999999;
-  font-weight: 300;
-}
-
-.info-row svg {
-  width: 16px;
-  height: 16px;
-  opacity: 0.6;
-}
-
-.info-label {
-  font-weight: 400;
-  color: #ffffff;
-}
-
-/* ==========================================
-   MODAL - Minimaliste
-   ========================================== */
-.modal {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.95);
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.modal-content {
-  background: #000000;
-  border: 2px solid #ffffff;
-  padding: 50px;
-  max-width: 900px;
-  width: 90%;
-  max-height: 85vh;
-  overflow-y: auto;
-  position: relative;
-}
-
-.modal-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  cursor: pointer;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  transition: all 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.modal-close:hover {
-  background: #ffffff;
-  color: #000000;
+[data-theme="light"] .theme-slider {
+  transform: translateX(30px);
 }
 
-.modal-header {
-  display: flex;
-  gap: 40px;
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #333333;
-}
-
-.modal-avatar {
-  width: 150px;
-  height: 150px;
-  background: transparent;
-  border: 2px solid #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
-  flex-shrink: 0;
-}
-
-.modal-info h2 {
-  font-family: var(--font-main);
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 15px;
-}
-
-.modal-details {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
-  margin-bottom: 40px;
-}
-
-.detail-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.detail-label {
-  font-size: 0.75rem;
-  color: #666666;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-weight: 400;
-}
-
-.detail-value {
-  font-size: 1.1rem;
-  color: #ffffff;
-  font-weight: 300;
-}
-
-.modal-actions {
-  display: flex;
-  gap: 15px;
-  justify-content: flex-end;
-}
-
-.btn {
-  padding: 12px 35px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.btn-primary {
-  background: #ffffff;
-  color: #000000;
-  border: 2px solid #ffffff;
-}
-
-.btn-primary:hover {
-  background: transparent;
-  color: #ffffff;
-}
-
-.btn-secondary {
-  background: transparent;
-  color: #ffffff;
-  border: 2px solid #ffffff;
-}
-
-.btn-secondary:hover {
-  background: #ffffff;
-  color: #000000;
-}
-
-/* ==========================================
-   TOAST NOTIFICATIONS
-   ========================================== */
-.toast {
-  position: fixed;
-  bottom: 60px;
-  right: 60px;
-  padding: 20px 30px;
-  background: #000000;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  z-index: 20000;
-  display: none;
-  font-size: 0.95rem;
-  animation: slideIn 0.3s ease;
-}
-
-.toast.show {
-  display: block;
-}
-
-@keyframes slideIn {
-  from { transform: translateX(400px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.toast.success { border-left: 4px solid #00FF00; }
-.toast.error { border-left: 4px solid #FF0000; }
-.toast.info { border-left: 4px solid #FFD700; }
-
-/* ==========================================
-   CONTEXT MENU
-   ========================================== */
-#contextMenu {
-  display: none;
-  position: fixed;
-  background: #000000;
-  border: 2px solid #ffffff;
-  padding: 10px;
-  z-index: 20000;
-  min-width: 250px;
-}
-
-.context-menu-item {
-  padding: 15px 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  color: #ffffff;
-  font-size: 0.95rem;
-  border-bottom: 1px solid #222222;
-}
-
-.context-menu-item:last-child {
-  border-bottom: none;
-}
-
-.context-menu-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* ==========================================
-   AUTRES COMPOSANTS
-   ========================================== */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-  margin-bottom: 40px;
-}
-
-.stat-card {
-  background: transparent;
-  border: 2px solid #ffffff;
-  padding: 30px;
-  transition: all 0.3s;
-}
-
-.stat-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.stat-label {
-  font-size: 0.85rem;
-  color: #666666;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 10px;
-}
-
-.stat-value {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.comment-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 12px;
-  border: 1px solid #FFD700;
-  font-size: 0.75rem;
-  color: #FFD700;
-  cursor: help;
-  position: relative;
-}
-
-.tooltip {
-  position: fixed;
-  background: #000000;
-  border: 2px solid #ffffff;
-  padding: 15px 20px;
-  max-width: 300px;
-  z-index: 30000;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  display: none;
-}
-
-.comment-badge:hover .tooltip {
-  display: block;
-}
-
-#commentDisplay {
-  padding: 20px;
-  background: transparent;
-  border: 1px solid #333333;
-  min-height: 120px;
-  cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 20px;
-}
-
-#commentDisplay:hover {
-  border-color: #ffffff;
-}
-
-#commentEdit {
-  display: none;
-  margin-top: 20px;
-}
-
-#commentTextarea {
-  width: 100%;
-  min-height: 120px;
-  padding: 15px;
-  background: transparent;
-  border: 2px solid #ffffff;
-  color: #ffffff;
-  font-family: var(--font-nav);
-  font-size: 0.95rem;
-  resize: vertical;
-}
-
-#commentTextarea:focus {
-  outline: none;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.comment-actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-#logsContainer table {
-  width: 100%;
-  border-collapse: collapse;
-  border: 2px solid #ffffff;
-}
-
-#logsContainer th {
-  background: transparent;
-  padding: 20px;
-  text-align: left;
-  font-weight: 600;
-  color: #ffffff;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  letter-spacing: 0.1em;
-  border-bottom: 2px solid #ffffff;
-}
-
-#logsContainer td {
-  padding: 20px;
-  color: #999999;
-  border-bottom: 1px solid #222222;
-}
-
-#logsContainer tr:hover {
-  background: rgba(255, 255, 255, 0.02);
-}
-
-/* ==========================================
-   RESPONSIVE
-   ========================================== */
-@media (max-width: 1024px) {
-  header {
-    flex-direction: column;
-    gap: 20px;
-    align-items: flex-start;
-  }
-  
-  nav {
-    gap: 25px;
-  }
-  
-  main {
-    padding: 140px 40px 80px 40px;
-  }
-  
-  .vertical-text {
-    display: none;
-  }
-  
-  .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .logo {
-    font-size: 2rem;
-  }
-  
-  nav {
-    flex-wrap: wrap;
-    gap: 15px;
-  }
-  
-  .nav-item {
-    font-size: 1rem;
-  }
-  
-  main {
-    padding: 180px 30px 80px 30px;
-  }
-  
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .modal-content {
-    padding: 30px;
-  }
-  
-  .modal-details {
-    grid-template-columns: 1fr;
-  }
-  
-  .footer-text {
-    font-size: 0.7rem;
-  }
-}
-</style>
-</head>
-<body>
-
-<!-- Texte vertical ARTONN ILOW -->
-<div class="vertical-text">ARTONN ILOW</div>
-
-<!-- Footer texte -->
-<div class="footer-text">SYSTÈME DE GESTION - BY ARTONN</div>
-
-<!-- Logo Discord -->
-<svg class="discord-icon" viewBox="0 0 71 55" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z" fill="white"/>
-</svg>
-
+.theme-icon {
   font-size: 14px;
 }
 
@@ -1671,9 +971,188 @@ header .navigation { display: flex; justify-content: center; gap: 50px; margin-t
 header .nav-item { position: relative; font-weight: 600; font-size: 1.05rem; color: #fff; cursor: pointer; padding: 8px 0; user-select: none; background: none !important; }
 header .nav-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: #fff; border-radius: 5px; transition: width 0.3s ease; }
 header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
+/* ==========================================
+   STYLES ADDITIONNELS POUR DESIGN PNG
+   ========================================== */
+
+/* Texte vertical "ARTONN ILOW" à gauche */
+.vertical-text {
+  position: fixed;
+  left: 50px;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+  font-family: var(--font-main);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.3em;
+  z-index: 500;
+}
+
+/* Footer texte "SYSTÈME DE GESTION - BY ARTONN" */
+.footer-text {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-nav);
+  font-size: 0.75rem;
+  font-weight: 300;
+  color: var(--color-text-dim);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  z-index: 500;
+}
+
+/* Logo Discord en bas à droite */
+.discord-icon {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  width: 35px;
+  height: 35px;
+  z-index: 500;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+  fill: white;
+}
+
+.discord-icon:hover {
+  opacity: 1;
+}
+
+/* Scrollbar blanche comme PNG */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-text);
+  border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border);
+}
+
+/* Cards avec couleurs pastel selon PNG */
+.recruit-card.card-yellow::before {
+  background: var(--color-card-yellow);
+}
+
+.recruit-card.card-red::before {
+  background: var(--color-card-pink);
+}
+
+.recruit-card.card-white::before {
+  background: var(--color-card-orange);
+}
+
+/* Ajustements header */
+header {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Main content ajusté */
+main {
+  padding: 140px 100px 100px 140px !important;
+}
+
+/* Cards style selon PNG */
+.recruit-card {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 12px !important;
+}
+
+.recruit-card::before {
+  height: 4px !important;
+  border-radius: 12px 12px 0 0 !important;
+}
+
+/* Search bar selon PNG */
+.search-input {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 25px !important;
+}
+
+.filter-btn {
+  background: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 25px !important;
+}
+
+/* Modal selon PNG */
+.modal-content {
+  background: var(--color-bg) !important;
+  border: 2px solid var(--color-border) !important;
+  border-radius: 20px !important;
+}
+
+/* Boutons selon PNG */
+.btn-primary {
+  background: var(--color-text) !important;
+  color: var(--color-bg) !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.btn-secondary {
+  background: transparent !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0 !important;
+}
+
+/* Status badges selon PNG */
+.status-en-attente {
+  background: rgba(245, 234, 213, 0.2) !important;
+  color: #d4a574 !important;
+  border: 1px solid #d4a574 !important;
+}
+
+.status-accepte {
+  background: rgba(164, 230, 164, 0.2) !important;
+  color: #6ecf6e !important;
+  border: 1px solid #6ecf6e !important;
+}
+
+.status-refuse {
+  background: rgba(245, 197, 213, 0.2) !important;
+  color: #e094b3 !important;
+  border: 1px solid #e094b3 !important;
+}
+
 </style>
 </head>
 <body>
+
+<!-- Texte vertical ARTONN ILOW selon PNG -->
+<div class="vertical-text">ARTONN ILOW</div>
+
+<!-- Footer texte selon PNG -->
+<div class="footer-text">SYSTÈME DE GESTION - BY ARTONN</div>
+
+<!-- Logo Discord selon PNG -->
+<svg class="discord-icon" viewBox="0 0 71 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z" fill="white"/>
+</svg>
+
+
 
 <!-- LOGIN PAGE -->
 <div class="login-container" id="loginContainer">
