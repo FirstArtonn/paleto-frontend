@@ -977,6 +977,189 @@ header .navigation { display: flex; justify-content: center; gap: 50px; margin-t
 header .nav-item { position: relative; font-weight: 600; font-size: 1.05rem; color: #fff; cursor: pointer; padding: 8px 0; user-select: none; background: none !important; }
 header .nav-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: #fff; border-radius: 5px; transition: width 0.3s ease; }
 header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
+/* ========================================
+   NOUVEAU LAYOUT - HORIZONTAL
+   ======================================== */
+
+/* LAYOUT PRINCIPAL */
+#mainApp {
+  display: flex !important;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* HEADER HORIZONTAL EN HAUT */
+header {
+  background: linear-gradient(90deg, #16213e 0%, #0a0a12 100%);
+  padding: 1.5rem 3rem !important;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* TOP HEADER (logo + user) */
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 2rem !important;
+  margin: 0 !important;
+  color: white;
+  letter-spacing: 3px;
+}
+
+header .subtitle {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 2px;
+}
+
+/* USER PROFILE EN HAUT À DROITE */
+.user-profile {
+  display: flex !important;
+  align-items: center;
+  gap: 1rem;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* NAVIGATION HORIZONTALE */
+.navigation {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  padding: 0 !important;
+  background: none !important;
+  width: auto !important;
+  position: relative !important;
+  left: auto !important;
+}
+
+.navigation button {
+  padding: 0.6rem 1.5rem !important;
+  border-radius: 8px !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: var(--color-text) !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.navigation button:hover {
+  background: rgba(255,255,255,0.1) !important;
+  border-color: var(--color-highlight) !important;
+}
+
+.navigation button.active {
+  background: var(--color-highlight) !important;
+  color: white !important;
+  border-color: var(--color-highlight) !important;
+}
+
+/* MAIN CONTENT AREA */
+.main-content-wrapper {
+  flex: 1;
+  display: flex;
+  position: relative;
+}
+
+/* SIDEBAR GAUCHE */
+.sidebar-left-vertical {
+  width: 100px;
+  background: linear-gradient(180deg, #16213e 0%, #0a0a12 100%);
+  border-right: 2px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sidebar-vertical-text {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 4px;
+  color: white;
+  text-transform: uppercase;
+}
+
+/* CONTENT CONTAINER */
+.content-container {
+  flex: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* FOOTER EN BAS */
+.main-footer {
+  background: linear-gradient(90deg, #0a0a12 0%, #16213e 100%);
+  padding: 1.2rem 3rem;
+  border-top: 2px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-text {
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 2px;
+}
+
+.discord-footer-icon {
+  width: 45px;
+  height: 45px;
+  background: #5865F2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.discord-footer-icon:hover {
+  background: #4752C4;
+  transform: scale(1.1);
+}
+
+.discord-footer-icon::before {
+  content: '💬';
+  font-size: 1.8rem;
+}
+
+/* THEME TOGGLE EN HAUT */
+.theme-toggle {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+}
+
 </style>
 </head>
 <body>
@@ -1004,27 +1187,40 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
 <!-- MAIN APP -->
 <div id="mainApp" style="display: none;">
   <header>
-    <div class="user-profile" id="userProfile">
-      <img id="userAvatar" src="" alt="Avatar">
-      <span class="username" id="userName"></span>
-      <button class="logout-btn" onclick="logout()">Déconnexion</button>
-    </div>
-
-    <div class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">
-      <div class="theme-slider">
-        <span class="theme-icon">🌙</span>
+    <div class="header-top-row">
+      <h1>PALETO GARAGE</h1>
+      
+      <div style="display:flex; gap:1.5rem; align-items:center;">
+        <div class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">
+          <div class="theme-slider">
+            <span class="theme-icon">🌙</span>
+          </div>
+        </div>
+        
+        <div class="user-profile" id="userProfile">
+          <img id="userAvatar" src="" alt="Avatar">
+          <span class="username" id="userName"></span>
+          <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
       </div>
     </div>
-
-    <h1>PALETO GARAGE</h1>
-    <div class="subtitle">Système de Gestion - By Artonn</div>
 
     <nav class="navigation" id="mainNavigation">
       <!-- Navigation générée dynamiquement -->
     </nav>
+    
+    <div class="subtitle">Système de Gestion - By Artonn</div>
   </header>
 
-  <div class="content-container">
+  <!-- MAIN CONTENT AVEC SIDEBAR -->
+  <div class="main-content-wrapper">
+    <!-- SIDEBAR GAUCHE -->
+    <div class="sidebar-left-vertical">
+      <div class="sidebar-vertical-text">PERSONNE CONNECTÉ</div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content-container">
     <!-- ACCUEIL -->
     <div class="tab-content active" id="tab-accueil">
       <div class="info-message">
@@ -1110,8 +1306,16 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
     </div>
     <div class="tab-content" id="tab-profil"><div class="info-message"><h2>👤 Profil</h2></div></div>
 
+  </div> <!-- fin content-container -->
+  </div> <!-- fin main-content-wrapper -->
+
+  <!-- FOOTER -->
+  <div class="main-footer">
+    <div class="footer-text">SYSTÈME DE GESTION - BY ARTONN</div>
+    <div class="discord-footer-icon"></div>
   </div>
-</div>
+
+</div> <!-- fin mainApp -->
 
 <!-- EMPLOYEE DETAILS MODAL -->
 <div class="modal" id="employeeModal">
