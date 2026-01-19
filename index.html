@@ -1489,6 +1489,7 @@ async function loadRecruits() {
 
     allRecruits = dataRows
       .map(r => ({
+        gmail: r[0] ? r[0].toString().trim() : '',  // Colonne A
         id: r[4] ? r[4].toString().trim() : '',
         nom: r[5] ? r[5].toString().trim() : '',
         rib: r[6] ? r[6].toString().trim() : '',
@@ -1877,6 +1878,7 @@ function showRecruitDetails(rec) {
           <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem;">
             <div><span style="color:var(--color-text-dim);">Tel:</span> <strong>${rec.tel || '-'}</strong></div>
             <div><span style="color:var(--color-text-dim);">Discord:</span> <strong>${rec.discord || '-'}</strong></div>
+            <div><span style="color:var(--color-text-dim);">Gmail:</span> <strong>${rec.gmail || '-'}</strong></div>
             <div><span style="color:var(--color-text-dim);">ID:</span> <strong style="font-family:monospace;">${rec.id || '-'}</strong></div>
           </div>
         </div>
