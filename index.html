@@ -394,7 +394,7 @@ body.role-rh .nav-item.rh-only {
 }
 
 .employee-card {
-  background: rgba(30, 30, 40, 0.6);
+  background: rgba(15, 15, 20, 0.8);
   backdrop-filter: blur(10px);
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 20px;
@@ -406,24 +406,24 @@ body.role-rh .nav-item.rh-only {
 }
 
 .employee-card:hover {
-  border-color: rgba(255, 255, 255, 0.25);
-  background: rgba(40, 40, 50, 0.7);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(20, 20, 25, 0.9);
   transform: translateY(-2px);
 }
 
 .employee-card.sanction-1 {
-  border-color: rgba(255, 215, 0, 0.4);
-  background: rgba(40, 40, 30, 0.7);
+  border-color: rgba(255, 215, 0, 0.5);
+  background: rgba(20, 18, 10, 0.8);
 }
 
 .employee-card.sanction-2 {
-  border-color: rgba(255, 140, 0, 0.4);
-  background: rgba(40, 35, 30, 0.7);
+  border-color: rgba(255, 140, 0, 0.6);
+  background: rgba(20, 15, 10, 0.8);
 }
 
 .employee-card.sanction-3 {
-  border-color: rgba(255, 51, 51, 0.4);
-  background: rgba(40, 30, 30, 0.7);
+  border-color: rgba(255, 51, 51, 0.7);
+  background: rgba(20, 10, 10, 0.8);
 }
 
 @keyframes pulse {
@@ -687,18 +687,19 @@ body.role-rh .nav-item.rh-only {
 /* COMMENT BADGE */
 .comment-badge {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  width: 32px;
-  height: 32px;
+  top: 1rem;
+  right: 1rem;
+  width: 12px;
+  height: 12px;
+  background: #ff5e7a;
+  border-radius: 50%;
   cursor: help;
   z-index: 10;
+  box-shadow: 0 0 0 3px rgba(255, 94, 122, 0.3);
 }
 
 .comment-badge svg {
-  width: 100%;
-  height: 100%;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  display: none;
 }
 
 .comment-badge .tooltip {
@@ -1544,19 +1545,19 @@ function displayRecruits(recruits) {
     
     // Coloriser selon le statut
     if (rec.statut === 'Accepté') {
-      card.style.borderColor = 'rgba(76, 175, 80, 0.6)';
-      card.style.background = 'rgba(30, 40, 30, 0.6)';
+      card.style.borderColor = 'rgba(76, 175, 80, 0.7)';
+      card.style.background = 'rgba(15, 20, 15, 0.8)';
     } else if (rec.statut === 'Refusé') {
-      card.style.borderColor = 'rgba(255, 59, 48, 0.6)';
-      card.style.background = 'rgba(40, 30, 30, 0.6)';
+      card.style.borderColor = 'rgba(255, 59, 48, 0.7)';
+      card.style.background = 'rgba(20, 15, 15, 0.8)';
     } else if (rec.statut === 'Blacklist') {
-      card.style.borderColor = 'rgba(0, 0, 0, 0.8)';
-      card.style.background = 'rgba(20, 20, 20, 0.8)';
+      card.style.borderColor = 'rgba(0, 0, 0, 0.9)';
+      card.style.background = 'rgba(10, 10, 10, 0.9)';
       card.style.opacity = '0.7';
     } else {
       // En attente (par défaut)
-      card.style.borderColor = 'rgba(255, 165, 0, 0.6)';
-      card.style.background = 'rgba(40, 35, 30, 0.6)';
+      card.style.borderColor = 'rgba(255, 165, 0, 0.7)';
+      card.style.background = 'rgba(20, 18, 15, 0.8)';
     }
     
     card.innerHTML = `
