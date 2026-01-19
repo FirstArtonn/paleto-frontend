@@ -2009,13 +2009,21 @@ function showRecruitDetails(rec) {
 
 async function updateRecruitStatus(recruitId, newStatus) {
   console.log('🔵 updateRecruitStatus appelé:', { recruitId, newStatus });
+  
+  // Fermer le menu de statut immédiatement
+  const statusOptions = document.querySelector('.status-options');
+  if (statusOptions) {
+    statusOptions.classList.remove('show');
+  }
+  
   const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
   const proxy = "https://corsproxy.io/?";
   
   showToast('⏳ Mise à jour du statut...', 'info');
   
   try {
-    console.log('📤 Envoi requête:', { recruitId, newStatus, url });
+    console.log('📤 Envoi requête:', { type: 'updateRecruitStatus', id: recruitId, status: newStatus });
+    
     const response = await fetch(proxy + encodeURIComponent(url), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -2026,34 +2034,34 @@ async function updateRecruitStatus(recruitId, newStatus) {
       })
     });
     
+    console.log('📥 Response status:', response.status, response.statusText);
+    
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     
     const result = await response.json();
-    console.log('✅ Réponse updateRecruitStatus:', result);
+    console.log('✅ Réponse complète:', result);
     
     if (result.success === false) {
       throw new Error(result.error || 'Erreur serveur');
     }
     
-    // Mise à jour locale
-    const rec = allRecruits.find(r => r.id === recruitId);
-    if (rec) {
-      rec.statut = newStatus;
-      const filtered = filteredRecruits.find(r => r.id === recruitId);
-      if (filtered) filtered.statut = newStatus;
-    }
-    
-    showToast('✅ Statut mis à jour !', 'success');
+    showToast(`✅ Statut → ${newStatus}`, 'success');
     logAction(`Modification statut candidat ID ${recruitId} → ${newStatus}`);
     
+    // Fermer la modal et rafraîchir
     closeModal();
-    setTimeout(() => loadRecruits(), 500);
+    
+    // Attendre un peu plus longtemps pour être sûr que Google Sheets est à jour
+    setTimeout(() => {
+      console.log('🔄 Rafraîchissement de la liste...');
+      loadRecruits();
+    }, 1000);
     
   } catch (error) {
-    console.error('❌ Erreur updateRecruitStatus:', error);
-    console.error('❌ ID:', recruitId, 'Nouveau statut:', newStatus);
+    console.error('❌ Erreur complète:', error);
+    console.error('❌ Stack:', error.stack);
     showToast(`❌ Erreur: ${error.message}`, 'error');
   }
 }
