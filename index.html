@@ -394,52 +394,36 @@ body.role-rh .nav-item.rh-only {
 }
 
 .employee-card {
-  background: rgba(26, 26, 46, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--color-border);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: rgba(30, 30, 40, 0.6);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 1.75rem 1.5rem;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.2s ease;
   position: relative;
-  overflow: hidden;
-}
-
-.employee-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--color-gold), var(--color-highlight));
-  transform: scaleX(0);
-  transition: transform 0.3s;
-}
-
-.employee-card:hover::before {
-  transform: scaleX(1);
+  overflow: visible;
 }
 
 .employee-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(233, 69, 96, 0.3);
-  border-color: var(--color-highlight);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(40, 40, 50, 0.7);
+  transform: translateY(-2px);
 }
 
 .employee-card.sanction-1 {
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(26, 26, 46, 0.8));
-  animation: pulse 2s infinite;
+  border-color: rgba(255, 215, 0, 0.4);
+  background: rgba(40, 40, 30, 0.7);
 }
 
 .employee-card.sanction-2 {
-  background: linear-gradient(135deg, rgba(255, 140, 0, 0.2), rgba(26, 26, 46, 0.8));
-  animation: pulse 2s infinite;
+  border-color: rgba(255, 140, 0, 0.4);
+  background: rgba(40, 35, 30, 0.7);
 }
 
 .employee-card.sanction-3 {
-  background: linear-gradient(135deg, rgba(255, 51, 51, 0.2), rgba(26, 26, 46, 0.8));
-  animation: pulse 2s infinite;
+  border-color: rgba(255, 51, 51, 0.4);
+  background: rgba(40, 30, 30, 0.7);
 }
 
 @keyframes pulse {
@@ -448,15 +432,20 @@ body.role-rh .nav-item.rh-only {
 }
 
 .employee-name {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .employee-grade {
-  font-size: 0.95rem;
-  color: var(--color-text-dim);
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 400;
 }
 
 /* EMPLOYEE DETAILS MODAL */
@@ -1555,19 +1544,19 @@ function displayRecruits(recruits) {
     
     // Coloriser selon le statut
     if (rec.statut === 'Accepté') {
-      card.style.background = 'linear-gradient(145deg, rgba(76,175,80,0.2), rgba(76,175,80,0.1))';
-      card.style.borderLeft = '4px solid #4CAF50';
+      card.style.borderColor = 'rgba(76, 175, 80, 0.6)';
+      card.style.background = 'rgba(30, 40, 30, 0.6)';
     } else if (rec.statut === 'Refusé') {
-      card.style.background = 'linear-gradient(145deg, rgba(255,59,48,0.2), rgba(255,59,48,0.1))';
-      card.style.borderLeft = '4px solid #FF3B30';
+      card.style.borderColor = 'rgba(255, 59, 48, 0.6)';
+      card.style.background = 'rgba(40, 30, 30, 0.6)';
     } else if (rec.statut === 'Blacklist') {
-      card.style.background = 'linear-gradient(145deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3))';
-      card.style.borderLeft = '4px solid #000';
+      card.style.borderColor = 'rgba(0, 0, 0, 0.8)';
+      card.style.background = 'rgba(20, 20, 20, 0.8)';
       card.style.opacity = '0.7';
     } else {
       // En attente (par défaut)
-      card.style.background = 'linear-gradient(145deg, rgba(255,165,0,0.2), rgba(255,165,0,0.1))';
-      card.style.borderLeft = '4px solid #FFA500';
+      card.style.borderColor = 'rgba(255, 165, 0, 0.6)';
+      card.style.background = 'rgba(40, 35, 30, 0.6)';
     }
     
     card.innerHTML = `
