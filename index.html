@@ -11,7 +11,7 @@
 <style>
 :root {
   --color-primary: #1a1a2e;
-  --color-secondary: #16213e;
+  --color-secondary: #0d1117;
   --color-accent: #0f3460;
   --color-highlight: #e94560;
   --color-gold: #d4af37;
@@ -988,18 +988,18 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
   display: flex !important;
   flex-direction: column;
   min-height: 100vh;
-  background: #0a0a12 !important;
+  background: #000000 !important;
 }
 
 body {
-  background: #0a0a12 !important;
+  background: #000000 !important;
 }
 
 /* HEADER HORIZONTAL */
 .header-horizontal {
-  background: #16213e;
+  background: #0a0a12;
   padding: 1.5rem 3rem;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1140,22 +1140,34 @@ body {
 /* SIDEBAR VERTICALE */
 .sidebar-vertical {
   width: 100px;
-  background: linear-gradient(180deg, #16213e 0%, #0a0a12 100%);
-  border-right: 2px solid rgba(255,255,255,0.1);
+  background: #0a0a12;
+  border-right: 1px solid rgba(255,255,255,0.05);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  position: relative;
 }
 
-.sidebar-text-vertical {
+.sidebar-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 4px;
+}
+
+.sidebar-line {
+  width: 2px;
+  height: 60px;
+  background: white;
+}
+
+.sidebar-username {
+  font-size: 1rem;
+  font-weight: 500;
   color: white;
-  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 /* CONTENT AREA */
@@ -1169,7 +1181,7 @@ body {
 
 /* CARDS DARK MODE */
 .employee-card {
-  background: #16213e !important;
+  background: #0d1117 !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
   color: #e8e8e8 !important;
 }
@@ -1189,7 +1201,7 @@ body {
 
 /* INFO MESSAGE DARK */
 .info-message {
-  background: #16213e !important;
+  background: #0d1117 !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
   color: #e8e8e8 !important;
 }
@@ -1220,33 +1232,23 @@ body {
 
 /* FOOTER */
 .footer-dark {
-  background: #16213e;
-  padding: 1.5rem 3rem;
-  border-top: 2px solid rgba(255,255,255,0.1);
+  background: transparent;
+  padding: 2rem 3rem;
+  border-top: none;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
 }
 
 .footer-text {
-  font-size: 0.875rem;
-  color: #a0a0a8;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 1px;
+  font-weight: 300;
 }
 
 .discord-icon-footer {
-  width: 45px;
-  height: 45px;
-  background: #5865F2;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-size: 1.5rem;
+  display: none;
 }
 
 .discord-icon-footer:hover {
@@ -1260,7 +1262,7 @@ body {
 }
 
 .modal-content {
-  background: #16213e !important;
+  background: #0d1117 !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
   color: #e8e8e8 !important;
 }
@@ -1302,7 +1304,7 @@ body {
 
 /* TOAST DARK */
 .toast {
-  background: #16213e !important;
+  background: #0d1117 !important;
   border: 1px solid rgba(255,255,255,0.1) !important;
   color: #e8e8e8 !important;
 }
@@ -1318,13 +1320,13 @@ body {
 }
 
 .comment-badge .tooltip {
-  background: #16213e !important;
+  background: #0d1117 !important;
   border: 1px solid rgba(255,255,255,0.2) !important;
 }
 
 /* CONTEXT MENU DARK */
 .context-menu {
-  background: #16213e !important;
+  background: #0d1117 !important;
   border: 1px solid rgba(255,255,255,0.2) !important;
 }
 
@@ -1338,7 +1340,7 @@ body {
 
 /* IFRAME CONTAINER */
 .iframe-container {
-  background: #16213e;
+  background: #0d1117;
   border-radius: 0.75rem;
   overflow: hidden;
   border: 1px solid rgba(255,255,255,0.1);
@@ -1384,21 +1386,16 @@ body {
         <!-- Navigation générée dynamiquement -->
       </nav>
     </div>
-    
-    <div class="header-right">
-      <div class="user-info-header" id="userProfile">
-        <img id="userAvatar" class="user-avatar-header" src="" alt="Avatar">
-        <span class="user-name-header" id="userName"></span>
-        <button class="logout-btn-header" onclick="logout()">Déconnexion</button>
-      </div>
-    </div>
   </div>
 
   <!-- MAIN WRAPPER -->
   <div class="main-wrapper">
     <!-- SIDEBAR VERTICALE -->
     <div class="sidebar-vertical">
-      <div class="sidebar-text-vertical">PERSONNE CONNECTÉ</div>
+      <div class="sidebar-content">
+        <div class="sidebar-line"></div>
+        <div class="sidebar-username" id="sidebarUserName"></div>
+      </div>
     </div>
 
     <!-- CONTENT AREA -->
@@ -1493,8 +1490,7 @@ body {
 
   <!-- FOOTER -->
   <div class="footer-dark">
-    <div class="footer-text">SYSTÈME DE GESTION - BY ARTONN</div>
-    <div class="discord-icon-footer">💬</div>
+    <div class="footer-text">by artonn</div>
   </div>
 
 </div> <!-- fin mainApp -->
@@ -1589,9 +1585,12 @@ function showApp() {
   document.getElementById('loginContainer').style.display = 'none';
   document.getElementById('mainApp').style.display = 'block';
   
-  document.getElementById('userAvatar').src = currentUser.avatar;
-  document.getElementById('userName').textContent = currentUser.employeeName || currentUser.username;
-  document.getElementById('welcomeName').textContent = currentUser.employeeName || currentUser.username;
+  // Mettre le prénom dans la sidebar
+  const fullName = currentUser.employeeName || currentUser.username;
+  const firstName = fullName.split(' ')[0]; // Prendre juste le prénom
+  document.getElementById('sidebarUserName').textContent = firstName;
+  
+  document.getElementById('welcomeName').textContent = fullName;
   
   const permissions = {
     'admin': 'Administrateur - Accès complet',
@@ -2163,10 +2162,9 @@ function buildNavigation() {
   if (!nav) return;
   
   nav.innerHTML = userCategories.map((cat, index) => {
-    const icon = CATEGORY_ICONS[cat] || "📄";
     const label = CATEGORY_LABELS[cat] || cat;
     const activeClass = index === 0 ? 'active' : '';
-    return `<div class="nav-item ${activeClass}" onclick="switchTab('${cat}')">${icon} ${label}</div>`;
+    return `<button class="header-nav-item ${activeClass}" onclick="switchTab('${cat}')">${label}</button>`;
   }).join('');
   
   if (userCategories.length > 0) {
