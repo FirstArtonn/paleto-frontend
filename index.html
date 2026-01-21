@@ -1193,33 +1193,60 @@ body {
 .content-container {
   flex: 1;
   padding: 2rem 2rem 2rem 8rem !important;
-  overflow-y: auto;
+  padding-right: calc(2rem + 10px) !important;
+  overflow-y: scroll;
   background: transparent;
   max-width: none !important;
   position: relative;
   z-index: 1;
-  margin-right: 10px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.6) rgba(255, 255, 255, 0.05);
 }
 
-/* SCROLLBAR SIMPLE */
+/* SCROLLBAR ÉPAISSE ET VISIBLE */
 .content-container::-webkit-scrollbar {
-  width: 12px;
+  width: 16px;
 }
 
 .content-container::-webkit-scrollbar-button {
   display: none;
 }
 
+.content-container::-webkit-scrollbar-button:vertical:start:decrement,
+.content-container::-webkit-scrollbar-button:vertical:end:increment {
+  display: none;
+  height: 0;
+}
+
 .content-container::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  margin-right: 10px;
+}
+
+.content-container::-webkit-scrollbar-track-piece {
+  background: rgba(255, 255, 255, 0.2);
+  margin-right: 10px;
 }
 
 .content-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+.content-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 1);
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+
+/* Firefox */
+.content-container {
+  scrollbar-width: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.8) rgba(255, 255, 255, 0.2);
+}
+  border-right: 10px solid transparent;
+  border-left: 10px solid transparent;
+  background-clip: padding-box;
 }
 
 /* CARDS DARK MODE */
