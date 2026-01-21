@@ -988,11 +988,12 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
 #mainApp {
   display: flex !important;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
   background: url('https://i.postimg.cc/L5RzN6nF/bgcolor-Logo-Paleto-Garage.png') center/cover fixed !important;
   position: relative;
   padding: 70px 130px;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 /* Logo watermark centré */
@@ -1159,6 +1160,7 @@ body {
   display: flex;
   position: relative;
   padding-top: 100px;
+  overflow: hidden;
 }
 
 /* USER BADGE FIXE EN BAS À GAUCHE */
@@ -1198,6 +1200,8 @@ body {
   max-width: none !important;
   position: relative;
   z-index: 1;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(15, 52, 96, 0.8) rgba(26, 26, 46, 0.8);
 }
 
 /* SCROLLBAR STYLE FACTURE */
@@ -1216,12 +1220,6 @@ body {
 
 .content-container::-webkit-scrollbar-thumb:hover {
   background: #e94560;
-}
-
-/* Firefox scrollbar */
-.content-container {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(15, 52, 96, 0.8) rgba(26, 26, 46, 0.8);
 }
 
 /* CARDS DARK MODE */
