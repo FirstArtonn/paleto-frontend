@@ -360,27 +360,32 @@ body.role-rh .nav-item.rh-only {
 
 /* EMPLOYEE CARDS */
 .search-container {
-  margin: 2rem 0;
-  text-align: center;
+  position: sticky;
+  top: 100px;
+  z-index: 50;
+  background: transparent;
+  padding: 1rem 0;
+  text-align: left;
+  margin: 0 0 1rem 0;
 }
 
 .search-input {
   width: 100%;
-  max-width: 400px;
-  padding: 1rem 1.5rem;
-  background: rgba(26, 26, 46, 0.8);
-  backdrop-filter: blur(20px);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  color: var(--color-text);
-  font-size: 1rem;
+  max-width: 350px;
+  padding: 0.75rem 1.25rem;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #e8e8e8;
+  font-size: 0.95rem;
   transition: all 0.3s;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: var(--color-highlight);
-  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.1);
+  border-color: #e94560;
+  box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
 }
 
 .search-input::placeholder {
@@ -1277,6 +1282,18 @@ body {
   box-shadow: 0 0 25px rgba(239, 68, 68, 0.5) !important;
 }
 
+/* TITRES DE SECTIONS */
+.employee-section-title {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-family: "alfarn-2", "Outfit", sans-serif;
+  margin: 2rem 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+  text-align: left;
+}
+
 .employee-name {
   color: white !important;
 }
@@ -1817,57 +1834,131 @@ function displayEmployees(employees) {
     return;
   }
 
-  employees.forEach((emp, index) => {
-    const card = document.createElement('div');
-    card.className = 'employee-card';
-    
-    // Système de couleurs dynamiques basé sur les sanctions
-    const statusClass = getSanctionStatusClass(emp.sanction);
-    if (statusClass) {
-      card.classList.add(statusClass);
+  // Séparer les employés actifs et les licenciés/démissionnés
+  const actifs = [];
+  const licencies = [];
+  
+  employees.forEach(emp => {
+    const sanctionLower = (emp.sanction || '').toLowerCase();
+    if (sanctionLower.includes('licenciement') || sanctionLower.includes('démission') || sanctionLower.includes('demission')) {
+      licencies.push(emp);
+    } else {
+      actifs.push(emp);
     }
-    
-    card.innerHTML = `
-      <div class="employee-name">${emp.nom}</div>
-      <div class="employee-grade">${emp.grade || 'Sans grade'}</div>
-    `;
-    
-    card.onclick = () => showEmployeeDetails(index);
-    list.appendChild(card);
   });
+  
+  // Trier les actifs par grade
+  actifs.sort((a, b) => getGradeLevel(a.grade) - getGradeLevel(b.grade));
+  
+  // Trier les licenciés par grade aussi
+  licencies.sort((a, b) => getGradeLevel(a.grade) - getGradeLevel(b.grade));
+  
+  // Afficher les employés actifs
+  if (actifs.length > 0) {
+    const titleActifs = document.createElement('div');
+    titleActifs.className = 'employee-section-title';
+    titleActifs.textContent = 'Employé';
+    list.appendChild(titleActifs);
+    
+    actifs.forEach((emp, index) => {
+      const card = document.createElement('div');
+      card.className = 'employee-card';
+      
+      // Système de couleurs dynamiques basé sur les sanctions
+      const statusClass = getSanctionStatusClass(emp.sanction);
+      if (statusClass) {
+        card.classList.add(statusClass);
+      }
+      
+      card.innerHTML = `
+        <div class="employee-name">${emp.nom}</div>
+        <div class="employee-grade">${emp.grade || 'Sans grade'}</div>
+      `;
+      
+      // Trouver l'index dans le tableau original pour showEmployeeDetails
+      const originalIndex = employees.indexOf(emp);
+      card.onclick = () => showEmployeeDetails(originalIndex);
+      list.appendChild(card);
+    });
+  }
+  
+  // Afficher les licenciés/démissionnés
+  if (licencies.length > 0) {
+    const titleLicencies = document.createElement('div');
+    titleLicencies.className = 'employee-section-title';
+    titleLicencies.textContent = 'Licenciement / Démission';
+    list.appendChild(titleLicencies);
+    
+    licencies.forEach((emp, index) => {
+      const card = document.createElement('div');
+      card.className = 'employee-card';
+      
+      // Système de couleurs dynamiques basé sur les sanctions
+      const statusClass = getSanctionStatusClass(emp.sanction);
+      if (statusClass) {
+        card.classList.add(statusClass);
+      }
+      
+      card.innerHTML = `
+        <div class="employee-name">${emp.nom}</div>
+        <div class="employee-grade">${emp.grade || 'Sans grade'}</div>
+      `;
+      
+      // Trouver l'index dans le tableau original pour showEmployeeDetails
+      const originalIndex = employees.indexOf(emp);
+      card.onclick = () => showEmployeeDetails(originalIndex);
+      list.appendChild(card);
+    });
+  }
 }
 
 // Fonction pour déterminer la couleur selon les sanctions
 function getSanctionStatusClass(sanction) {
   if (!sanction || sanction === '-' || sanction === '') {
-    return 'card-status-green'; // Pas de sanction = vert
+    return null; // Pas de sanction = PAS de contour
   }
   
   const sanctionLower = sanction.toLowerCase();
   
-  // Compter le niveau de sanctions
-  let sanctionLevel = 0;
-  
-  if (sanctionLower.includes('licenciement')) {
-    sanctionLevel = 10; // Rouge immédiat
-  } else if (sanctionLower.includes('avertissement 3') || sanctionLower.includes('avertissement3')) {
-    sanctionLevel = 7; // Orange
-  } else if (sanctionLower.includes('avertissement 2') || sanctionLower.includes('avertissement2')) {
-    sanctionLevel = 4; // Jaune
-  } else if (sanctionLower.includes('avertissement 1') || sanctionLower.includes('avertissement1') || sanctionLower.includes('avertissement')) {
-    sanctionLevel = 2; // Vert/Jaune limite
+  // Licenciement ou Démission = ROUGE
+  if (sanctionLower.includes('licenciement') || sanctionLower.includes('démission') || sanctionLower.includes('demission')) {
+    return 'card-status-red';
   }
   
-  // Retourner la classe selon le niveau
-  if (sanctionLevel >= 10) {
-    return 'card-status-red';    // Rouge : Licenciement ou 10+ sanctions
-  } else if (sanctionLevel >= 6) {
-    return 'card-status-orange'; // Orange : 6-9 sanctions
-  } else if (sanctionLevel >= 3) {
-    return 'card-status-yellow'; // Jaune : 3-5 sanctions
-  } else {
-    return 'card-status-green';  // Vert : 0-2 sanctions
+  // Avertissement 2 = ORANGE
+  if (sanctionLower.includes('avertissement 2') || sanctionLower.includes('avertissement2')) {
+    return 'card-status-orange';
   }
+  
+  // Avertissement 1 = JAUNE
+  if (sanctionLower.includes('avertissement 1') || sanctionLower.includes('avertissement1') || sanctionLower.includes('avertissement')) {
+    return 'card-status-yellow';
+  }
+  
+  // Par défaut pas de contour
+  return null;
+}
+
+// Fonction pour les couleurs des recrutements
+function getRecruitStatusClass(statut) {
+  if (!statut) {
+    return null;
+  }
+  
+  const statutLower = statut.toLowerCase();
+  
+  // Accepté = VERT
+  if (statutLower.includes('accepté') || statutLower.includes('accepte')) {
+    return 'card-status-green';
+  }
+  
+  // Refusé = ROUGE
+  if (statutLower.includes('refusé') || statutLower.includes('refuse')) {
+    return 'card-status-red';
+  }
+  
+  // En attente = PAS de contour
+  return null;
 }
 
 function showEmployeeDetails(index) {
@@ -2053,21 +2144,10 @@ function displayRecruits(recruits) {
     const card = document.createElement('div');
     card.className = 'employee-card';
     
-    // Coloriser selon le statut
-    if (rec.statut === 'Accepté') {
-      card.style.background = 'linear-gradient(145deg, rgba(76,175,80,0.2), rgba(76,175,80,0.1))';
-      card.style.borderLeft = '4px solid #4CAF50';
-    } else if (rec.statut === 'Refusé') {
-      card.style.background = 'linear-gradient(145deg, rgba(255,59,48,0.2), rgba(255,59,48,0.1))';
-      card.style.borderLeft = '4px solid #FF3B30';
-    } else if (rec.statut === 'Blacklist') {
-      card.style.background = 'linear-gradient(145deg, rgba(0,0,0,0.5), rgba(0,0,0,0.3))';
-      card.style.borderLeft = '4px solid #000';
-      card.style.opacity = '0.7';
-    } else {
-      // En attente (par défaut)
-      card.style.background = 'linear-gradient(145deg, rgba(255,165,0,0.2), rgba(255,165,0,0.1))';
-      card.style.borderLeft = '4px solid #FFA500';
+    // Système de couleurs pour les recrutements
+    const statusClass = getRecruitStatusClass(rec.statut);
+    if (statusClass) {
+      card.classList.add(statusClass);
     }
     
     card.innerHTML = `
