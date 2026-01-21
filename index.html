@@ -1144,12 +1144,24 @@ body {
   bottom: 2rem;
   left: 2rem;
   z-index: 200;
-  background: transparent;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.user-badge-line {
+  width: 3px;
+  height: 80px;
+  background: white;
+}
+
+.user-badge-text {
+  font-size: 1.75rem;
+  font-weight: 700;
   color: white;
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  letter-spacing: 2px;
 }
 
 /* CONTENT AREA */
@@ -1468,7 +1480,10 @@ body {
   </div>
 
   <!-- USER BADGE FIXE BAS GAUCHE -->
-  <div class="user-badge-fixed" id="userBadgeFixed"></div>
+  <div class="user-badge-fixed">
+    <div class="user-badge-line"></div>
+    <div class="user-badge-text" id="userBadgeText"></div>
+  </div>
 
 </div> <!-- fin mainApp -->
 
@@ -1564,7 +1579,7 @@ function showApp() {
   
   // Mettre le prénom et nom dans le badge user fixe
   const fullName = currentUser.employeeName || currentUser.username;
-  document.getElementById('userBadgeFixed').textContent = fullName;
+  document.getElementById('userBadgeText').textContent = fullName;
   
   document.getElementById('welcomeName').textContent = fullName;
   
