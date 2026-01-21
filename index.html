@@ -1194,7 +1194,7 @@ body {
 /* CONTENT AREA */
 .content-container {
   flex: 1;
-  padding: 2rem 3rem 2rem 8rem !important;
+  padding: 2rem 2rem 2rem 8rem !important;
   overflow-y: auto;
   background: transparent;
   max-width: none !important;
@@ -1202,24 +1202,43 @@ body {
   z-index: 1;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.6) rgba(255, 255, 255, 0.05);
+  margin-right: 10px;
 }
 
 /* SCROLLBAR SIMPLE ET MODERNE */
 ::-webkit-scrollbar {
-  width: 18px;
+  width: 10px;
+}
+
+::-webkit-scrollbar-button {
+  display: none;
 }
 
 ::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
-  border-right: 10px solid transparent;
-  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
-  border-right: 10px solid transparent;
-  background-clip: padding-box;
+}
+
+.content-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.content-container::-webkit-scrollbar-button {
+  display: none;
+}
+
+.content-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.content-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+}
 }
 
 /* CARDS DARK MODE */
