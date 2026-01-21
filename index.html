@@ -361,12 +361,43 @@ body.role-rh .nav-item.rh-only {
 /* EMPLOYEE CARDS */
 .search-container {
   position: sticky;
-  top: 100px;
+  top: 50px;
   z-index: 50;
   background: transparent;
-  padding: 1rem 0;
-  text-align: left;
-  margin: 0 0 1rem 0;
+  padding: 0.5rem 0 1rem 0;
+  text-align: right;
+  margin: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+}
+
+.filter-select {
+  padding: 0.75rem 1.25rem;
+  background: rgba(13, 17, 23, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #e8e8e8;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  outline: none;
+}
+
+.filter-select:hover {
+  border-color: rgba(255,255,255,0.2);
+}
+
+.filter-select:focus {
+  border-color: #e94560;
+  box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
+}
+
+.filter-select option {
+  background: #0d1117;
+  color: #e8e8e8;
 }
 
 .search-input {
@@ -1284,14 +1315,16 @@ body {
 
 /* TITRES DE SECTIONS */
 .employee-section-title {
-  color: white;
-  font-size: 1.25rem;
-  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  font-size: 0.9rem;
+  font-weight: 500;
   font-family: "alfarn-2", "Outfit", sans-serif;
-  margin: 2rem 0 1rem 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
+  margin: 1.5rem 0 0.75rem 0;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
   text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .employee-name {
@@ -1511,6 +1544,18 @@ body {
     <!-- EMPLOYÉS -->
     <div class="tab-content" id="tab-employes">
       <div class="search-container">
+        <select class="filter-select" id="filterEmployees" onchange="filterEmployeesByType()">
+          <option value="tous">Tous les employés</option>
+          <option value="actifs">Employés actifs</option>
+          <option value="licencies">Licenciement/Démission</option>
+          <option value="patron">Grade: Patron</option>
+          <option value="copatron">Grade: Co Patron</option>
+          <option value="drh">Grade: DRH</option>
+          <option value="rh">Grade: RH</option>
+          <option value="mecano">Grade: Mécano</option>
+          <option value="apprenti">Grade: Apprenti</option>
+          <option value="stagiaire">Grade: Stagiaire</option>
+        </select>
         <input type="text" class="search-input" id="searchBar" placeholder="🔍 Rechercher un employé...">
       </div>
       <div class="employee-grid" id="employeeList"></div>
@@ -1519,6 +1564,13 @@ body {
     <!-- RECRUTEMENT -->
     <div class="tab-content" id="tab-recrutement">
       <div class="search-container">
+        <select class="filter-select" id="filterRecruits" onchange="filterRecruitsByStatus()">
+          <option value="tous">Tous les candidats</option>
+          <option value="attente">En attente</option>
+          <option value="accepte">Acceptés</option>
+          <option value="refuse">Refusés</option>
+          <option value="blacklist">Blacklist</option>
+        </select>
         <input type="text" class="search-input" id="searchBarRecruit" placeholder="🔍 Rechercher un candidat...">
       </div>
       <div class="employee-grid" id="recruitList"></div>
@@ -1961,6 +2013,94 @@ function getRecruitStatusClass(statut) {
   return null;
 }
 
+// Fonctions de filtrage
+function filterEmployeesByType() {
+  const filterValue = document.getElementById('filterEmployees').value;
+  const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+  
+  let filtered = allEmployees;
+  
+  // Appliquer le filtre
+  if (filterValue === 'actifs') {
+    filtered = filtered.filter(emp => {
+      const sanctionLower = (emp.sanction || '').toLowerCase();
+      return !sanctionLower.includes('licenciement') && !sanctionLower.includes('démission') && !sanctionLower.includes('demission');
+    });
+  } else if (filterValue === 'licencies') {
+    filtered = filtered.filter(emp => {
+      const sanctionLower = (emp.sanction || '').toLowerCase();
+      return sanctionLower.includes('licenciement') || sanctionLower.includes('démission') || sanctionLower.includes('demission');
+    });
+  } else if (filterValue === 'patron') {
+    filtered = filtered.filter(emp => (emp.grade || '').toLowerCase().includes('patron') && !(emp.grade || '').toLowerCase().includes('co'));
+  } else if (filterValue === 'copatron') {
+    filtered = filtered.filter(emp => (emp.grade || '').toLowerCase().includes('co patron'));
+  } else if (filterValue === 'drh') {
+    filtered = filtered.filter(emp => (emp.grade || '').toLowerCase() === 'drh');
+  } else if (filterValue === 'rh') {
+    filtered = filtered.filter(emp => (emp.grade || '').toLowerCase() === 'rh');
+  } else if (filterValue === 'mecano') {
+    filtered = filtered.filter(emp => (emp.grade || '').toLowerCase().includes('mécano'));
+  } else if (filterValue === 'apprenti') {
+    filtered = filtered.filter(emp => (emp.grade || '').toLowerCase().includes('apprenti'));
+  } else if (filterValue === 'stagiaire') {
+    filtered = filtered.filter(emp => (emp.grade || '').toLowerCase().includes('stagiaire'));
+  }
+  
+  // Appliquer la recherche
+  if (searchTerm) {
+    filtered = filtered.filter(emp => 
+      (emp.nom || '').toLowerCase().includes(searchTerm) ||
+      (emp.grade || '').toLowerCase().includes(searchTerm)
+    );
+  }
+  
+  filteredEmployees = filtered;
+  displayEmployees(filteredEmployees);
+}
+
+function filterRecruitsByStatus() {
+  const filterValue = document.getElementById('filterRecruits').value;
+  const searchTerm = document.getElementById('searchBarRecruit').value.toLowerCase();
+  
+  let filtered = allRecruits;
+  
+  // Appliquer le filtre
+  if (filterValue === 'attente') {
+    filtered = filtered.filter(rec => {
+      const statutLower = (rec.statut || '').toLowerCase();
+      return !statutLower.includes('accepté') && !statutLower.includes('accepte') && 
+             !statutLower.includes('refusé') && !statutLower.includes('refuse') &&
+             !statutLower.includes('blacklist');
+    });
+  } else if (filterValue === 'accepte') {
+    filtered = filtered.filter(rec => {
+      const statutLower = (rec.statut || '').toLowerCase();
+      return statutLower.includes('accepté') || statutLower.includes('accepte');
+    });
+  } else if (filterValue === 'refuse') {
+    filtered = filtered.filter(rec => {
+      const statutLower = (rec.statut || '').toLowerCase();
+      return statutLower.includes('refusé') || statutLower.includes('refuse');
+    });
+  } else if (filterValue === 'blacklist') {
+    filtered = filtered.filter(rec => {
+      const statutLower = (rec.statut || '').toLowerCase();
+      return statutLower.includes('blacklist');
+    });
+  }
+  
+  // Appliquer la recherche
+  if (searchTerm) {
+    filtered = filtered.filter(rec => 
+      (rec.nom || '').toLowerCase().includes(searchTerm)
+    );
+  }
+  
+  filteredRecruits = filtered;
+  displayRecruits(filteredRecruits);
+}
+
 function showEmployeeDetails(index) {
   const emp = filteredEmployees[index];
   const modal = document.getElementById('employeeModal');
@@ -2183,23 +2323,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchBar = document.getElementById('searchBar');
   if (searchBar) {
     searchBar.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      filteredEmployees = allEmployees.filter(emp =>
-        emp.nom.toLowerCase().includes(query) ||
-        emp.grade.toLowerCase().includes(query)
-      );
-      displayEmployees(filteredEmployees);
+      filterEmployeesByType();
     });
   }
   
   const searchBarRecruit = document.getElementById('searchBarRecruit');
   if (searchBarRecruit) {
     searchBarRecruit.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      filteredRecruits = allRecruits.filter(rec =>
-        rec.nom.toLowerCase().includes(query)
-      );
-      displayRecruits(filteredRecruits);
+      filterRecruitsByStatus();
     });
   }
 });
