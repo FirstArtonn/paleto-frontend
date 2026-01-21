@@ -361,10 +361,11 @@ body.role-rh .nav-item.rh-only {
 /* EMPLOYEE CARDS */
 .search-container {
   position: sticky;
-  top: 50px;
-  z-index: 50;
-  background: transparent;
-  padding: 0.5rem 0 1rem 0;
+  top: 0;
+  z-index: 101;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(15px);
+  padding: 1rem;
   text-align: right;
   margin: 0;
   display: flex;
@@ -1315,16 +1316,22 @@ body {
 
 /* TITRES DE SECTIONS */
 .employee-section-title {
-  color: rgba(255,255,255,0.7);
-  font-size: 0.9rem;
-  font-weight: 500;
+  color: white;
+  font-size: 1.15rem;
+  font-weight: 600;
   font-family: "alfarn-2", "Outfit", sans-serif;
-  margin: 1.5rem 0 0.75rem 0;
-  padding-bottom: 0.25rem;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  margin: 2.5rem 0 1rem 0;
+  padding: 0;
+  border: none;
   text-align: left;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
+  grid-column: 1 / -1;
+  width: 100%;
+}
+
+.employee-section-title:first-of-type {
+  margin-top: 0.5rem;
 }
 
 .employee-name {
