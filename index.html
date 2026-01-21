@@ -361,23 +361,45 @@ body.role-rh .nav-item.rh-only {
 /* EMPLOYEE CARDS */
 .search-container {
   position: sticky;
-  top: 0;
+  top: -10px;
   z-index: 101;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(15px);
-  border-radius: 50px
-  padding: 200px;
+  padding: 1.5rem 1rem;
   text-align: right;
-  margin: 0;
+  margin: -10px 0 0 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  gap: 200px;
+  gap: 1rem;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.filter-icon {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.filter-icon:hover {
+  opacity: 0.7;
 }
 
 .filter-select {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
   padding: 0.75rem 1.25rem;
-  background: rgba(13, 17, 23, 0.85);
+  background: rgba(13, 17, 23, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
@@ -386,6 +408,11 @@ body.role-rh .nav-item.rh-only {
   cursor: pointer;
   transition: all 0.3s;
   outline: none;
+  min-width: 200px;
+}
+
+.filter-select.active {
+  display: block;
 }
 
 .filter-select:hover {
@@ -727,6 +754,12 @@ body.role-rh .nav-item.rh-only {
 }
 
 .comment-badge svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+}
+
+.comment-badge img {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
@@ -1552,19 +1585,26 @@ body {
     <!-- EMPLOYÉS -->
     <div class="tab-content" id="tab-employes">
       <div class="search-container">
-        <select class="filter-select" id="filterEmployees" onchange="filterEmployeesByType()">
-          <option value="tous">Tous les employés</option>
-          <option value="actifs">Employés actifs</option>
-          <option value="licencies">Licenciement/Démission</option>
-          <option value="patron">Grade: Patron</option>
-          <option value="copatron">Grade: Co Patron</option>
-          <option value="drh">Grade: DRH</option>
-          <option value="rh">Grade: RH</option>
-          <option value="mecano">Grade: Mécano</option>
-          <option value="apprenti">Grade: Apprenti</option>
-          <option value="stagiaire">Grade: Stagiaire</option>
-        </select>
-        <input type="text" class="search-input" id="searchBar" placeholder="🔍 Rechercher un employé...">
+        <div class="search-wrapper">
+          <img src="https://i.postimg.cc/28dkdrB2/filtre-Logo-Paleto-Garage.png" 
+               alt="Filtrer" 
+               class="filter-icon" 
+               id="filterIconEmployees"
+               onclick="toggleFilterDropdown('filterEmployees')">
+          <select class="filter-select" id="filterEmployees" onchange="filterEmployeesByType()">
+            <option value="tous">Tous les employés</option>
+            <option value="actifs">Employés actifs</option>
+            <option value="licencies">Licenciement/Démission</option>
+            <option value="patron">Grade: Patron</option>
+            <option value="copatron">Grade: Co Patron</option>
+            <option value="drh">Grade: DRH</option>
+            <option value="rh">Grade: RH</option>
+            <option value="mecano">Grade: Mécano</option>
+            <option value="apprenti">Grade: Apprenti</option>
+            <option value="stagiaire">Grade: Stagiaire</option>
+          </select>
+          <input type="text" class="search-input" id="searchBar" placeholder="Rechercher un employé...">
+        </div>
       </div>
       <div class="employee-grid" id="employeeList"></div>
     </div>
@@ -1572,14 +1612,21 @@ body {
     <!-- RECRUTEMENT -->
     <div class="tab-content" id="tab-recrutement">
       <div class="search-container">
-        <select class="filter-select" id="filterRecruits" onchange="filterRecruitsByStatus()">
-          <option value="tous">Tous les candidats</option>
-          <option value="attente">En attente</option>
-          <option value="accepte">Acceptés</option>
-          <option value="refuse">Refusés</option>
-          <option value="blacklist">Blacklist</option>
-        </select>
-        <input type="text" class="search-input" id="searchBarRecruit" placeholder="🔍 Rechercher un candidat...">
+        <div class="search-wrapper">
+          <img src="https://i.postimg.cc/28dkdrB2/filtre-Logo-Paleto-Garage.png" 
+               alt="Filtrer" 
+               class="filter-icon" 
+               id="filterIconRecruits"
+               onclick="toggleFilterDropdown('filterRecruits')">
+          <select class="filter-select" id="filterRecruits" onchange="filterRecruitsByStatus()">
+            <option value="tous">Tous les candidats</option>
+            <option value="attente">En attente</option>
+            <option value="accepte">Acceptés</option>
+            <option value="refuse">Refusés</option>
+            <option value="blacklist">Blacklist</option>
+          </select>
+          <input type="text" class="search-input" id="searchBarRecruit" placeholder="Rechercher un candidat...">
+        </div>
       </div>
       <div class="employee-grid" id="recruitList"></div>
     </div>
@@ -2067,6 +2114,24 @@ function filterEmployeesByType() {
   displayEmployees(filteredEmployees);
 }
 
+// Fonction pour toggle le dropdown de filtre
+function toggleFilterDropdown(selectId) {
+  const select = document.getElementById(selectId);
+  select.classList.toggle('active');
+  
+  // Fermer si on clique ailleurs
+  if (select.classList.contains('active')) {
+    setTimeout(() => {
+      document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('.search-wrapper')) {
+          select.classList.remove('active');
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+    }, 100);
+  }
+}
+
 function filterRecruitsByStatus() {
   const filterValue = document.getElementById('filterRecruits').value;
   const searchTerm = document.getElementById('searchBarRecruit').value.toLowerCase();
@@ -2304,10 +2369,7 @@ function displayRecruits(recruits) {
         <div class="employee-grade">${rec.statut}</div>
         ${rec.commentaires ? `
           <div class="comment-badge" onmouseenter="showCommentTooltip(event, this)" onmouseleave="hideCommentTooltip(this)">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M20 2H4C2.9 2 2 2.9 2 4V16C2 17.1 2.9 18 4 18H7L12 22L17 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" 
-                    fill="white" stroke="white" stroke-width="0.5"/>
-            </svg>
+            <img src="https://i.postimg.cc/Z0t9DHTr/Plan-de-travail-2Logo-Paleto-Garage.png" alt="Commentaire" style="width: 24px; height: 24px;">
             <div class="tooltip">${rec.commentaires.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
           </div>
         ` : ''}
