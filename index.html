@@ -991,6 +991,8 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
   min-height: 100vh;
   background: url('https://i.postimg.cc/L5RzN6nF/bgcolor-Logo-Paleto-Garage.png') center/cover fixed !important;
   position: relative;
+  padding: 70px 130px;
+  box-sizing: border-box;
 }
 
 /* Logo watermark centré */
@@ -1003,7 +1005,7 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
   width: 600px;
   height: 600px;
   background: url('https://i.postimg.cc/2ywnJRZq/logo-flashback-fa-Logo-Paleto-Garage.png') no-repeat center/contain;
-  opacity: 0.2;
+  opacity: 0.35;
   z-index: 0;
   pointer-events: none;
 }
@@ -1022,9 +1024,9 @@ body {
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  top: 70px;
+  left: 130px;
+  right: 130px;
   z-index: 100;
   box-shadow: none;
 }
@@ -1162,8 +1164,8 @@ body {
 /* USER BADGE FIXE EN BAS À GAUCHE */
 .user-badge-fixed {
   position: fixed;
-  bottom: 2rem;
-  left: 2rem;
+  bottom: calc(2rem + 70px);
+  left: calc(2rem + 130px);
   z-index: 200;
   display: flex;
   align-items: center;
@@ -1190,42 +1192,36 @@ body {
 /* CONTENT AREA */
 .content-container {
   flex: 1;
-  padding: 2rem 5rem 2rem 10rem !important;
+  padding: 2rem 3rem 2rem 8rem !important;
   overflow-y: auto;
   background: transparent;
   max-width: none !important;
   position: relative;
   z-index: 1;
-  padding-right: calc(5rem - 12px) !important;
 }
 
-/* SCROLLBAR MODERNE */
+/* SCROLLBAR STYLE FACTURE */
 .content-container::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 .content-container::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-  border-right: 6px solid transparent;
-  background-clip: padding-box;
+  background: rgba(26, 26, 46, 0.8);
 }
 
 .content-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  border-right: 6px solid transparent;
-  background-clip: padding-box;
+  background: rgba(15, 52, 96, 0.8);
+  border-radius: 4px;
 }
 
 .content-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 1);
+  background: #e94560;
 }
 
 /* Firefox scrollbar */
 .content-container {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.9) rgba(255, 255, 255, 0.05);
+  scrollbar-color: rgba(15, 52, 96, 0.8) rgba(26, 26, 46, 0.8);
 }
 
 /* CARDS DARK MODE */
