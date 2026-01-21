@@ -1047,7 +1047,8 @@ body {
 .header-center {
   flex: 1;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-right: 3rem;
 }
 
 .header-nav {
@@ -1137,37 +1138,18 @@ body {
   position: relative;
 }
 
-/* SIDEBAR VERTICALE */
-.sidebar-vertical {
-  width: 100px;
-  background: #0a0a12;
-  border-right: 1px solid rgba(255,255,255,0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  position: relative;
-}
-
-.sidebar-content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-}
-
-.sidebar-line {
-  width: 2px;
-  height: 60px;
-  background: white;
-}
-
-.sidebar-username {
-  font-size: 1rem;
-  font-weight: 500;
+/* USER BADGE FIXE EN BAS À GAUCHE */
+.user-badge-fixed {
+  position: fixed;
+  bottom: 2rem;
+  left: 2rem;
+  z-index: 200;
+  background: transparent;
+  padding: 0;
   color: white;
-  letter-spacing: 2px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
 }
 
 /* CONTENT AREA */
@@ -1390,14 +1372,6 @@ body {
 
   <!-- MAIN WRAPPER -->
   <div class="main-wrapper">
-    <!-- SIDEBAR VERTICALE -->
-    <div class="sidebar-vertical">
-      <div class="sidebar-content">
-        <div class="sidebar-line"></div>
-        <div class="sidebar-username" id="sidebarUserName"></div>
-      </div>
-    </div>
-
     <!-- CONTENT AREA -->
     <div class="content-container">
     <!-- ACCUEIL -->
@@ -1493,6 +1467,9 @@ body {
     <div class="footer-text">by artonn</div>
   </div>
 
+  <!-- USER BADGE FIXE BAS GAUCHE -->
+  <div class="user-badge-fixed" id="userBadgeFixed"></div>
+
 </div> <!-- fin mainApp -->
 
 <!-- EMPLOYEE DETAILS MODAL -->
@@ -1585,10 +1562,9 @@ function showApp() {
   document.getElementById('loginContainer').style.display = 'none';
   document.getElementById('mainApp').style.display = 'block';
   
-  // Mettre le prénom dans la sidebar
+  // Mettre le prénom et nom dans le badge user fixe
   const fullName = currentUser.employeeName || currentUser.username;
-  const firstName = fullName.split(' ')[0]; // Prendre juste le prénom
-  document.getElementById('sidebarUserName').textContent = firstName;
+  document.getElementById('userBadgeFixed').textContent = fullName;
   
   document.getElementById('welcomeName').textContent = fullName;
   
