@@ -988,12 +988,11 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
 #mainApp {
   display: flex !important;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   background: url('https://i.postimg.cc/L5RzN6nF/bgcolor-Logo-Paleto-Garage.png') center/cover fixed !important;
   position: relative;
   padding: 70px 130px;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 /* Logo watermark centré */
@@ -1160,7 +1159,6 @@ body {
   display: flex;
   position: relative;
   padding-top: 100px;
-  overflow: hidden;
 }
 
 /* USER BADGE FIXE EN BAS À GAUCHE */
@@ -1200,31 +1198,14 @@ body {
   max-width: none !important;
   position: relative;
   z-index: 1;
+  margin-right: 10px;
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.6) rgba(255, 255, 255, 0.05);
-  margin-right: 10px;
 }
 
-/* SCROLLBAR SIMPLE ET MODERNE */
-::-webkit-scrollbar {
-  width: 10px;
-}
-
-::-webkit-scrollbar-button {
-  display: none;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.6);
-  border-radius: 10px;
-}
-
+/* SCROLLBAR SIMPLE */
 .content-container::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 .content-container::-webkit-scrollbar-button {
@@ -1233,12 +1214,12 @@ body {
 
 .content-container::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
 }
 
 .content-container::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.6);
   border-radius: 10px;
-}
 }
 
 /* CARDS DARK MODE */
