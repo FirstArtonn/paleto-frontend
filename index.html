@@ -454,30 +454,42 @@ body.role-rh .nav-item.rh-only {
 
 .filter-options {
   position: absolute;
-  top: 100%;
-  right: 0;
+  top: 50%;
+  left: calc(100% + 0.5rem);
+  transform: translateY(-50%) scaleX(0);
+  transform-origin: left center;
   background: rgba(13, 17, 23, 0.98);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
-  margin-top: 0.5rem;
-  max-height: 400px;
-  overflow-y: auto;
-  display: none;
+  padding: 0.5rem;
+  max-height: 60px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
   z-index: 1000;
-  min-width: 220px;
+  white-space: nowrap;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
 }
 
 .filter-options.active {
-  display: block;
+  display: flex;
+  transform: translateY(-50%) scaleX(1);
+  opacity: 1;
 }
 
 .filter-option {
-  padding: 0.75rem 1rem;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   transition: all 0.2s;
   color: #e8e8e8;
   font-size: 0.9rem;
+  border-radius: 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .filter-option:hover {
@@ -833,9 +845,10 @@ body.role-rh .nav-item.rh-only {
 .comment-badge img {
   width: 100%;
   height: 100%;
-  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2)) brightness(2) contrast(1.5);
   background: transparent !important;
-  mix-blend-mode: screen;
+  mix-blend-mode: lighten;
+  isolation: isolate;
 }
 
 .comment-badge .tooltip {
@@ -1650,16 +1663,16 @@ body {
                  class="filter-icon-only"
                  onclick="toggleFilterOptions('filterEmployees')">
             <div class="filter-options" id="filterEmployees">
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'tous', 'Tous les employés')">Tous les employés</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'actifs', 'Employés actifs')">Employés actifs</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'licencies', 'Licenciement/Démission')">Licenciement / Démission</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'patron', 'Grade: Patron')">Grade: Patron</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'copatron', 'Grade: Co Patron')">Grade: Co Patron</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'drh', 'Grade: DRH')">Grade: DRH</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'rh', 'Grade: RH')">Grade: RH</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'mecano', 'Grade: Mécano')">Grade: Mécano</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'apprenti', 'Grade: Apprenti')">Grade: Apprenti</div>
-              <div class="filter-option" onclick="selectFilter('filterEmployees', 'stagiaire', 'Grade: Stagiaire')">Grade: Stagiaire</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'tous', 'Tous')">Tous</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'actifs', 'Actifs')">Actifs</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'licencies', 'Licenciés')">Licenciés</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'patron', 'Patron')">Patron</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'copatron', 'Co Patron')">Co Patron</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'drh', 'DRH')">DRH</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'rh', 'RH')">RH</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'mecano', 'Mécano')">Mécano</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'apprenti', 'Apprenti')">Apprenti</div>
+              <div class="filter-option" onclick="selectFilter('filterEmployees', 'stagiaire', 'Stagiaire')">Stagiaire</div>
             </div>
           </div>
           <input type="text" class="search-input" id="searchBar" placeholder="Rechercher un employé...">
@@ -1889,13 +1902,13 @@ function showApp() {
 
 // ==================== NAVIGATION ====================
 function switchTab(tabName) {
-  // Désactiver tous les nav-items
-  document.querySelectorAll('.nav-item').forEach(item => {
+  // Désactiver tous les header-nav-items
+  document.querySelectorAll('.header-nav-item').forEach(item => {
     item.classList.remove('active');
   });
   
-  // Activer le bon nav-item
-  document.querySelectorAll('.nav-item').forEach(item => {
+  // Activer le bon header-nav-item
+  document.querySelectorAll('.header-nav-item').forEach(item => {
     const onclick = item.getAttribute('onclick');
     if (onclick && onclick.includes("'" + tabName + "'")) {
       item.classList.add('active');
@@ -2907,7 +2920,11 @@ async function updateRecruitStatus(recruitId, newStatus) {
     }
     
     showToast(`✅ Statut → ${newStatus}`, 'success');
-    logAction(`Modification statut candidat ID ${recruitId} → ${newStatus}`);
+    
+    // Trouver le nom du candidat
+    const recruit = allRecruits.find(r => r.id === recruitId);
+    const recruitName = recruit ? recruit.nom : 'Inconnu';
+    logAction(`Modification statut candidat ${recruitName} (ID ${recruitId}) → ${newStatus}`);
     
     // Fermer la modal et rafraîchir
     closeModal();
@@ -3075,7 +3092,10 @@ async function saveComment(recruitId) {
     
     cancelEditComment();
     
-    logAction(`Commentaire modifié pour candidat ID ${recruitId}`);
+    // Trouver le nom du candidat
+    const recruit = allRecruits.find(r => r.id === recruitId);
+    const recruitName = recruit ? recruit.nom : 'Inconnu';
+    logAction(`Commentaire modifié pour candidat ${recruitName} (ID ${recruitId})`);
     
     // Rafraîchir les recrues
     setTimeout(() => loadRecruits(), 1000);
