@@ -988,16 +988,33 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
   display: flex !important;
   flex-direction: column;
   min-height: 100vh;
-  background: #000000 !important;
+  background: url('https://i.postimg.cc/L5RzN6nF/bgcolor-Logo-Paleto-Garage.png') center/cover fixed !important;
+  position: relative;
+}
+
+/* Logo watermark centré */
+#mainApp::before {
+  content: '';
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  background: url('https://i.postimg.cc/2ywnJRZq/logo-flashback-fa-Logo-Paleto-Garage.png') no-repeat center/contain;
+  opacity: 0.08;
+  z-index: 0;
+  pointer-events: none;
 }
 
 body {
-  background: #000000 !important;
+  background: url('https://i.postimg.cc/L5RzN6nF/bgcolor-Logo-Paleto-Garage.png') center/cover fixed !important;
 }
 
 /* HEADER HORIZONTAL */
 .header-horizontal {
-  background: #0a0a12;
+  background: rgba(10, 10, 18, 0.95);
+  backdrop-filter: blur(10px);
   padding: 1.5rem 3rem;
   border-bottom: 1px solid rgba(255,255,255,0.05);
   display: flex;
@@ -1015,11 +1032,10 @@ body {
   gap: 1.5rem;
 }
 
-.logo-text {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: white;
-  letter-spacing: 2px;
+.logo-image {
+  height: 50px;
+  width: auto;
+  display: block;
 }
 
 .theme-toggle-header {
@@ -1167,15 +1183,18 @@ body {
 /* CONTENT AREA */
 .content-container {
   flex: 1;
-  padding: 2rem 3rem !important;
+  padding: 2rem 3rem 2rem 8rem !important;
   overflow-y: auto;
-  background: #0a0a12;
+  background: transparent;
   max-width: none !important;
+  position: relative;
+  z-index: 1;
 }
 
 /* CARDS DARK MODE */
 .employee-card {
-  background: #0d1117 !important;
+  background: rgba(13, 17, 23, 0.85) !important;
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.1) !important;
   color: #e8e8e8 !important;
 }
@@ -1183,6 +1202,7 @@ body {
 .employee-card:hover {
   border-color: #e94560 !important;
   box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3) !important;
+  background: rgba(13, 17, 23, 0.95) !important;
 }
 
 .employee-name {
@@ -1195,7 +1215,8 @@ body {
 
 /* INFO MESSAGE DARK */
 .info-message {
-  background: #0d1117 !important;
+  background: rgba(13, 17, 23, 0.85) !important;
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255,255,255,0.1) !important;
   color: #e8e8e8 !important;
 }
@@ -1369,7 +1390,7 @@ body {
   <!-- HEADER HORIZONTAL -->
   <div class="header-horizontal">
     <div class="header-left">
-      <div class="logo-text">PALETO GARAGE</div>
+      <img class="logo-image" src="https://i.postimg.cc/020tghsY/logo-paleto-garage-Logo-Paleto-Garage.png" alt="PALETO GARAGE">
       <div class="theme-toggle-header" onclick="toggleTheme()" title="Changer de thème">
         <span class="theme-icon">🌙</span>
       </div>
@@ -1473,11 +1494,6 @@ body {
 
     </div> <!-- fin content-container -->
   </div> <!-- fin main-wrapper -->
-
-  <!-- FOOTER -->
-  <div class="footer-dark">
-    <div class="footer-text">by artonn</div>
-  </div>
 
   <!-- USER BADGE FIXE BAS GAUCHE -->
   <div class="user-badge-fixed">
