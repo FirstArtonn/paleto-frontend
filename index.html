@@ -999,10 +999,10 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   background: url('https://i.postimg.cc/2ywnJRZq/logo-flashback-fa-Logo-Paleto-Garage.png') no-repeat center/contain;
-  opacity: 0.08;
+  opacity: 0.2;
   z-index: 0;
   pointer-events: none;
 }
@@ -1013,17 +1013,19 @@ body {
 
 /* HEADER HORIZONTAL */
 .header-horizontal {
-  background: rgba(10, 10, 18, 0.95);
-  backdrop-filter: blur(10px);
+  background: transparent;
+  backdrop-filter: none;
   padding: 1.5rem 3rem;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 100;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  box-shadow: none;
 }
 
 .header-left {
@@ -1084,6 +1086,7 @@ body {
   padding: 0.5rem 0;
   border: none;
   background: none;
+  font-family: "Alfarn 2 Regular", "Outfit", sans-serif;
 }
 
 .header-nav-item:hover {
@@ -1152,6 +1155,7 @@ body {
   flex: 1;
   display: flex;
   position: relative;
+  padding-top: 100px;
 }
 
 /* USER BADGE FIXE EN BAS À GAUCHE */
@@ -1178,6 +1182,7 @@ body {
   font-weight: 700;
   color: white;
   letter-spacing: 2px;
+  text-transform: uppercase;
 }
 
 /* CONTENT AREA */
