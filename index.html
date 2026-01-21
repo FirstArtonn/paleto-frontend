@@ -360,11 +360,8 @@ body.role-rh .nav-item.rh-only {
 
 /* EMPLOYEE CARDS */
 .search-container {
-  position: sticky;
-  top: 0;
-  z-index: 101;
   background: transparent;
-  padding: 1rem 2rem;
+  padding: 0 0 1rem 0;
   text-align: right;
   margin: 0;
   display: flex;
@@ -421,6 +418,19 @@ body.role-rh .nav-item.rh-only {
   position: relative;
   display: inline-block;
 }
+
+.filter-icon-only {
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.filter-icon-only:hover {
+  opacity: 0.7;
+  transform: scale(1.1);
+}
+
 
 .filter-selector button {
   padding: 0.75rem 1.25rem;
@@ -824,7 +834,8 @@ body.role-rh .nav-item.rh-only {
   width: 100%;
   height: 100%;
   filter: drop-shadow(0 1px 4px rgba(0,0,0,0.2));
-  background: transparent;
+  background: transparent !important;
+  mix-blend-mode: screen;
 }
 
 .comment-badge .tooltip {
@@ -1207,32 +1218,33 @@ body {
   font-family: "alfarn-2", "Outfit", sans-serif;
 }
 
+.header-nav-item::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.header-nav-item:hover::after {
+  left: 0;
+  right: 0;
+}
+
+.header-nav-item.active::after {
+  left: 0;
+  right: 0;
+}
+
 .header-nav-item:hover {
   color: white;
 }
 
-.header-nav-item:hover::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: white;
-}
-
 .header-nav-item.active {
   color: white;
-}
-
-.header-nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: white;
 }
 
 .header-right {
@@ -1633,12 +1645,10 @@ body {
       <div class="search-container">
         <div class="search-wrapper">
           <div class="filter-selector">
-            <button onclick="toggleFilterOptions('filterEmployees')">
-              <img src="https://i.postimg.cc/28dkdrB2/filtre-Logo-Paleto-Garage.png" 
-                   alt="Filtrer" 
-                   style="width: 20px; height: 20px;">
-              <span id="filterEmployeesLabel">Tous les employés</span>
-            </button>
+            <img src="https://i.postimg.cc/28dkdrB2/filtre-Logo-Paleto-Garage.png" 
+                 alt="Filtrer" 
+                 class="filter-icon-only"
+                 onclick="toggleFilterOptions('filterEmployees')">
             <div class="filter-options" id="filterEmployees">
               <div class="filter-option" onclick="selectFilter('filterEmployees', 'tous', 'Tous les employés')">Tous les employés</div>
               <div class="filter-option" onclick="selectFilter('filterEmployees', 'actifs', 'Employés actifs')">Employés actifs</div>
@@ -1663,12 +1673,10 @@ body {
       <div class="search-container">
         <div class="search-wrapper">
           <div class="filter-selector">
-            <button onclick="toggleFilterOptions('filterRecruits')">
-              <img src="https://i.postimg.cc/28dkdrB2/filtre-Logo-Paleto-Garage.png" 
-                   alt="Filtrer" 
-                   style="width: 20px; height: 20px;">
-              <span id="filterRecruitsLabel">Tous les candidats</span>
-            </button>
+            <img src="https://i.postimg.cc/28dkdrB2/filtre-Logo-Paleto-Garage.png" 
+                 alt="Filtrer" 
+                 class="filter-icon-only"
+                 onclick="toggleFilterOptions('filterRecruits')">
             <div class="filter-options" id="filterRecruits">
               <div class="filter-option" onclick="selectFilter('filterRecruits', 'tous', 'Tous les candidats')">Tous les candidats</div>
               <div class="filter-option" onclick="selectFilter('filterRecruits', 'attente', 'En attente')">En attente</div>
