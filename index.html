@@ -1184,17 +1184,48 @@ body {
   color: white;
   letter-spacing: 2px;
   text-transform: uppercase;
+  font-family: "alfarn-2", "Outfit", sans-serif;
 }
 
 /* CONTENT AREA */
 .content-container {
   flex: 1;
-  padding: 2rem 3rem 2rem 8rem !important;
+  padding: 2rem 5rem 2rem 10rem !important;
   overflow-y: auto;
   background: transparent;
   max-width: none !important;
   position: relative;
   z-index: 1;
+  padding-right: calc(5rem - 12px) !important;
+}
+
+/* SCROLLBAR MODERNE */
+.content-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.content-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  border-right: 6px solid transparent;
+  background-clip: padding-box;
+}
+
+.content-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  border-right: 6px solid transparent;
+  background-clip: padding-box;
+}
+
+.content-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+/* Firefox scrollbar */
+.content-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.9) rgba(255, 255, 255, 0.05);
 }
 
 /* CARDS DARK MODE */
