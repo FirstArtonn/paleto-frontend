@@ -977,371 +977,705 @@ header .navigation { display: flex; justify-content: center; gap: 50px; margin-t
 header .nav-item { position: relative; font-weight: 600; font-size: 1.05rem; color: #fff; cursor: pointer; padding: 8px 0; user-select: none; background: none !important; }
 header .nav-item::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 3px; background: #fff; border-radius: 5px; transition: width 0.3s ease; }
 header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
+/* ==========================================
+   ULTRA MODERN UI - DESIGN 2026
+   ========================================== */
 
-/* ========================================
-   DARK MODE - LAYOUT HORIZONTAL
-   Style inspiré des images
-   ======================================== */
+:root {
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --bg-main: #f5f7fa;
+  --bg-glass: rgba(255, 255, 255, 0.7);
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --text-dark: #1a202c;
+  --text-muted: #718096;
+  --primary: #667eea;
+  --primary-light: #7c3aed;
+  --secondary: #f093fb;
+  --accent: #4facfe;
+  --success: #48bb78;
+  --info: #4299e1;
+  --warning: #ed8936;
+  --danger: #f56565;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 20px rgba(102, 126, 234, 0.3);
+  --border-radius: 1rem;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* MAIN APP LAYOUT */
-#mainApp {
-  display: flex !important;
-  flex-direction: column;
-  min-height: 100vh;
-  background: #0a0a12 !important;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: #0a0a12 !important;
+  font-family: 'Inter', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg-main);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  position: relative;
 }
 
-/* HEADER HORIZONTAL */
-.header-horizontal {
-  background: #16213e;
-  padding: 1.5rem 3rem;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  opacity: 0.03;
+  z-index: -1;
+}
+
+/* ==================== LOGIN ==================== */
+.login-container {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.login-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 2rem;
+  padding: 3.5rem;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.2);
+  text-align: center;
+  max-width: 480px;
+  width: 90%;
+  border: 1px solid rgba(255,255,255,0.3);
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-card h1 {
+  font-size: 2.75rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1px;
+}
+
+.login-card p {
+  color: var(--text-muted);
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+}
+
+.discord-login-btn {
+  background: linear-gradient(135deg, #5865F2, #4752C4);
+  color: white;
+  border: none;
+  padding: 1.1rem 2.5rem;
+  border-radius: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: 0 12px 28px rgba(88, 101, 242, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 auto;
+}
+
+.discord-login-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(88, 101, 242, 0.5);
+}
+
+.discord-login-btn:active {
+  transform: translateY(-1px);
+}
+
+.discord-login-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.login-info {
+  margin-top: 2.5rem;
+  padding: 1.25rem;
+  background: rgba(102, 126, 234, 0.08);
+  border-radius: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  border: 1px solid rgba(102, 126, 234, 0.15);
+}
+
+/* ==================== MAIN APP ==================== */
+#mainApp {
+  display: none;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 0;
+  border-right: 1px solid rgba(255,255,255,0.5);
+}
+
+.sidebar-header {
+  padding: 0 2rem 2rem;
+  border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+  margin-bottom: 2rem;
+}
+
+.sidebar-logo {
+  font-size: 1.75rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 0 1.25rem;
+  overflow-y: auto;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.3);
+  border-radius: 3px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.5rem;
+  border-radius: 0.75rem;
+  color: var(--text-dark);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.nav-item:hover::before {
+  opacity: 1;
+}
+
+.nav-item:hover {
+  transform: translateX(4px);
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+}
+
+.nav-item.active::before {
+  opacity: 0;
+}
+
+.nav-icon {
+  font-size: 1.2rem;
+  min-width: 24px;
+}
+
+/* MAIN CONTENT */
+.main-content {
+  margin-left: 280px;
+  min-height: 100vh;
+  background: transparent;
+}
+
+/* TOPBAR */
+.topbar {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  padding: 1.5rem 2.5rem;
+  box-shadow: var(--shadow-sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
-  z-index: 100;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  z-index: 50;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.logo-text {
-  font-size: 1.75rem;
+.topbar-left h1 {
+  font-size: 1.5rem;
   font-weight: 700;
-  color: white;
-  letter-spacing: 2px;
+  color: var(--text-dark);
+  letter-spacing: -0.5px;
 }
 
-.theme-toggle-header {
-  width: 50px;
-  height: 26px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 13px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  padding: 0 4px;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-.theme-toggle-header:hover {
-  background: rgba(255,255,255,0.15);
-}
-
-.theme-toggle-header .theme-icon {
+.topbar-left p {
   font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
 }
 
-.header-center {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.header-nav {
-  display: flex;
-  gap: 2.5rem;
-  align-items: center;
-}
-
-.header-nav-item {
-  color: #e8e8e8;
-  text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  padding: 0.5rem 0;
-  border: none;
-  background: none;
-}
-
-.header-nav-item:hover {
-  color: white;
-}
-
-.header-nav-item.active {
-  color: white;
-}
-
-.header-nav-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #e94560;
-}
-
-.header-right {
+.topbar-right {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
-.user-info-header {
+.user-info {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
-.user-avatar-header {
-  width: 40px;
-  height: 40px;
+.user-avatar {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid rgba(255,255,255,0.2);
+  border: 3px solid rgba(102, 126, 234, 0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.user-name-header {
+.user-name {
   font-weight: 600;
-  color: white;
   font-size: 0.95rem;
+  color: var(--text-dark);
 }
 
-.logout-btn-header {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  color: white;
+.logout-btn {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  padding: 0.65rem 1.5rem;
+  border-radius: 0.75rem;
+  color: var(--primary);
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: var(--transition);
 }
 
-.logout-btn-header:hover {
-  background: #e94560;
-  border-color: #e94560;
+.logout-btn:hover {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
 }
 
-/* MAIN WRAPPER */
-.main-wrapper {
-  flex: 1;
-  display: flex;
-  position: relative;
-}
-
-/* SIDEBAR VERTICALE */
-.sidebar-vertical {
-  width: 100px;
-  background: linear-gradient(180deg, #16213e 0%, #0a0a12 100%);
-  border-right: 2px solid rgba(255,255,255,0.1);
+.theme-toggle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  cursor: pointer;
+  transition: var(--transition);
+  border: 1px solid rgba(102, 126, 234, 0.2);
 }
 
-.sidebar-text-vertical {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 4px;
-  color: white;
-  text-transform: uppercase;
+.theme-toggle:hover {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: var(--shadow-glow);
+  transform: rotate(20deg) scale(1.1);
+}
+
+.theme-toggle:hover .theme-icon {
+  filter: brightness(0) invert(1);
 }
 
 /* CONTENT AREA */
-.content-container {
-  flex: 1;
-  padding: 2rem 3rem !important;
-  overflow-y: auto;
-  background: #0a0a12;
-  max-width: none !important;
+.content-area {
+  padding: 2.5rem;
 }
 
-/* CARDS DARK MODE */
-.employee-card {
-  background: #16213e !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: #e8e8e8 !important;
+/* CARDS */
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(255,255,255,0.5);
+  transition: var(--transition);
 }
 
-.employee-card:hover {
-  border-color: #e94560 !important;
-  box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3) !important;
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
-.employee-name {
-  color: white !important;
+.card-header {
+  margin-bottom: 2rem;
 }
 
-.employee-grade {
-  color: #a0a0a8 !important;
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.5px;
 }
 
-/* INFO MESSAGE DARK */
-.info-message {
-  background: #16213e !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: #e8e8e8 !important;
+.card-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
 }
 
-.info-message h2 {
-  color: white !important;
+/* SEARCH */
+.search-container {
+  margin-bottom: 2rem;
 }
 
-.info-message p {
-  color: #e8e8e8 !important;
-}
-
-/* SEARCH INPUT DARK */
 .search-input {
-  background: #0f1419 !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: #e8e8e8 !important;
-}
-
-.search-input::placeholder {
-  color: #a0a0a8 !important;
+  width: 100%;
+  max-width: 450px;
+  padding: 1rem 1.5rem;
+  border: 2px solid rgba(102, 126, 234, 0.15);
+  border-radius: 1rem;
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  background: white;
+  transition: var(--transition);
+  font-family: inherit;
 }
 
 .search-input:focus {
-  border-color: #e94560 !important;
-  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2) !important;
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
 }
 
-/* FOOTER */
-.footer-dark {
-  background: #16213e;
-  padding: 1.5rem 3rem;
-  border-top: 2px solid rgba(255,255,255,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+.search-input::placeholder {
+  color: var(--text-muted);
 }
 
-.footer-text {
-  font-size: 0.875rem;
-  color: #a0a0a8;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+/* EMPLOYEE GRID */
+.employee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
 }
 
-.discord-icon-footer {
-  width: 45px;
-  height: 45px;
-  background: #5865F2;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.employee-card {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
   cursor: pointer;
-  transition: all 0.3s;
-  font-size: 1.5rem;
+  transition: var(--transition);
+  border: 1px solid rgba(255,255,255,0.5);
+  position: relative;
+  overflow: hidden;
 }
 
-.discord-icon-footer:hover {
-  background: #4752C4;
-  transform: scale(1.1);
+.employee-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: var(--transition);
 }
 
-/* MODAL DARK */
-.modal {
-  background: rgba(0,0,0,0.8) !important;
+.employee-card:hover::before {
+  transform: scaleX(1);
 }
 
-.modal-content {
-  background: #16213e !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: #e8e8e8 !important;
+.employee-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(102, 126, 234, 0.3);
 }
 
-.modal-content h2 {
-  color: white !important;
+.employee-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.3px;
 }
 
-.details-table {
-  color: #e8e8e8 !important;
-}
-
-.details-table th {
-  background: #0f1419 !important;
-  color: white !important;
-}
-
-.details-table td {
-  border-color: rgba(255,255,255,0.1) !important;
-}
-
-.close-btn {
-  background: rgba(255,255,255,0.1) !important;
-  color: white !important;
-}
-
-.close-btn:hover {
-  background: #e94560 !important;
-}
-
-/* TAB CONTENT */
-.tab-content {
-  color: #e8e8e8;
-}
-
-.tab-content h2 {
-  color: white !important;
-}
-
-/* TOAST DARK */
-.toast {
-  background: #16213e !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: #e8e8e8 !important;
+.employee-grade {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 /* STATUS BADGES */
 .status-badge {
+  display: inline-block;
+  padding: 0.35rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-accepted {
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.15), rgba(72, 187, 120, 0.25));
+  color: #2f855a;
+  border: 1px solid rgba(72, 187, 120, 0.3);
+}
+
+.status-pending {
+  background: linear-gradient(135deg, rgba(237, 137, 54, 0.15), rgba(237, 137, 54, 0.25));
+  color: #c05621;
+  border: 1px solid rgba(237, 137, 54, 0.3);
+}
+
+.status-refused {
+  background: linear-gradient(135deg, rgba(245, 101, 101, 0.15), rgba(245, 101, 101, 0.25));
+  color: #c53030;
+  border: 1px solid rgba(245, 101, 101, 0.3);
+}
+
+.status-blacklist {
+  background: linear-gradient(135deg, rgba(74, 85, 104, 0.15), rgba(74, 85, 104, 0.25));
+  color: #2d3748;
+  border: 1px solid rgba(74, 85, 104, 0.3);
+}
+
+/* MODAL */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  max-width: 850px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.2);
+  position: relative;
+  border: 1px solid rgba(255,255,255,0.5);
+  animation: slideUp 0.4s ease;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(102, 126, 234, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: var(--text-dark);
+  transition: var(--transition);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.close-btn:hover {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  transform: rotate(90deg);
+}
+
+/* TAB CONTENT */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* TOAST */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.25rem 2rem;
+  border-radius: 1rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  gap: 1rem;
+  min-width: 320px;
+  border: 1px solid rgba(255,255,255,0.5);
+}
+
+.toast.show {
+  display: flex;
+  animation: slideUp 0.4s ease;
+}
+
+.toast.success {
+  border-left: 4px solid var(--success);
+}
+
+.toast.error {
+  border-left: 4px solid var(--danger);
+}
+
+.toast.info {
+  border-left: 4px solid var(--info);
 }
 
 /* COMMENT BADGE */
 .comment-badge {
-  background: #e94560 !important;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 50%;
+  cursor: help;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(102, 126, 234, 0);
+  }
 }
 
 .comment-badge .tooltip {
-  background: #16213e !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
-}
-
-/* CONTEXT MENU DARK */
-.context-menu {
-  background: #16213e !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
-}
-
-.context-menu-item {
-  color: #e8e8e8 !important;
-}
-
-.context-menu-item:hover {
-  background: rgba(255,255,255,0.1) !important;
-}
-
-/* IFRAME CONTAINER */
-.iframe-container {
-  background: #16213e;
+  display: none;
+  position: fixed;
+  padding: 1rem 1.25rem;
+  background: rgba(26, 32, 44, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: white;
   border-radius: 0.75rem;
-  overflow: hidden;
+  font-size: 0.9rem;
+  white-space: pre-wrap;
+  max-width: 320px;
+  box-shadow: var(--shadow-lg);
+  z-index: 10000;
+  pointer-events: none;
   border: 1px solid rgba(255,255,255,0.1);
+}
+
+.comment-badge:hover .tooltip {
+  display: block;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .employee-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+  
+  .topbar {
+    padding: 1.25rem 1.5rem;
+  }
+  
+  .content-area {
+    padding: 1.5rem;
+  }
 }
 
 </style>
@@ -1370,133 +1704,164 @@ body {
 
 <!-- MAIN APP -->
 <div id="mainApp" style="display: none;">
-  <!-- HEADER HORIZONTAL -->
-  <div class="header-horizontal">
-    <div class="header-left">
-      <div class="logo-text">PALETO GARAGE</div>
-      <div class="theme-toggle-header" onclick="toggleTheme()" title="Changer de thème">
-        <span class="theme-icon">🌙</span>
-      </div>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">PALETO GARAGE</div>
     </div>
     
-    <div class="header-center">
-      <nav class="header-nav" id="mainNavigation">
-        <!-- Navigation générée dynamiquement -->
-      </nav>
-    </div>
-    
-    <div class="header-right">
-      <div class="user-info-header" id="userProfile">
-        <img id="userAvatar" class="user-avatar-header" src="" alt="Avatar">
-        <span class="user-name-header" id="userName"></span>
-        <button class="logout-btn-header" onclick="logout()">Déconnexion</button>
-      </div>
+    <div class="sidebar-nav" id="mainNavigation">
+      <!-- Navigation générée dynamiquement par JavaScript -->
     </div>
   </div>
 
-  <!-- MAIN WRAPPER -->
-  <div class="main-wrapper">
-    <!-- SIDEBAR VERTICALE -->
-    <div class="sidebar-vertical">
-      <div class="sidebar-text-vertical">PERSONNE CONNECTÉ</div>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <h1 id="pageTitle">Tableau de bord</h1>
+        <p id="pageSubtitle">Système de Gestion - By Artonn</p>
+      </div>
+      
+      <div class="topbar-right">
+        <div class="theme-toggle" onclick="toggleTheme()" title="Changer de thème">
+          <span class="theme-icon">🌙</span>
+        </div>
+        
+        <div class="user-info" id="userProfile">
+          <img id="userAvatar" class="user-avatar" src="" alt="Avatar">
+          <span class="user-name" id="userName"></span>
+          <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+      </div>
     </div>
 
     <!-- CONTENT AREA -->
-    <div class="content-container">
-    <!-- ACCUEIL -->
-    <div class="tab-content active" id="tab-accueil">
-      <div class="info-message">
-        <h2>👋 Bienvenue <span id="welcomeName"></span></h2>
-        <p style="margin-top: 1rem;">Utilisez le menu ci-dessus pour naviguer entre les différentes sections.</p>
-        <div style="margin-top: 2rem; padding: 2rem; background: rgba(233, 69, 96, 0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
-          <strong>Vos permissions :</strong>
-          <p id="userPermissions" style="margin-top: 1rem;"></p>
+    <div class="content-area">
+      <!-- ACCUEIL -->
+      <div class="tab-content active" id="tab-accueil">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">👋 Bienvenue <span id="welcomeName"></span></h2>
+            <p class="card-subtitle">Utilisez la navigation pour accéder aux différentes sections.</p>
+          </div>
+          <div style="padding: 1.5rem; background: #f8f9fa; border-radius: 0.75rem;">
+            <strong style="color: var(--text-dark);">Vos permissions :</strong>
+            <p id="userPermissions" style="margin-top: 1rem; color: var(--text-muted);"></p>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- EMPLOYÉS -->
-    <div class="tab-content" id="tab-employes">
-      <div class="search-container">
-        <input type="text" class="search-input" id="searchBar" placeholder="🔍 Rechercher un employé...">
-      </div>
-      <div class="employee-grid" id="employeeList"></div>
-    </div>
-
-    <!-- RECRUTEMENT -->
-    <div class="tab-content" id="tab-recrutement">
-      <div class="search-container">
-        <input type="text" class="search-input" id="searchBarRecruit" placeholder="🔍 Rechercher un candidat...">
-      </div>
-      <div class="employee-grid" id="recruitList"></div>
-    </div>
-
-    <!-- FACTURES -->
-    <div class="tab-content" id="tab-factures">
-      <div class="iframe-container">
-        <iframe src="Facture_Paleto.html"></iframe>
-      </div>
-    </div>
-
-    <!-- ABSENCE -->
-    <div class="tab-content" id="tab-absence">
-      <div class="info-message">
-        <h2>📅 Gestion des absences</h2>
-        <p style="margin-top: 1rem;">Cette section est en cours de développement.</p>
-      </div>
-    </div>
-    <!-- PROFIL -->
-    <div class="tab-content" id="tab-profil">
-      <div class="info-message" id="profilContent">
-        <h2>👤 Mon Profil</h2>
-        <p style="margin-top: 1rem;">Chargement...</p>
-      </div>
-    </div>
-
-    <!-- PARTENARIATS -->
-    <div class="tab-content" id="tab-partenariats">
-      <div class="info-message">
-        <h2>🤝 Partenariats</h2>
-        <p style="margin-top: 1rem;">Section en cours de développement.</p>
-      </div>
-    </div>
-
-    <!-- BANQUE -->
-    <div class="tab-content" id="tab-banque">
-      <div class="info-message">
-        <h2>🏦 Banque</h2>
-        <p style="margin-top: 1rem;">Section en cours de développement.</p>
-      </div>
-    </div>
-
-    <!-- COMPTA -->
-    <div class="tab-content" id="tab-compta">
-      <div class="info-message">
-        <h2>📊 Comptabilité</h2>
-        <p style="margin-top: 1rem;">Section en cours de développement.</p>
-      </div>
-    </div>
-
-    <!-- LOGS -->
-    <div class="tab-content" id="tab-logs">
-      <div class="info-message">
-        <h2>📜 Historique</h2>
-        <div id="logsContainer" style="margin-top: 2rem;">
-          <p>Chargement des logs...</p>
+      <!-- EMPLOYÉS -->
+      <div class="tab-content" id="tab-employes">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">👥 Employés</h2>
+            <p class="card-subtitle">Liste des employés actifs</p>
+          </div>
+          <div class="search-container">
+            <input type="text" class="search-input" id="searchBar" placeholder="🔍 Rechercher un employé...">
+          </div>
+          <div class="employee-grid" id="employeeList"></div>
         </div>
       </div>
-    </div>
-    <div class="tab-content" id="tab-profil"><div class="info-message"><h2>👤 Profil</h2></div></div>
 
-    </div> <!-- fin content-container -->
-  </div> <!-- fin main-wrapper -->
+      <!-- RECRUTEMENT -->
+      <div class="tab-content" id="tab-recrutement">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📋 Recrutement</h2>
+            <p class="card-subtitle">Candidatures en cours</p>
+          </div>
+          <div class="search-container">
+            <input type="text" class="search-input" id="searchBarRecruit" placeholder="🔍 Rechercher un candidat...">
+          </div>
+          <div class="employee-grid" id="recruitList"></div>
+        </div>
+      </div>
 
-  <!-- FOOTER -->
-  <div class="footer-dark">
-    <div class="footer-text">SYSTÈME DE GESTION - BY ARTONN</div>
-    <div class="discord-icon-footer">💬</div>
-  </div>
+      <!-- FACTURES -->
+      <div class="tab-content" id="tab-factures">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">💰 Factures</h2>
+            <p class="card-subtitle">Gestion de la facturation</p>
+          </div>
+          <div class="iframe-container" style="height: 800px; border-radius: 0.75rem; overflow: hidden;">
+            <iframe src="Facture_Paleto.html" style="width: 100%; height: 100%; border: none;"></iframe>
+          </div>
+        </div>
+      </div>
 
+      <!-- ABSENCE -->
+      <div class="tab-content" id="tab-absence">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📅 Gestion des absences</h2>
+            <p class="card-subtitle">Cette section est en cours de développement.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFIL -->
+      <div class="tab-content" id="tab-profil">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">👤 Mon Profil</h2>
+            <p class="card-subtitle">Informations personnelles</p>
+          </div>
+          <div id="profilContent">
+            <p>Chargement...</p>
+          </div>
+        </div>
+      </div>
+
+        <!-- PARTENARIATS -->
+      <div class="tab-content" id="tab-partenariats">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🤝 Partenariats</h2>
+            <p class="card-subtitle">Section en cours de développement</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANQUE -->
+      <div class="tab-content" id="tab-banque">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">🏦 Banque</h2>
+            <p class="card-subtitle">Section en cours de développement</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPTA -->
+      <div class="tab-content" id="tab-compta">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📊 Comptabilité</h2>
+            <p class="card-subtitle">Section en cours de développement</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGS -->
+      <div class="tab-content" id="tab-logs">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">📜 Historique</h2>
+            <p class="card-subtitle">Logs des actions</p>
+          </div>
+          <div id="logsContainer" style="margin-top: 1rem;">
+            <p>Chargement des logs...</p>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- fin content-area -->
+  </div> <!-- fin main-content -->
 </div> <!-- fin mainApp -->
 
 <!-- EMPLOYEE DETAILS MODAL -->
