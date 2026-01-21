@@ -1201,25 +1201,25 @@ body {
   position: relative;
   z-index: 1;
   scrollbar-width: thin;
-  scrollbar-color: #0f3460 #1a1a2e;
+  scrollbar-color: rgba(255, 255, 255, 0.6) rgba(255, 255, 255, 0.05);
 }
 
-/* SCROLLBAR STYLE FACTURE (GLOBAL) */
+/* SCROLLBAR SIMPLE ET MODERNE */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 18px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #1a1a2e;
+  background: rgba(255, 255, 255, 0.05);
+  border-right: 10px solid transparent;
+  background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #0f3460;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #e94560;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 10px;
+  border-right: 10px solid transparent;
+  background-clip: padding-box;
 }
 
 /* CARDS DARK MODE */
