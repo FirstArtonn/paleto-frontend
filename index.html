@@ -2645,7 +2645,7 @@ function displayRecruits(recruits) {
         <div class="employee-grade">${rec.statut}</div>
         ${rec.commentaires ? `
           <div class="comment-badge" onmouseenter="showCommentTooltip(event, this)" onmouseleave="hideCommentTooltip(this)">
-            <img src="https://i.postimg.cc/qMxz4BFF/Plan-de-travail-4Logo-Paleto-Garage.png" alt="Commentaire" style="width: 25px; height: 20px;">
+            <img src="https://i.postimg.cc/Z0t9DHTr/Plan-de-travail-2Logo-Paleto-Garage.png" alt="Commentaire" style="width: 24px; height: 24px;">
             <div class="tooltip">${rec.commentaires.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</div>
           </div>
         ` : ''}
@@ -3216,12 +3216,108 @@ async function addRecruitAsEmployee(grade) {
     showToast(`✅ ${currentRecruit.nom} ajouté comme ${grade} !`, 'success');
     logAction(`Ajout recrue ${currentRecruit.nom} (ID ${currentRecruit.id}) comme ${grade}`);
     
+    // Écrire le nom dans la colonne C du sheet de noms
+    await writeToNameColumn(currentRecruit.nom);
+    
     // Rafraîchir les employés
     setTimeout(() => loadEmployees(), 1000);
     
   } catch (error) {
     console.error('❌ Erreur addRecruitAsEmployee:', error);
     showToast(`❌ Erreur: ${error.message}`, 'error');
+  }
+}
+
+// Fonction pour écrire dans la colonne C du Google Sheet des noms
+async function writeToNameColumn(nom) {
+  const NAME_SHEET_ID = '1BFoQReOIRiH821la1dnGRUFdF78HOAXHPBqMEszrAz4';
+  const RANGE = 'C1:C200'; // Lire une large plage pour trouver "Dépannage"
+  
+  try {
+    console.log('📝 Écriture du nom dans la section Dépannage:', nom);
+    
+    // Lire toute la colonne C pour trouver la section "Dépannage"
+    const readUrl = `https://sheets.googleapis.com/v4/spreadsheets/${NAME_SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+    const readResponse = await fetch(readUrl);
+    const readData = await readResponse.json();
+    
+    if (!readData.values) {
+      console.error('❌ Impossible de lire la colonne C');
+      showToast('❌ Erreur de lecture du sheet', 'error');
+      return;
+    }
+    
+    // Chercher "Dépannage" dans la colonne
+    let depannageIndex = -1;
+    for (let i = 0; i < readData.values.length; i++) {
+      const cellValue = (readData.values[i][0] || '').toString().trim();
+      if (cellValue.toLowerCase().includes('dépannage') || cellValue.toLowerCase().includes('depannage')) {
+        depannageIndex = i;
+        console.log('✅ Section "Dépannage" trouvée à la ligne', i + 1);
+        break;
+      }
+    }
+    
+    if (depannageIndex === -1) {
+      console.error('❌ Section "Dépannage" non trouvée dans la colonne C');
+      showToast('❌ Section "Dépannage" introuvable', 'error');
+      return;
+    }
+    
+    // Chercher la première cellule vide APRÈS la ligne "Dépannage"
+    let firstEmptyRow = -1;
+    for (let i = depannageIndex + 1; i < readData.values.length; i++) {
+      const cellValue = (readData.values[i][0] || '').toString().trim();
+      
+      // Si on trouve une cellule vide OU une nouvelle section/catégorie (commence par un titre en majuscules)
+      if (cellValue === '') {
+        firstEmptyRow = i + 1; // +1 car les indices commencent à 0 mais les lignes à 1
+        console.log('✅ Première cellule vide trouvée à la ligne', firstEmptyRow);
+        break;
+      }
+    }
+    
+    // Si aucune cellule vide trouvée dans les données existantes, prendre la ligne suivante
+    if (firstEmptyRow === -1) {
+      firstEmptyRow = readData.values.length + 1;
+      console.log('✅ Ajout à la fin de la section, ligne', firstEmptyRow);
+    }
+    
+    // Vérifier qu'on ne dépasse pas C200
+    if (firstEmptyRow > 200) {
+      console.warn('⚠️ Plus de place dans la colonne C');
+      showToast('⚠️ Plus de place dans la liste', 'warning');
+      return;
+    }
+    
+    console.log(`📍 Écriture du nom "${nom}" à la ligne C${firstEmptyRow}`);
+    
+    // Écrire via Google Apps Script
+    const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+    const proxy = "https://corsproxy.io/?";
+    
+    const writeResponse = await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'writeToNameColumn',
+        sheetId: NAME_SHEET_ID,
+        range: `C${firstEmptyRow}`,
+        value: nom
+      })
+    });
+    
+    if (!writeResponse.ok) {
+      throw new Error(`HTTP ${writeResponse.status}`);
+    }
+    
+    const writeResult = await writeResponse.json();
+    console.log('✅ Nom écrit dans la colonne C (section Dépannage):', writeResult);
+    
+  } catch (error) {
+    console.error('❌ Erreur writeToNameColumn:', error);
+    // Ne pas bloquer si l'écriture dans la colonne C échoue
+    console.warn('⚠️ Impossible d\'écrire dans la colonne C, mais l\'employé a été ajouté');
   }
 }
 
