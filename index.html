@@ -915,17 +915,17 @@ body.role-rh .nav-item.rh-only {
   display: none;
   position: fixed;
   padding: 0.75rem 1rem;
-  background: rgba(26, 26, 46, 0.98);
+  background: rgba(255,255,255,0.03);
   backdrop-filter: blur(20px);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 12px;
   color: var(--color-text);
   font-size: 0.85rem;
   line-height: 1.4;
   white-space: pre-wrap;
   max-width: 300px;
   min-width: 200px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   z-index: 10000;
   pointer-events: none;
 }
@@ -1618,12 +1618,15 @@ body {
 
 /* COMMENT BADGE */
 .comment-badge {
-  background: #e94560 !important;
+  background: transparent !important;
 }
 
 .comment-badge .tooltip {
-  background: #0d1117 !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
+  background: rgba(255,255,255,0.03) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
 }
 
 /* CONTEXT MENU DARK */
