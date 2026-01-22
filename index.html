@@ -1888,15 +1888,11 @@ function showApp() {
   
   // Charger employés et recrues avec délais
   setTimeout(() => {
-    if (currentUser.role === 'admin' || currentUser.role === 'rh') {
-      loadEmployees();
-    }
+    loadEmployees();
   }, 1000);
   
   setTimeout(() => {
-    if (currentUser.role === 'admin' || currentUser.role === 'rh') {
-      loadRecruits();
-    }
+    loadRecruits();
   }, 3000);
 }
 
@@ -2287,7 +2283,7 @@ function showEmployeeDetails(index) {
   }
   
   let gradeHTML = emp.grade;
-  if (currentUser.role === 'admin' || currentUser.role === 'rh') {
+  if (currentUser.role === 'admin') {
     gradeHTML = `
       <div class="grade-selector">
         <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner'}</button>
@@ -2372,8 +2368,6 @@ function closeModal() {
 
 // ==================== RECRUITS ====================
 async function loadRecruits() {
-  if (currentUser.role !== 'admin' && currentUser.role !== 'rh') return;
-  
   const list = document.getElementById('recruitList');
   
   try {
