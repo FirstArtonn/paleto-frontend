@@ -2113,6 +2113,17 @@ function displayEmployees(employees) {
       // Trouver l'index dans le tableau original pour showEmployeeDetails
       const originalIndex = employees.indexOf(emp);
       card.onclick = () => showEmployeeDetails(originalIndex);
+      
+      // Clic droit pour supprimer
+      card.oncontextmenu = (e) => {
+        e.preventDefault();
+        currentEmployee = emp;
+        const menu = document.getElementById('contextMenuEmployee');
+        menu.style.display = 'block';
+        menu.style.left = e.pageX + 'px';
+        menu.style.top = e.pageY + 'px';
+      };
+      
       list.appendChild(card);
     });
   }
@@ -2142,6 +2153,17 @@ function displayEmployees(employees) {
       // Trouver l'index dans le tableau original pour showEmployeeDetails
       const originalIndex = employees.indexOf(emp);
       card.onclick = () => showEmployeeDetails(originalIndex);
+      
+      // Clic droit pour supprimer
+      card.oncontextmenu = (e) => {
+        e.preventDefault();
+        currentEmployee = emp;
+        const menu = document.getElementById('contextMenuEmployee');
+        menu.style.display = 'block';
+        menu.style.left = e.pageX + 'px';
+        menu.style.top = e.pageY + 'px';
+      };
+      
       list.appendChild(card);
     });
   }
@@ -3132,6 +3154,7 @@ async function updateRecruitStatus(recruitId, newStatus) {
 
 
 let currentRecruit = null;
+let currentEmployee = null;
 
 function showContextMenu(event, recruit) {
   event.preventDefault();
@@ -3266,6 +3289,61 @@ async function writeToNameColumn(nom) {
     console.error('❌ Erreur writeToNameColumn:', error);
     // Ne pas bloquer si l'écriture dans la colonne C échoue
     console.warn('⚠️ Impossible d\'écrire dans la colonne C, mais l\'employé a été ajouté');
+  }
+}
+
+// Fonction pour supprimer un employé
+async function deleteEmployee() {
+  if (!currentEmployee) {
+    console.error('❌ currentEmployee est null/undefined !');
+    showToast('❌ Erreur: Aucun employé sélectionné', 'error');
+    return;
+  }
+  
+  const menu = document.getElementById('contextMenuEmployee');
+  menu.style.display = 'none';
+  
+  // Demander confirmation
+  if (!confirm(`Êtes-vous sûr de vouloir supprimer ${currentEmployee.nom} ?`)) {
+    return;
+  }
+  
+  console.log('📤 Suppression de l\'employé:', currentEmployee);
+  showToast('⏳ Suppression en cours...', 'info');
+  
+  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const proxy = "https://corsproxy.io/?";
+  
+  try {
+    const response = await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'deleteEmployee',
+        employeeId: currentEmployee.id
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    
+    const result = await response.json();
+    console.log('✅ Réponse deleteEmployee:', result);
+    
+    if (result.success === false) {
+      throw new Error(result.error || 'Erreur serveur');
+    }
+    
+    showToast(`✅ ${currentEmployee.nom} supprimé !`, 'success');
+    logAction(`Suppression employé ${currentEmployee.nom} (ID ${currentEmployee.id})`);
+    
+    // Rafraîchir la liste des employés
+    setTimeout(() => loadEmployees(), 1000);
+    
+  } catch (error) {
+    console.error('❌ Erreur deleteEmployee:', error);
+    showToast(`❌ Erreur: ${error.message}`, 'error');
   }
 }
 
@@ -3434,10 +3512,27 @@ function filterLogs() {
   tbody.innerHTML = html;
 }
 
+// Fermer les menus contextuels au clic ailleurs
+document.addEventListener('click', (e) => {
+  const contextMenu = document.getElementById('contextMenu');
+  const contextMenuEmployee = document.getElementById('contextMenuEmployee');
+  
+  // Fermer menu recrues si on ne clique pas dessus
+  if (contextMenu && !contextMenu.contains(e.target)) {
+    contextMenu.style.display = 'none';
+  }
+  
+  // Fermer menu employés si on ne clique pas dessus
+  if (contextMenuEmployee && !contextMenuEmployee.contains(e.target)) {
+    contextMenuEmployee.style.display = 'none';
+  }
+});
+
 
 </script>
 
   <!-- CONTEXT MENU -->
+  <!-- CONTEXT MENU RECRUES -->
   <div id="contextMenu">
     <div class="context-menu-item" onclick="addRecruitAsEmployee('Apprenti')">
       <span>🎓</span>
@@ -3446,6 +3541,14 @@ function filterLogs() {
     <div class="context-menu-item" onclick="addRecruitAsEmployee('Stagiaire')">
       <span>📝</span>
       <span>Ajouter comme Stagiaire</span>
+    </div>
+  </div>
+
+  <!-- CONTEXT MENU EMPLOYÉS -->
+  <div id="contextMenuEmployee" style="position:fixed;display:none;background:rgba(255,255,255,0.03);backdrop-filter:blur(20px);border:1px solid var(--color-border);border-radius:12px;padding:0.5rem 0;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:10000;">
+    <div class="context-menu-item" onclick="deleteEmployee()" style="padding:0.75rem 1.5rem;cursor:pointer;transition:all 0.2s ease;color:var(--color-text);white-space:nowrap;display:flex;align-items:center;gap:0.5rem;">
+      <span>🗑️</span>
+      <span>Supprimer l'employé</span>
     </div>
   </div>
 </body>
