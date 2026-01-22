@@ -14,7 +14,7 @@
   --color-primary: #1a1a2e;
   --color-secondary: #0d1117;
   --color-accent: #0f3460;
-  --color-highlight: white;
+  --color-highlight: #e94560;
   --color-gold: #d4af37;
   --color-bg: #0a0a12;
   --color-surface: #1a1a2e;
@@ -59,7 +59,7 @@ body::before {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 20% 50%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(15, 52, 96, 0.15) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
@@ -148,9 +148,9 @@ body::before {
 .login-info {
   margin-top: 2rem;
   padding: 1.5rem;
-  background: rgba(255,255,255,0.1);
+  background: rgba(233, 69, 96, 0.1);
   border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(233, 69, 96, 0.2);
   color: var(--color-text-dim);
   font-size: 0.9rem;
   line-height: 1.6;
@@ -234,9 +234,9 @@ header h1 {
 }
 
 .logout-btn {
-  background: rgba(255,255,255,0.1);
+  background: rgba(233, 69, 96, 0.2);
   border: 1px solid var(--color-highlight);
-  color: white;
+  color: var(--color-highlight);
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -246,7 +246,7 @@ header h1 {
 }
 
 .logout-btn:hover {
-  background: white;
+  background: var(--color-highlight);
   color: white;
 }
 
@@ -264,7 +264,7 @@ header h1 {
 }
 
 .theme-toggle:hover {
-  background: white;
+  background: var(--color-highlight);
 }
 
 .theme-slider {
@@ -449,24 +449,30 @@ body.role-rh .nav-item.rh-only {
 
 .filter-selector button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: white;
+  border-color: #e94560;
 }
 
 .filter-options {
   position: absolute;
   top: 50%;
-  right: calc(100% + 0.5rem);
+  left: calc(100% + 0.5rem);
   transform: translateY(-50%) scaleX(0);
-  transform-origin: right center;
-  background: transparent;
+  transform-origin: left center;
+  background: rgba(13, 17, 23, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 0.5rem;
+  max-height: 60px;
+  overflow-x: auto;
+  overflow-y: hidden;
   display: flex;
   flex-direction: row;
-  gap: 1.5rem;
-  z-index: 9999;
+  gap: 0.5rem;
+  z-index: 1000;
   white-space: nowrap;
   transition: transform 0.3s ease, opacity 0.3s ease;
   opacity: 0;
-  padding: 0;
 }
 
 .filter-options.active {
@@ -476,37 +482,19 @@ body.role-rh .nav-item.rh-only {
 }
 
 .filter-option {
-  padding: 0.5rem 0;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   transition: all 0.2s;
   color: #e8e8e8;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
+  border-radius: 8px;
   white-space: nowrap;
   flex-shrink: 0;
-  position: relative;
-  background: transparent;
-  border: none;
-}
-
-.filter-option::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  right: 50%;
-  height: 2px;
-  background: white;
-  transition: all 0.3s ease;
-}
-
-.filter-option:hover::after {
-  left: 0;
-  right: 0;
 }
 
 .filter-option:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(233, 69, 96, 0.2);
+  color: #e94560;
 }
 
 
@@ -515,8 +503,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .filter-select:focus {
-  border-color: white;
-  box-shadow: 0 0 15px rgba(255,255,255,0.1);
+  border-color: #e94560;
+  box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
 }
 
 .filter-select option {
@@ -539,8 +527,8 @@ body.role-rh .nav-item.rh-only {
 
 .search-input:focus {
   outline: none;
-  border-color: white;
-  box-shadow: 0 0 15px rgba(255,255,255,0.1);
+  border-color: #e94560;
+  box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
 }
 
 .search-input::placeholder {
@@ -573,7 +561,7 @@ body.role-rh .nav-item.rh-only {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--color-gold), white);
+  background: linear-gradient(90deg, var(--color-gold), var(--color-highlight));
   transform: scaleX(0);
   transition: transform 0.3s;
 }
@@ -584,8 +572,8 @@ body.role-rh .nav-item.rh-only {
 
 .employee-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(255,255,255,0.2);
-  border-color: white;
+  box-shadow: 0 12px 30px rgba(233, 69, 96, 0.3);
+  border-color: var(--color-highlight);
 }
 
 
@@ -611,7 +599,7 @@ body.role-rh .nav-item.rh-only {
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  z-index: 9999;
+  z-index: 1000;
   padding: 2rem;
   overflow-y: auto;
 }
@@ -646,7 +634,7 @@ body.role-rh .nav-item.rh-only {
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-  background: white;
+  background: var(--color-highlight);
   border-radius: 10px;
 }
 
@@ -658,24 +646,19 @@ body.role-rh .nav-item.rh-only {
   position: absolute;
   top: 1.5rem;
   right: 1.5rem;
-  width: 36px;
-  height: 36px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid var(--color-highlight);
-  border-radius: 50%;
-  color: white;
-  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--color-text);
+  font-size: 2rem;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.2s;
+  padding: 0.5rem;
+  line-height: 1;
 }
 
 .close-btn:hover {
-  background: white;
   color: white;
-  transform: rotate(90deg);
+  transform: scale(1.1);
 }
 
 .modal-content h2 {
@@ -744,7 +727,7 @@ body.role-rh .nav-item.rh-only {
 
 .grade-selector button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: white;
+  border-color: var(--color-highlight);
 }
 
 .grade-options {
@@ -775,8 +758,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .grade-option:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(233, 69, 96, 0.2);
+  color: var(--color-highlight);
 }
 
 /* STATUS SELECTOR (même style que grade-selector) */
@@ -802,7 +785,7 @@ body.role-rh .nav-item.rh-only {
 
 .status-selector button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: white;
+  border-color: var(--color-highlight);
 }
 
 .status-options {
@@ -833,8 +816,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .status-option:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(233, 69, 96, 0.2);
+  color: var(--color-highlight);
 }
 
 /* COMMENT BADGE */
@@ -911,8 +894,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .context-menu-item:hover {
-  background: rgba(255,255,255,0.1);
-  color: white;
+  background: rgba(233, 69, 96, 0.2);
+  color: var(--color-highlight);
 }
 
 .context-menu-separator {
@@ -949,8 +932,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .toast.error {
-  border-color: white;
-  background: rgba(255,255,255,0.1);
+  border-color: var(--color-highlight);
+  background: rgba(233, 69, 96, 0.1);
 }
 
 @keyframes slideInRight {
@@ -1028,7 +1011,7 @@ body.role-rh .nav-item.rh-only {
 }
 
 .modal-content::-webkit-scrollbar-thumb {
-  background: white;
+  background: var(--color-highlight);
   border-radius: 10px;
 }
 
@@ -1113,7 +1096,7 @@ body.role-rh .nav-item.rh-only {
   left: 0;
   width: 0%;
   height: 3px;
-  background: white;
+  background: var(--color-highlight);
   border-radius: 5px;
   transition: width 0.3s ease;
 }
@@ -1311,8 +1294,8 @@ body {
 }
 
 .logout-btn-header:hover {
-  background: white;
-  border-color: white;
+  background: #e94560;
+  border-color: #e94560;
 }
 
 /* MAIN WRAPPER */
@@ -1402,6 +1385,20 @@ body {
 }
 
 /* CARDS DARK MODE */
+.employee-card {
+  background: rgba(13, 17, 23, 0.85) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.1) !important;
+  color: #e8e8e8 !important;
+  transition: all 0.3s ease;
+}
+
+.employee-card:hover {
+  border-color: #e94560 !important;
+  box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3) !important;
+  background: rgba(13, 17, 23, 0.95) !important;
+}
+
 /* SYSTÈME DE COULEURS DYNAMIQUES BASÉ SUR LES SANCTIONS */
 .employee-card.card-status-green {
   border: 2px solid #22c55e !important;
@@ -1499,8 +1496,8 @@ body {
 }
 
 .search-input:focus {
-  border-color: white !important;
-  box-shadow: 0 0 0 3px rgba(255,255,255,0.1) !important;
+  border-color: #e94560 !important;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2) !important;
 }
 
 /* MODAL DARK */
@@ -1536,10 +1533,6 @@ body {
   color: white !important;
 }
 
-.close-btn:hover {
-  background: white !important;
-}
-
 /* TAB CONTENT */
 .tab-content {
   color: #e8e8e8;
@@ -1563,7 +1556,7 @@ body {
 
 /* COMMENT BADGE */
 .comment-badge {
-  background: white !important;
+  background: #e94560 !important;
 }
 
 .comment-badge .tooltip {
@@ -1644,7 +1637,7 @@ body {
       <div class="info-message">
         <h2>👋 Bienvenue <span id="welcomeName"></span></h2>
         <p style="margin-top: 1rem;">Utilisez le menu ci-dessus pour naviguer entre les différentes sections.</p>
-        <div style="margin-top: 2rem; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
+        <div style="margin-top: 2rem; padding: 2rem; background: rgba(233, 69, 96, 0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
           <strong>Vos permissions :</strong>
           <p id="userPermissions" style="margin-top: 1rem;"></p>
         </div>
@@ -1774,7 +1767,8 @@ body {
 <div class="modal" id="employeeModal">
   <div class="modal-content">
     <div class="close-btn" onclick="closeModal()">✖</div>
-    <div id="modalContent"></div>
+    <h2 id="modalTitle"></h2>
+    <table class="details-table" id="modalContent"></table>
   </div>
 </div>
 
@@ -1885,11 +1879,15 @@ function showApp() {
   
   // Charger employés et recrues avec délais
   setTimeout(() => {
-    loadEmployees();
+    if (currentUser.role === 'admin' || currentUser.role === 'rh') {
+      loadEmployees();
+    }
   }, 1000);
   
   setTimeout(() => {
-    loadRecruits();
+    if (currentUser.role === 'admin' || currentUser.role === 'rh') {
+      loadRecruits();
+    }
   }, 3000);
 }
 
@@ -2203,6 +2201,9 @@ function toggleFilterOptions(optionsId) {
 }
 
 function selectFilter(filterId, value, label) {
+  const labelElement = document.getElementById(filterId + 'Label');
+  labelElement.textContent = label;
+  
   const options = document.getElementById(filterId);
   options.classList.remove('active');
   
@@ -2260,182 +2261,49 @@ function filterRecruitsByStatus() {
 function showEmployeeDetails(index) {
   const emp = filteredEmployees[index];
   const modal = document.getElementById('employeeModal');
-  const modalContent = document.getElementById('modalContent');
+  const title = document.getElementById('modalTitle');
+  const content = document.getElementById('modalContent');
   
-  // Préparer le HTML des diplômes
-  let diplomeHTML = '';
+  title.textContent = `👤 ${emp.nom}`;
+  
+  let diplomeHTML = '<em>Aucun diplôme</em>';
   if (emp.diplome) {
     const links = emp.diplome.split(/\s+/).filter(l => l.startsWith('http'));
     if (links.length > 0) {
       diplomeHTML = links.map((link, i) => {
         const label = links.length === 1 ? 'Diplôme' : `Diplôme ${i + 1}`;
-        return `<a href="${link}" target="_blank" style="display:inline-block;margin:0.3rem;padding:0.5rem 1rem;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)';this.style.borderColor='white'" onmouseout="this.style.background='rgba(255,255,255,0.1)';this.style.borderColor='rgba(255,255,255,0.3)'">🎓 ${label}</a>`;
+        return `<button class="diplome-btn" onclick="window.open('${link}', '_blank')">🎓 ${label}</button>`;
       }).join('');
     }
   }
-  if (!diplomeHTML) {
-    diplomeHTML = '<span style="color:var(--color-text-dim);font-style:italic;">Aucun diplôme renseigné</span>';
+  
+  let gradeHTML = emp.grade;
+  if (currentUser.role === 'admin' || currentUser.role === 'rh') {
+    gradeHTML = `
+      <div class="grade-selector">
+        <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner'}</button>
+        <div class="grade-options">
+          ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
+        </div>
+      </div>
+    `;
   }
   
-  modalContent.innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:1.5rem;">
-      
-      <!-- Header -->
-      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:2px solid var(--color-border);">
-        <h2 style="margin:0;font-size:1.8rem;">👤 ${emp.nom}</h2>
-      </div>
-      
-      <!-- Infos grid -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;">
-        
-        <div style="background:rgba(255,255,255,0.03);padding:1rem;border-radius:12px;border:1px solid var(--color-border);">
-          <h3 style="margin:0 0 0.8rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">📞 CONTACT</h3>
-          <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem;">
-            <div><span style="color:var(--color-text-dim);">Tel:</span> <strong>${emp.tel || '-'}</strong></div>
-            <div><span style="color:var(--color-text-dim);">Discord:</span> <strong>${emp.discord || '-'}</strong></div>
-            <div><span style="color:var(--color-text-dim);">Gmail:</span> <strong>${emp.gmail || '-'}</strong></div>
-            <div><span style="color:var(--color-text-dim);">ID:</span> <strong style="font-family:monospace;">${emp.id || '-'}</strong></div>
-          </div>
-        </div>
-        
-        <div style="background:rgba(255,255,255,0.03);padding:1rem;border-radius:12px;border:1px solid var(--color-border);">
-          <h3 style="margin:0 0 0.8rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">📄 INFORMATIONS RH</h3>
-          <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem;">
-            <div><span style="color:var(--color-text-dim);">Grade:</span> <strong>${emp.grade || '-'}</strong></div>
-            <div><span style="color:var(--color-text-dim);">RIB:</span> <strong style="font-family:monospace;font-size:0.85rem;">${emp.rib || '-'}</strong></div>
-            <div><span style="color:var(--color-text-dim);">Date d'entrée:</span> <strong>${emp.entree || '-'}</strong></div>
-          </div>
-        </div>
-        
-      </div>
-      
-      <!-- Sélecteur de grade -->
-      <div style="background:rgba(255,255,255,0.03);padding:1.2rem;border-radius:12px;border:1px solid var(--color-border);">
-        <h3 style="margin:0 0 1rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">⚙️ MODIFIER LE GRADE</h3>
-        <div class="grade-selector" style="display:inline-block;">
-          <button onclick="toggleGradeOptions(event)" style="padding:0.8rem 1.5rem;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:10px;font-weight:600;cursor:pointer;transition:all 0.2s;font-size:1rem;" onmouseover="this.style.background='rgba(255,255,255,0.2)';this.style.borderColor='white'" onmouseout="this.style.background='rgba(255,255,255,0.1)';this.style.borderColor='rgba(255,255,255,0.3)'">${emp.grade || 'Sélectionner grade'}</button>
-          <div class="grade-options">
-            ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
-          </div>
-        </div>
-      </div>
-      
-      <!-- Diplômes -->
-      <div style="background:rgba(255,255,255,0.03);padding:1.2rem;border-radius:12px;border:1px solid var(--color-border);">
-        <h3 style="margin:0 0 1rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">🎓 DIPLÔMES</h3>
-        <div>${diplomeHTML}</div>
-      </div>
-      
-      ${emp.sortie || emp.sanction || emp.retrait ? `
-      <!-- Historique / Sanctions -->
-      <div style="background:rgba(255,255,255,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid white;">
-        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:white;">⚠️ Historique et sanctions</h3>
-        <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem;line-height:1.6;">
-          ${emp.sortie ? `<div><span style="color:var(--color-text-dim);">Date de sortie:</span> <strong>${emp.sortie}</strong></div>` : ''}
-          ${emp.sanction ? `<div><span style="color:var(--color-text-dim);">Sanction:</span> <strong>${emp.sanction}</strong></div>` : ''}
-          ${emp.retrait ? `<div><span style="color:var(--color-text-dim);">Date retrait:</span> <strong>${emp.retrait}</strong></div>` : ''}
-        </div>
-      </div>
-      ` : ''}
-      
-    </div>
+  content.innerHTML = `
+    <tr><td>ID Unique</td><td>${emp.id || '-'}</td></tr>
+    <tr><td>RIB</td><td>${emp.rib || '-'}</td></tr>
+    <tr><td>Grade</td><td>${gradeHTML}</td></tr>
+    <tr><td>Téléphone</td><td>${emp.tel || '-'}</td></tr>
+    <tr><td>Discord</td><td>${emp.discord || '-'}</td></tr>
+    <tr><td>Gmail</td><td>${emp.gmail || '-'}</td></tr>
+    <tr><td>🎓 Diplôme</td><td>${diplomeHTML}</td></tr>
+    <tr><td>Date d'entrée</td><td>${emp.entree || '-'}</td></tr>
+    <tr><td>Date de sortie</td><td>${emp.sortie || '-'}</td></tr>
+    <tr><td>Sanction</td><td>${emp.sanction || '-'}</td></tr>
+    <tr><td>Date retrait</td><td>${emp.retrait || '-'}</td></tr>
   `;
   
-  // Ajouter section commentaires
-  const commentsSection = document.createElement('div');
-  commentsSection.style.cssText = 'margin-top:2rem;padding-top:2rem;border-top:2px solid var(--color-border);';
-  
-  commentsSection.innerHTML = `
-    <h3 style="margin:0 0 1rem 0;font-size:1.2rem;color:white;">💬 Commentaire interne</h3>
-    
-    <div style="position:relative;">
-      <!-- Zone de commentaire éditable -->
-      <div 
-        id="commentDisplay"
-        ondblclick="editEmployeeComment('${emp.id}')"
-        style="padding:1rem;background:rgba(0,0,0,0.2);border:2px dashed var(--color-border);border-radius:8px;min-height:80px;cursor:pointer;transition:all 0.2s;color:${emp.commentaires ? 'var(--color-text)' : 'var(--color-text-dim)'};font-style:${emp.commentaires ? 'normal' : 'italic'};"
-        onmouseover="this.style.borderColor='white'"
-        onmouseout="this.style.borderColor='var(--color-border)'"
-      >${emp.commentaires || 'Double-cliquez pour ajouter un commentaire...'}</div>
-      
-      <!-- Zone d'édition (cachée par défaut) -->
-      <div id="commentEdit" style="display:none;">
-        <textarea 
-          id="commentTextarea"
-          style="width:100%;min-height:120px;padding:1rem;background:rgba(0,0,0,0.3);border:2px solid white;border-radius:8px;color:var(--color-text);font-size:0.95rem;font-family:inherit;resize:vertical;"
-          placeholder="Tapez votre commentaire ici..."
-        >${emp.commentaires || ''}</textarea>
-        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
-          <button 
-            onclick="saveEmployeeComment('${emp.id}')"
-            style="padding:0.6rem 1.2rem;background:white;color:#0a0a12;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.2s;"
-            onmouseover="this.style.background='rgba(255,255,255,0.9)'"
-            onmouseout="this.style.background='white'"
-          >💾 Sauvegarder</button>
-          <button 
-            onclick="cancelEmployeeComment()"
-            style="padding:0.6rem 1.2rem;background:rgba(255,255,255,0.1);color:var(--color-text);border:1px solid var(--color-border);border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.2s;"
-            onmouseover="this.style.background='rgba(255,255,255,0.15)'"
-            onmouseout="this.style.background='rgba(255,255,255,0.1)'"
-          >❌ Annuler</button>
-        </div>
-      </div>
-    </div>
-  `;
-  
-  modalContent.appendChild(commentsSection);
   modal.classList.add('active');
-}
-
-function editEmployeeComment(empId) {
-  document.getElementById('commentDisplay').style.display = 'none';
-  document.getElementById('commentEdit').style.display = 'block';
-  document.getElementById('commentTextarea').focus();
-}
-
-function cancelEmployeeComment() {
-  document.getElementById('commentDisplay').style.display = 'block';
-  document.getElementById('commentEdit').style.display = 'none';
-}
-
-async function saveEmployeeComment(empId) {
-  const textarea = document.getElementById('commentTextarea');
-  const newComment = textarea.value.trim();
-  
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
-  const proxy = "https://corsproxy.io/?";
-  
-  const emp = allEmployees.find(e => e.id === empId);
-  const empName = emp ? emp.nom : 'Inconnu';
-  
-  showToast('⏳ Enregistrement...', 'info');
-  
-  try {
-    await fetch(proxy + encodeURIComponent(url), {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        type: 'updateEmployeeComment',
-        empId: empId,
-        comment: newComment
-      })
-    });
-    
-    if (emp) emp.commentaires = newComment;
-    
-    document.getElementById('commentDisplay').textContent = newComment || 'Double-cliquez pour ajouter un commentaire...';
-    document.getElementById('commentDisplay').style.color = newComment ? 'var(--color-text)' : 'var(--color-text-dim)';
-    document.getElementById('commentDisplay').style.fontStyle = newComment ? 'normal' : 'italic';
-    cancelEmployeeComment();
-    
-    showToast('✅ Commentaire enregistré !', 'success');
-    
-    await logAction(`Commentaire modifié pour employé ${empName} (ID ${empId})`);
-    
-  } catch (error) {
-    console.error('Erreur:', error);
-    showToast('❌ Erreur lors de l\'enregistrement', 'error');
-  }
 }
 
 function toggleGradeOptions(event) {
@@ -2495,6 +2363,8 @@ function closeModal() {
 
 // ==================== RECRUITS ====================
 async function loadRecruits() {
+  if (currentUser.role !== 'admin' && currentUser.role !== 'rh') return;
+  
   const list = document.getElementById('recruitList');
   
   try {
@@ -2890,14 +2760,14 @@ function showRecruitDetails(rec) {
             <div>
               <span style="color:var(--color-text-dim);">Permis:</span> 
               ${rec.permis && (rec.permis.startsWith('http://') || rec.permis.startsWith('https://')) 
-                ? `<a href="${rec.permis}" target="_blank" style="display:inline-block;margin-left:0.5rem;padding:0.3rem 0.8rem;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:6px;text-decoration:none;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">📄 Voir le permis</a>`
+                ? `<a href="${rec.permis}" target="_blank" style="display:inline-block;margin-left:0.5rem;padding:0.3rem 0.8rem;background:rgba(233,69,96,0.2);color:var(--color-highlight);border:1px solid var(--color-highlight);border-radius:6px;text-decoration:none;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='rgba(233,69,96,0.3)'" onmouseout="this.style.background='rgba(233,69,96,0.2)'">📄 Voir le permis</a>`
                 : `<strong>${rec.permis || '-'}</strong>`
               }
             </div>
             <div>
               <span style="color:var(--color-text-dim);">Diplôme:</span> 
               ${rec.diplome && (rec.diplome.startsWith('http://') || rec.diplome.startsWith('https://')) 
-                ? `<a href="${rec.diplome}" target="_blank" style="display:inline-block;margin-left:0.5rem;padding:0.3rem 0.8rem;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:6px;text-decoration:none;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">📄 Voir le diplôme</a>`
+                ? `<a href="${rec.diplome}" target="_blank" style="display:inline-block;margin-left:0.5rem;padding:0.3rem 0.8rem;background:rgba(233,69,96,0.2);color:var(--color-highlight);border:1px solid var(--color-highlight);border-radius:6px;text-decoration:none;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='rgba(233,69,96,0.3)'" onmouseout="this.style.background='rgba(233,69,96,0.2)'">📄 Voir le diplôme</a>`
                 : `<strong>${rec.diplome || '-'}</strong>`
               }
             </div>
@@ -2913,7 +2783,7 @@ function showRecruitDetails(rec) {
         <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">${(rec.dispo && Array.isArray(rec.dispo)) ? rec.dispo.map((d) => {
           const disponible = d.heures && d.heures.length > 0;
           return `<span 
-            style="display:inline-block;padding:0.4rem 0.8rem;background:${disponible?'rgba(76,175,80,0.2)':'rgba(255,59,48,0.2)'};border:1px solid ${disponible?'#4CAF50':'rgba(255,255,255,0.6)'};border-radius:8px;font-size:0.85rem;font-weight:500;cursor:${disponible?'help':'default'};position:relative;"
+            style="display:inline-block;padding:0.4rem 0.8rem;background:${disponible?'rgba(76,175,80,0.2)':'rgba(255,59,48,0.2)'};border:1px solid ${disponible?'#4CAF50':'#FF3B30'};border-radius:8px;font-size:0.85rem;font-weight:500;cursor:${disponible?'help':'default'};position:relative;"
             title="${disponible ? d.heures : 'Indisponible'}"
             onmouseover="this.querySelector('.tooltip').style.display='block'"
             onmouseout="this.querySelector('.tooltip').style.display='none'">
@@ -2924,23 +2794,23 @@ function showRecruitDetails(rec) {
       </div>
       
       <!-- Sections questions -->
-      <div style="background:rgba(255,255,255,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid white;">
-        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:white;">💭 Motivations</h3>
+      <div style="background:rgba(233,69,96,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid var(--color-highlight);">
+        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:var(--color-highlight);">💭 Motivations</h3>
         <p style="margin:0;line-height:1.6;color:var(--color-text);">${rec.motivations || '<span style="color:var(--color-text-dim);font-style:italic;">Non renseigné</span>'}</p>
       </div>
       
-      <div style="background:rgba(255,255,255,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid white;">
-        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:white;">✨ Qualités / Défauts</h3>
+      <div style="background:rgba(233,69,96,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid var(--color-highlight);">
+        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:var(--color-highlight);">✨ Qualités / Défauts</h3>
         <p style="margin:0;line-height:1.6;color:var(--color-text);">${rec.qualites || '<span style="color:var(--color-text-dim);font-style:italic;">Non renseigné</span>'}</p>
       </div>
       
-      <div style="background:rgba(255,255,255,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid white;">
-        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:white;">❓ Pourquoi vous et pas un autre ?</h3>
+      <div style="background:rgba(233,69,96,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid var(--color-highlight);">
+        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:var(--color-highlight);">❓ Pourquoi vous et pas un autre ?</h3>
         <p style="margin:0;line-height:1.6;color:var(--color-text);">${rec.pourquoi || '<span style="color:var(--color-text-dim);font-style:italic;">Non renseigné</span>'}</p>
       </div>
       
-      <div style="background:rgba(255,255,255,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid white;">
-        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:white;">🔧 C'est quoi un mécano pour vous ?</h3>
+      <div style="background:rgba(233,69,96,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid var(--color-highlight);">
+        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:var(--color-highlight);">🔧 C'est quoi un mécano pour vous ?</h3>
         <p style="margin:0;line-height:1.6;color:var(--color-text);">${rec.mecano || '<span style="color:var(--color-text-dim);font-style:italic;">Non renseigné</span>'}</p>
       </div>
       
@@ -2952,7 +2822,7 @@ function showRecruitDetails(rec) {
   commentsSection.style.cssText = 'margin-top:2rem;padding-top:2rem;border-top:2px solid var(--color-border);';
   
   commentsSection.innerHTML = `
-    <h3 style="margin:0 0 1rem 0;font-size:1.2rem;color:white;">💬 Commentaire interne</h3>
+    <h3 style="margin:0 0 1rem 0;font-size:1.2rem;color:var(--color-highlight);">💬 Commentaire interne</h3>
     
     <div style="position:relative;">
       <!-- Zone de commentaire éditable -->
@@ -2968,15 +2838,15 @@ function showRecruitDetails(rec) {
       <div id="commentEdit" style="display:none;">
         <textarea 
           id="commentTextarea"
-          style="width:100%;padding:1rem;background:rgba(255,255,255,0.05);border:2px solid white;border-radius:8px;color:var(--color-text);font-family:inherit;resize:vertical;min-height:80px;box-sizing:border-box;"
+          style="width:100%;padding:1rem;background:rgba(255,255,255,0.05);border:2px solid var(--color-highlight);border-radius:8px;color:var(--color-text);font-family:inherit;resize:vertical;min-height:80px;box-sizing:border-box;"
           placeholder="Écrire un commentaire interne..."
         >${rec.commentaires || ''}</textarea>
         <div style="margin-top:0.5rem;display:flex;gap:0.5rem;">
           <button 
             onclick="saveComment('${rec.id}')"
-            style="padding:0.5rem 1.5rem;background:white;color:#0a0a12;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.2s;"
+            style="padding:0.5rem 1.5rem;background:var(--color-highlight);color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;transition:all 0.2s;"
             onmouseover="this.style.background='#ff6b8a'"
-            onmouseout="this.style.background='white'"
+            onmouseout="this.style.background='var(--color-highlight)'"
           >
             ✓ Enregistrer
           </button>
