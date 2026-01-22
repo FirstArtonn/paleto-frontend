@@ -1853,6 +1853,8 @@ const API_KEY = "AIzaSyBtOfa8W5POpJ2KOZSKqxsC4CfZBkYG40E";
 const SHEET_EMPLOYEES = "Info Employé";
 const SHEET_RECRUITMENT = "Formulaire Info ";
 const LOGS_SHEET_ID = "19YnTEHpGQSoqMbInvK29HWsPBXzoexYcqzRVDJjKsyI";
+// ⚠️ IMPORTANT: URL du Google Apps Script - Change cette ligne si tu redéploies !
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
 
 const GRADES = [
   "Patron", "Co Patron", "DRH", "RH", "Responsable D'atelier",
@@ -2486,7 +2488,7 @@ async function saveEmployeeComment(empId) {
   const textarea = document.getElementById('commentTextarea');
   const newComment = textarea.value.trim();
   
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const url = SCRIPT_URL;
   const proxy = "https://corsproxy.io/?";
   
   const emp = allEmployees.find(e => e.id === empId);
@@ -2536,7 +2538,7 @@ function toggleStatusOptions(event) {
 
 async function updateGrade(empId, newGrade) {
   console.log('🔵 updateGrade appelé:', { empId, newGrade, userGrade: currentUser.grade });
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const url = SCRIPT_URL;
   const proxy = "https://corsproxy.io/?";
   
   const emp = allEmployees.find(e => e.id === empId);
@@ -2912,7 +2914,7 @@ const L = {"profil":"Profil","accueil":"Accueil","employes":"Employés","recrute
 
 async function logAction(action) {
   console.log('🔵 logAction appelé:', action);
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const url = SCRIPT_URL;
   const proxy = "https://corsproxy.io/?";
   const now = new Date();
   const dateTime = now.toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
@@ -3098,7 +3100,7 @@ async function updateRecruitStatus(recruitId, newStatus) {
     statusOptions.classList.remove('show');
   }
   
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const url = SCRIPT_URL;
   const proxy = "https://corsproxy.io/?";
   
   showToast('⏳ Mise à jour du statut...', 'info');
@@ -3199,7 +3201,7 @@ async function addRecruitAsEmployee(grade) {
   console.log('📤 Envoi requête addRecruitAsEmployee:', { grade, recruit: currentRecruit });
   showToast('⏳ Ajout en cours...', 'info');
   
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const url = SCRIPT_URL;
   const proxy = "https://corsproxy.io/?";
   
   const today = new Date().toLocaleDateString('fr-FR');
@@ -3259,7 +3261,7 @@ async function writeToNameColumn(nom) {
     console.log('📝 Écriture du nom dans la section Dépannage:', nom);
     
     // Envoyer directement au Google Apps Script qui fera TOUT
-    const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+    const url = SCRIPT_URL;
     const proxy = "https://corsproxy.io/?";
     
     const response = await fetch(proxy + encodeURIComponent(url), {
@@ -3311,7 +3313,7 @@ async function deleteEmployee() {
   console.log('📤 Suppression de l\'employé:', currentEmployee);
   showToast('⏳ Suppression en cours...', 'info');
   
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const url = SCRIPT_URL;
   const proxy = "https://corsproxy.io/?";
   
   try {
@@ -3367,7 +3369,7 @@ async function saveComment(recruitId) {
   
   showToast('⏳ Enregistrement...', 'info');
   
-  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const url = SCRIPT_URL;
   const proxy = "https://corsproxy.io/?";
   
   try {
