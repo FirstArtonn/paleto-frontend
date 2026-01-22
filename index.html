@@ -2282,17 +2282,15 @@ function showEmployeeDetails(index) {
     }
   }
   
-  let gradeHTML = emp.grade;
-  if (currentUser.role === 'admin') {
-    gradeHTML = `
-      <div class="grade-selector">
-        <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner'}</button>
-        <div class="grade-options">
-          ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
-        </div>
+  // Tout le monde peut modifier les grades
+  let gradeHTML = `
+    <div class="grade-selector">
+      <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner'}</button>
+      <div class="grade-options">
+        ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
       </div>
-    `;
-  }
+    </div>
+  `;
   
   content.innerHTML = `
     <tr><td>ID Unique</td><td>${emp.id || '-'}</td></tr>
