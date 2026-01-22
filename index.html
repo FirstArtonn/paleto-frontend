@@ -723,23 +723,26 @@ body.role-rh .nav-item.rh-only {
   position: relative;
   display: inline-block;
   width: 100%;
+  max-width: 300px;
 }
 
 .grade-selector button {
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  color: var(--color-text);
+  padding: 0.8rem 1.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  color: white;
   cursor: pointer;
   text-align: left;
   transition: all 0.2s;
+  font-size: 1rem;
+  font-weight: normal;
 }
 
 .grade-selector button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--color-highlight);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: white;
 }
 
 .grade-options {
@@ -747,15 +750,16 @@ body.role-rh .nav-item.rh-only {
   top: 100%;
   left: 0;
   right: 0;
-  background: rgba(26, 26, 46, 0.98);
+  background: rgba(255,255,255,0.03);
   backdrop-filter: blur(20px);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 12px;
   margin-top: 0.5rem;
   max-height: 300px;
   overflow-y: auto;
   display: none;
   z-index: 10;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
 .grade-options.active {
@@ -770,8 +774,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .grade-option:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--color-highlight);
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 /* STATUS SELECTOR (même style que grade-selector) */
@@ -793,7 +797,7 @@ body.role-rh .nav-item.rh-only {
   text-align: left;
   transition: all 0.2s;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: normal;
 }
 
 .status-selector button:hover {
@@ -2315,7 +2319,7 @@ function showEmployeeDetails(index) {
       <div style="background:rgba(255,255,255,0.03);padding:1.2rem;border-radius:12px;border:1px solid var(--color-border);">
         <h3 style="margin:0 0 1rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">⚙️ MODIFIER LE GRADE</h3>
         <div class="grade-selector" style="display:inline-block;">
-          <button onclick="toggleGradeOptions(event)" style="padding:0.8rem 1.5rem;background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.3);border-radius:10px;font-weight:600;cursor:pointer;transition:all 0.2s;font-size:1rem;" onmouseover="this.style.background='rgba(255,255,255,0.2)';this.style.borderColor='white'" onmouseout="this.style.background='rgba(255,255,255,0.1)';this.style.borderColor='rgba(255,255,255,0.3)'">${emp.grade || 'Sélectionner grade'}</button>
+          <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner grade'}</button>
           <div class="grade-options">
             ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
           </div>
@@ -2920,12 +2924,12 @@ function showRecruitDetails(rec) {
       <div style="background:rgba(255,255,255,0.03);padding:1.2rem;border-radius:12px;border:1px solid var(--color-border);">
         <h3 style="margin:0 0 1rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">⚙️ MODIFIER LE STATUT</h3>
         <div class="status-selector" style="display:inline-block;">
-          <button onclick="toggleStatusOptions(event)">${rec.statut === 'Accepté' ? '✅' : rec.statut === 'Refusé' ? '❌' : rec.statut === 'Blacklist' ? '🚫' : '🕐'} ${rec.statut}</button>
+          <button onclick="toggleStatusOptions(event)">${rec.statut}</button>
           <div class="status-options">
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'En attente')">🕐 En attente</div>
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Accepté')">✅ Accepté</div>
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Refusé')">❌ Refusé</div>
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Blacklist')">🚫 Blacklist</div>
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'En attente')">En attente</div>
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Accepté')">Accepté</div>
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Refusé')">Refusé</div>
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Blacklist')">Blacklist</div>
           </div>
         </div>
       </div>
