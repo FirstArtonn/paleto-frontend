@@ -661,16 +661,16 @@ body.role-rh .nav-item.rh-only {
   background: none;
   border: none;
   color: var(--color-text);
-  font-size: 2rem;
+  font-size: 1.2rem;
   cursor: pointer;
-  transition: all 0.2s;
-  padding: 0.5rem;
+  transition: opacity 0.2s;
+  padding: 0.3rem;
   line-height: 1;
+  opacity: 0.6;
 }
 
 .close-btn:hover {
-  color: white;
-  transform: scale(1.1);
+  opacity: 1;
 }
 
 .modal-content h2 {
@@ -778,16 +778,17 @@ body.role-rh .nav-item.rh-only {
 .status-selector {
   position: relative;
   display: inline-block;
-  min-width: 200px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .status-selector button {
   width: 100%;
-  padding: 0.75rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  color: var(--color-text);
+  padding: 0.8rem 1.2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 10px;
+  color: white;
   cursor: pointer;
   text-align: left;
   transition: all 0.2s;
@@ -796,8 +797,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .status-selector button:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--color-highlight);
+  background: rgba(255, 255, 255, 0.15);
+  border-color: white;
 }
 
 .status-options {
@@ -805,15 +806,16 @@ body.role-rh .nav-item.rh-only {
   top: 100%;
   left: 0;
   right: 0;
-  background: rgba(26, 26, 46, 0.98);
+  background: rgba(255,255,255,0.03);
   backdrop-filter: blur(20px);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 12px;
   margin-top: 0.5rem;
   max-height: 300px;
   overflow-y: auto;
   display: none;
   z-index: 10;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
 }
 
 .status-options.active {
@@ -828,8 +830,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .status-option:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--color-highlight);
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 /* COMMENT BADGE */
@@ -2860,15 +2862,6 @@ function showRecruitDetails(rec) {
       <!-- Header -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:2px solid var(--color-border);">
         <h2 style="margin:0;font-size:1.8rem;">📋 ${rec.nom}</h2>
-        <div class="status-selector">
-          <button onclick="toggleStatusOptions(event)">${rec.statut === 'Accepté' ? '✅' : rec.statut === 'Refusé' ? '❌' : rec.statut === 'Blacklist' ? '🚫' : '🕐'} ${rec.statut}</button>
-          <div class="status-options">
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'En attente')">🕐 En attente</div>
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Accepté')">✅ Accepté</div>
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Refusé')">❌ Refusé</div>
-            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Blacklist')">🚫 Blacklist</div>
-          </div>
-        </div>
       </div>
       
       <!-- Infos grid -->
@@ -2921,6 +2914,20 @@ function showRecruitDetails(rec) {
             ${disponible ? `<div class="tooltip" style="display:none;position:absolute;top:-35px;left:50%;transform:translateX(-50%);background:#1a1a2e;color:#fff;padding:0.4rem 0.8rem;border-radius:6px;white-space:nowrap;font-size:0.75rem;z-index:1000;box-shadow:0 2px 10px rgba(0,0,0,0.3);">${d.heures}</div>` : ''}
           </span>`;
         }).join('') : '<p style="color:var(--color-text-dim);">Non renseigné</p>'}</div>
+      </div>
+      
+      <!-- Modifier le statut -->
+      <div style="background:rgba(255,255,255,0.03);padding:1.2rem;border-radius:12px;border:1px solid var(--color-border);">
+        <h3 style="margin:0 0 1rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">⚙️ MODIFIER LE STATUT</h3>
+        <div class="status-selector" style="display:inline-block;">
+          <button onclick="toggleStatusOptions(event)">${rec.statut === 'Accepté' ? '✅' : rec.statut === 'Refusé' ? '❌' : rec.statut === 'Blacklist' ? '🚫' : '🕐'} ${rec.statut}</button>
+          <div class="status-options">
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'En attente')">🕐 En attente</div>
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Accepté')">✅ Accepté</div>
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Refusé')">❌ Refusé</div>
+            <div class="status-option" onclick="updateRecruitStatus('${rec.id}', 'Blacklist')">🚫 Blacklist</div>
+          </div>
+        </div>
       </div>
       
       <!-- Sections questions -->
