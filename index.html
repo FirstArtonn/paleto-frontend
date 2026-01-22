@@ -1788,8 +1788,7 @@ body {
 <div class="modal" id="employeeModal">
   <div class="modal-content">
     <div class="close-btn" onclick="closeModal()">✖</div>
-    <h2 id="modalTitle"></h2>
-    <table class="details-table" id="modalContent"></table>
+    <div id="modalContent"></div>
   </div>
 </div>
 
@@ -2275,47 +2274,177 @@ function filterRecruitsByStatus() {
 function showEmployeeDetails(index) {
   const emp = filteredEmployees[index];
   const modal = document.getElementById('employeeModal');
-  const title = document.getElementById('modalTitle');
-  const content = document.getElementById('modalContent');
+  const modalContent = document.getElementById('modalContent');
   
-  title.textContent = `👤 ${emp.nom}`;
-  
-  let diplomeHTML = '<em>Aucun diplôme</em>';
+  // Préparer le HTML des diplômes
+  let diplomeHTML = '';
   if (emp.diplome) {
     const links = emp.diplome.split(/\s+/).filter(l => l.startsWith('http'));
     if (links.length > 0) {
       diplomeHTML = links.map((link, i) => {
         const label = links.length === 1 ? 'Diplôme' : `Diplôme ${i + 1}`;
-        return `<button class="diplome-btn" onclick="window.open('${link}', '_blank')">🎓 ${label}</button>`;
+        return `<a href="${link}" target="_blank" style="display:inline-block;margin:0.3rem;padding:0.5rem 1rem;background:rgba(233,69,96,0.2);color:var(--color-highlight);border:1px solid var(--color-highlight);border-radius:8px;text-decoration:none;font-weight:600;transition:all 0.2s;" onmouseover="this.style.background='rgba(233,69,96,0.3)'" onmouseout="this.style.background='rgba(233,69,96,0.2)'">🎓 ${label}</a>`;
       }).join('');
     }
   }
+  if (!diplomeHTML) {
+    diplomeHTML = '<span style="color:var(--color-text-dim);font-style:italic;">Aucun diplôme renseigné</span>';
+  }
   
-  // Tout le monde peut modifier les grades
-  let gradeHTML = `
-    <div class="grade-selector">
-      <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner'}</button>
-      <div class="grade-options">
-        ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
+  modalContent.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:1.5rem;">
+      
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:1rem;border-bottom:2px solid var(--color-border);">
+        <h2 style="margin:0;font-size:1.8rem;">👤 ${emp.nom}</h2>
+        <div class="grade-selector">
+          <button onclick="toggleGradeOptions(event)">${emp.grade || 'Sélectionner grade'}</button>
+          <div class="grade-options">
+            ${GRADES.map(g => `<div class="grade-option" onclick="updateGrade('${emp.id}', '${g}')">${g}</div>`).join('')}
+          </div>
+        </div>
+      </div>
+      
+      <!-- Infos grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;">
+        
+        <div style="background:rgba(255,255,255,0.03);padding:1rem;border-radius:12px;border:1px solid var(--color-border);">
+          <h3 style="margin:0 0 0.8rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">📞 CONTACT</h3>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem;">
+            <div><span style="color:var(--color-text-dim);">Tel:</span> <strong>${emp.tel || '-'}</strong></div>
+            <div><span style="color:var(--color-text-dim);">Discord:</span> <strong>${emp.discord || '-'}</strong></div>
+            <div><span style="color:var(--color-text-dim);">Gmail:</span> <strong>${emp.gmail || '-'}</strong></div>
+            <div><span style="color:var(--color-text-dim);">ID:</span> <strong style="font-family:monospace;">${emp.id || '-'}</strong></div>
+          </div>
+        </div>
+        
+        <div style="background:rgba(255,255,255,0.03);padding:1rem;border-radius:12px;border:1px solid var(--color-border);">
+          <h3 style="margin:0 0 0.8rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">📄 INFORMATIONS RH</h3>
+          <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem;">
+            <div><span style="color:var(--color-text-dim);">Grade:</span> <strong>${emp.grade || '-'}</strong></div>
+            <div><span style="color:var(--color-text-dim);">RIB:</span> <strong style="font-family:monospace;font-size:0.85rem;">${emp.rib || '-'}</strong></div>
+            <div><span style="color:var(--color-text-dim);">Date d'entrée:</span> <strong>${emp.entree || '-'}</strong></div>
+          </div>
+        </div>
+        
+      </div>
+      
+      <!-- Diplômes -->
+      <div style="background:rgba(255,255,255,0.03);padding:1.2rem;border-radius:12px;border:1px solid var(--color-border);">
+        <h3 style="margin:0 0 1rem 0;font-size:0.85rem;color:var(--color-text-dim);text-transform:uppercase;letter-spacing:1px;">🎓 DIPLÔMES</h3>
+        <div>${diplomeHTML}</div>
+      </div>
+      
+      ${emp.sortie || emp.sanction || emp.retrait ? `
+      <!-- Historique / Sanctions -->
+      <div style="background:rgba(233,69,96,0.05);padding:1.2rem;border-radius:12px;border-left:4px solid var(--color-highlight);">
+        <h3 style="margin:0 0 0.8rem 0;font-size:0.95rem;color:var(--color-highlight);">⚠️ Historique et sanctions</h3>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;font-size:0.9rem;line-height:1.6;">
+          ${emp.sortie ? `<div><span style="color:var(--color-text-dim);">Date de sortie:</span> <strong>${emp.sortie}</strong></div>` : ''}
+          ${emp.sanction ? `<div><span style="color:var(--color-text-dim);">Sanction:</span> <strong>${emp.sanction}</strong></div>` : ''}
+          ${emp.retrait ? `<div><span style="color:var(--color-text-dim);">Date retrait:</span> <strong>${emp.retrait}</strong></div>` : ''}
+        </div>
+      </div>
+      ` : ''}
+      
+    </div>
+  `;
+  
+  // Ajouter section commentaires
+  const commentsSection = document.createElement('div');
+  commentsSection.style.cssText = 'margin-top:2rem;padding-top:2rem;border-top:2px solid var(--color-border);';
+  
+  commentsSection.innerHTML = `
+    <h3 style="margin:0 0 1rem 0;font-size:1.2rem;color:var(--color-highlight);">💬 Commentaire interne</h3>
+    
+    <div style="position:relative;">
+      <!-- Zone de commentaire éditable -->
+      <div 
+        id="commentDisplay"
+        ondblclick="editEmployeeComment('${emp.id}')"
+        style="padding:1rem;background:rgba(0,0,0,0.2);border:2px dashed var(--color-border);border-radius:8px;min-height:80px;cursor:pointer;transition:all 0.2s;color:${emp.commentaires ? 'var(--color-text)' : 'var(--color-text-dim)'};font-style:${emp.commentaires ? 'normal' : 'italic'};"
+        onmouseover="this.style.borderColor='var(--color-highlight)'"
+        onmouseout="this.style.borderColor='var(--color-border)'"
+      >${emp.commentaires || 'Double-cliquez pour ajouter un commentaire...'}</div>
+      
+      <!-- Zone d'édition (cachée par défaut) -->
+      <div id="commentEdit" style="display:none;">
+        <textarea 
+          id="commentTextarea"
+          style="width:100%;min-height:120px;padding:1rem;background:rgba(0,0,0,0.3);border:2px solid var(--color-highlight);border-radius:8px;color:var(--color-text);font-size:0.95rem;font-family:inherit;resize:vertical;"
+          placeholder="Tapez votre commentaire ici..."
+        >${emp.commentaires || ''}</textarea>
+        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;">
+          <button 
+            onclick="saveEmployeeComment('${emp.id}')"
+            style="padding:0.6rem 1.2rem;background:var(--color-highlight);color:white;border:none;border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.2s;"
+            onmouseover="this.style.background='#d63850'"
+            onmouseout="this.style.background='var(--color-highlight)'"
+          >💾 Sauvegarder</button>
+          <button 
+            onclick="cancelEmployeeComment()"
+            style="padding:0.6rem 1.2rem;background:rgba(255,255,255,0.1);color:var(--color-text);border:1px solid var(--color-border);border-radius:6px;font-weight:600;cursor:pointer;transition:all 0.2s;"
+            onmouseover="this.style.background='rgba(255,255,255,0.15)'"
+            onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+          >❌ Annuler</button>
+        </div>
       </div>
     </div>
   `;
   
-  content.innerHTML = `
-    <tr><td>ID Unique</td><td>${emp.id || '-'}</td></tr>
-    <tr><td>RIB</td><td>${emp.rib || '-'}</td></tr>
-    <tr><td>Grade</td><td>${gradeHTML}</td></tr>
-    <tr><td>Téléphone</td><td>${emp.tel || '-'}</td></tr>
-    <tr><td>Discord</td><td>${emp.discord || '-'}</td></tr>
-    <tr><td>Gmail</td><td>${emp.gmail || '-'}</td></tr>
-    <tr><td>🎓 Diplôme</td><td>${diplomeHTML}</td></tr>
-    <tr><td>Date d'entrée</td><td>${emp.entree || '-'}</td></tr>
-    <tr><td>Date de sortie</td><td>${emp.sortie || '-'}</td></tr>
-    <tr><td>Sanction</td><td>${emp.sanction || '-'}</td></tr>
-    <tr><td>Date retrait</td><td>${emp.retrait || '-'}</td></tr>
-  `;
-  
+  modalContent.appendChild(commentsSection);
   modal.classList.add('active');
+}
+
+function editEmployeeComment(empId) {
+  document.getElementById('commentDisplay').style.display = 'none';
+  document.getElementById('commentEdit').style.display = 'block';
+  document.getElementById('commentTextarea').focus();
+}
+
+function cancelEmployeeComment() {
+  document.getElementById('commentDisplay').style.display = 'block';
+  document.getElementById('commentEdit').style.display = 'none';
+}
+
+async function saveEmployeeComment(empId) {
+  const textarea = document.getElementById('commentTextarea');
+  const newComment = textarea.value.trim();
+  
+  const url = "https://script.google.com/macros/s/AKfycbx8UcKzySSIaXfkXCBFGz3Dj90lmJ2qZ-W5aiMLWy2dEU7gAXzvX-NOZ1hzGkLbVFwt/exec";
+  const proxy = "https://corsproxy.io/?";
+  
+  const emp = allEmployees.find(e => e.id === empId);
+  const empName = emp ? emp.nom : 'Inconnu';
+  
+  showToast('⏳ Enregistrement...', 'info');
+  
+  try {
+    await fetch(proxy + encodeURIComponent(url), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'updateEmployeeComment',
+        empId: empId,
+        comment: newComment
+      })
+    });
+    
+    if (emp) emp.commentaires = newComment;
+    
+    document.getElementById('commentDisplay').textContent = newComment || 'Double-cliquez pour ajouter un commentaire...';
+    document.getElementById('commentDisplay').style.color = newComment ? 'var(--color-text)' : 'var(--color-text-dim)';
+    document.getElementById('commentDisplay').style.fontStyle = newComment ? 'normal' : 'italic';
+    cancelEmployeeComment();
+    
+    showToast('✅ Commentaire enregistré !', 'success');
+    
+    await logAction(`Commentaire modifié pour employé ${empName} (ID ${empId})`);
+    
+  } catch (error) {
+    console.error('Erreur:', error);
+    showToast('❌ Erreur lors de l\'enregistrement', 'error');
+  }
 }
 
 function toggleGradeOptions(event) {
