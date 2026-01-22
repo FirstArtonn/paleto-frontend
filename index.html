@@ -14,7 +14,7 @@
   --color-primary: #1a1a2e;
   --color-secondary: #0d1117;
   --color-accent: #0f3460;
-  --color-highlight: #e94560;
+  --color-highlight: white;
   --color-gold: #d4af37;
   --color-bg: #0a0a12;
   --color-surface: #1a1a2e;
@@ -59,7 +59,7 @@ body::before {
   width: 100%;
   height: 100%;
   background-image: 
-    radial-gradient(circle at 20% 50%, rgba(233, 69, 96, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
     radial-gradient(circle at 80% 80%, rgba(15, 52, 96, 0.15) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
@@ -148,9 +148,9 @@ body::before {
 .login-info {
   margin-top: 2rem;
   padding: 1.5rem;
-  background: rgba(233, 69, 96, 0.1);
+  background: rgba(255,255,255,0.1);
   border-radius: 12px;
-  border: 1px solid rgba(233, 69, 96, 0.2);
+  border: 1px solid rgba(255,255,255,0.1);
   color: var(--color-text-dim);
   font-size: 0.9rem;
   line-height: 1.6;
@@ -234,9 +234,9 @@ header h1 {
 }
 
 .logout-btn {
-  background: rgba(233, 69, 96, 0.2);
+  background: rgba(255,255,255,0.1);
   border: 1px solid var(--color-highlight);
-  color: var(--color-highlight);
+  color: white;
   padding: 0.5rem 1rem;
   border-radius: 8px;
   cursor: pointer;
@@ -449,7 +449,7 @@ body.role-rh .nav-item.rh-only {
 
 .filter-selector button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: #e94560;
+  border-color: white;
 }
 
 .filter-options {
@@ -462,7 +462,7 @@ body.role-rh .nav-item.rh-only {
   display: flex;
   flex-direction: row;
   gap: 1.5rem;
-  z-index: 1000;
+  z-index: 9999;
   white-space: nowrap;
   transition: transform 0.3s ease, opacity 0.3s ease;
   opacity: 0;
@@ -505,8 +505,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .filter-option:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: #e94560;
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 
@@ -515,8 +515,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .filter-select:focus {
-  border-color: #e94560;
-  box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
+  border-color: white;
+  box-shadow: 0 0 15px rgba(255,255,255,0.1);
 }
 
 .filter-select option {
@@ -539,8 +539,8 @@ body.role-rh .nav-item.rh-only {
 
 .search-input:focus {
   outline: none;
-  border-color: #e94560;
-  box-shadow: 0 0 15px rgba(233, 69, 96, 0.2);
+  border-color: white;
+  box-shadow: 0 0 15px rgba(255,255,255,0.1);
 }
 
 .search-input::placeholder {
@@ -573,7 +573,7 @@ body.role-rh .nav-item.rh-only {
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, var(--color-gold), var(--color-highlight));
+  background: linear-gradient(90deg, var(--color-gold), white);
   transform: scaleX(0);
   transition: transform 0.3s;
 }
@@ -584,8 +584,8 @@ body.role-rh .nav-item.rh-only {
 
 .employee-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 30px rgba(233, 69, 96, 0.3);
-  border-color: var(--color-highlight);
+  box-shadow: 0 12px 30px rgba(255,255,255,0.2);
+  border-color: white;
 }
 
 
@@ -611,7 +611,7 @@ body.role-rh .nav-item.rh-only {
   bottom: 0;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(10px);
-  z-index: 1000;
+  z-index: 9999;
   padding: 2rem;
   overflow-y: auto;
 }
@@ -660,10 +660,10 @@ body.role-rh .nav-item.rh-only {
   right: 1.5rem;
   width: 36px;
   height: 36px;
-  background: rgba(233, 69, 96, 0.2);
+  background: rgba(255,255,255,0.1);
   border: 1px solid var(--color-highlight);
   border-radius: 50%;
-  color: var(--color-highlight);
+  color: white;
   font-size: 1.5rem;
   cursor: pointer;
   display: flex;
@@ -744,7 +744,7 @@ body.role-rh .nav-item.rh-only {
 
 .grade-selector button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: var(--color-highlight);
+  border-color: white;
 }
 
 .grade-options {
@@ -775,8 +775,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .grade-option:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--color-highlight);
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 /* STATUS SELECTOR (même style que grade-selector) */
@@ -802,7 +802,7 @@ body.role-rh .nav-item.rh-only {
 
 .status-selector button:hover {
   background: rgba(255, 255, 255, 0.1);
-  border-color: var(--color-highlight);
+  border-color: white;
 }
 
 .status-options {
@@ -833,8 +833,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .status-option:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--color-highlight);
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 /* COMMENT BADGE */
@@ -911,8 +911,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .context-menu-item:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--color-highlight);
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 .context-menu-separator {
@@ -949,8 +949,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .toast.error {
-  border-color: var(--color-highlight);
-  background: rgba(233, 69, 96, 0.1);
+  border-color: white;
+  background: rgba(255,255,255,0.1);
 }
 
 @keyframes slideInRight {
@@ -1311,8 +1311,8 @@ body {
 }
 
 .logout-btn-header:hover {
-  background: #e94560;
-  border-color: #e94560;
+  background: white;
+  border-color: white;
 }
 
 /* MAIN WRAPPER */
@@ -1402,20 +1402,6 @@ body {
 }
 
 /* CARDS DARK MODE */
-.employee-card {
-  background: rgba(13, 17, 23, 0.85) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1) !important;
-  color: #e8e8e8 !important;
-  transition: all 0.3s ease;
-}
-
-.employee-card:hover {
-  border-color: #e94560 !important;
-  box-shadow: 0 8px 24px rgba(233, 69, 96, 0.3) !important;
-  background: rgba(13, 17, 23, 0.95) !important;
-}
-
 /* SYSTÈME DE COULEURS DYNAMIQUES BASÉ SUR LES SANCTIONS */
 .employee-card.card-status-green {
   border: 2px solid #22c55e !important;
@@ -1513,8 +1499,8 @@ body {
 }
 
 .search-input:focus {
-  border-color: #e94560 !important;
-  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2) !important;
+  border-color: white !important;
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.1) !important;
 }
 
 /* MODAL DARK */
@@ -1551,7 +1537,7 @@ body {
 }
 
 .close-btn:hover {
-  background: #e94560 !important;
+  background: white !important;
 }
 
 /* TAB CONTENT */
@@ -1577,7 +1563,7 @@ body {
 
 /* COMMENT BADGE */
 .comment-badge {
-  background: #e94560 !important;
+  background: white !important;
 }
 
 .comment-badge .tooltip {
@@ -1658,7 +1644,7 @@ body {
       <div class="info-message">
         <h2>👋 Bienvenue <span id="welcomeName"></span></h2>
         <p style="margin-top: 1rem;">Utilisez le menu ci-dessus pour naviguer entre les différentes sections.</p>
-        <div style="margin-top: 2rem; padding: 2rem; background: rgba(233, 69, 96, 0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
+        <div style="margin-top: 2rem; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 16px; border: 1px solid var(--color-highlight);">
           <strong>Vos permissions :</strong>
           <p id="userPermissions" style="margin-top: 1rem;"></p>
         </div>
@@ -2927,7 +2913,7 @@ function showRecruitDetails(rec) {
         <div style="display:flex;flex-wrap:wrap;gap:0.5rem;">${(rec.dispo && Array.isArray(rec.dispo)) ? rec.dispo.map((d) => {
           const disponible = d.heures && d.heures.length > 0;
           return `<span 
-            style="display:inline-block;padding:0.4rem 0.8rem;background:${disponible?'rgba(76,175,80,0.2)':'rgba(255,59,48,0.2)'};border:1px solid ${disponible?'#4CAF50':'#FF3B30'};border-radius:8px;font-size:0.85rem;font-weight:500;cursor:${disponible?'help':'default'};position:relative;"
+            style="display:inline-block;padding:0.4rem 0.8rem;background:${disponible?'rgba(76,175,80,0.2)':'rgba(255,59,48,0.2)'};border:1px solid ${disponible?'#4CAF50':'rgba(255,255,255,0.6)'};border-radius:8px;font-size:0.85rem;font-weight:500;cursor:${disponible?'help':'default'};position:relative;"
             title="${disponible ? d.heures : 'Indisponible'}"
             onmouseover="this.querySelector('.tooltip').style.display='block'"
             onmouseout="this.querySelector('.tooltip').style.display='none'">
