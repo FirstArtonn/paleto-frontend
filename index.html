@@ -937,12 +937,12 @@ body.role-rh .nav-item.rh-only {
 /* CONTEXT MENU */
 #contextMenu {
   position: fixed;
-  background: rgba(26, 26, 46, 0.98);
+  background: rgba(255,255,255,0.03);
   backdrop-filter: blur(20px);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 0.5rem 0;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
   z-index: 10000;
   display: none;
 }
@@ -950,7 +950,7 @@ body.role-rh .nav-item.rh-only {
 .context-menu-item {
   padding: 0.75rem 1.5rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
   color: var(--color-text);
   white-space: nowrap;
   display: flex;
@@ -959,8 +959,8 @@ body.role-rh .nav-item.rh-only {
 }
 
 .context-menu-item:hover {
-  background: rgba(233, 69, 96, 0.2);
-  color: var(--color-highlight);
+  background: rgba(255,255,255,0.1);
+  color: white;
 }
 
 .context-menu-separator {
@@ -1206,26 +1206,14 @@ header .nav-item.active::after, header .nav-item:hover::after { width: 100%; }
   width: 600px;
   height: 600px;
   background: url('https://i.postimg.cc/2ywnJRZq/logo-flashback-fa-Logo-Paleto-Garage.png') no-repeat center/contain;
-  opacity: 0.65;
+  opacity: 0.35;
   z-index: 0;
   pointer-events: none;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-}
-
 body {
-  min-height: 100vh;
-  background-image: url('https://i.postimg.cc/sfHF5Y7L/Plan-de-travail-3Logo-Paleto-Garage.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: url('https://i.postimg.cc/L5RzN6nF/bgcolor-Logo-Paleto-Garage.png') center/cover fixed !important;
 }
-
 
 /* HEADER HORIZONTAL */
 .header-horizontal {
@@ -1640,8 +1628,11 @@ body {
 
 /* CONTEXT MENU DARK */
 .context-menu {
-  background: #0d1117 !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
+  background: rgba(255,255,255,0.03) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3) !important;
 }
 
 .context-menu-item {
@@ -1650,6 +1641,7 @@ body {
 
 .context-menu-item:hover {
   background: rgba(255,255,255,0.1) !important;
+  color: white !important;
 }
 
 /* IFRAME CONTAINER */
@@ -3347,19 +3339,54 @@ async function loadLogs() {
       return;
     }
     
-    const logs = data.values.slice(1).reverse();
-    let html = '<div style="display:flex;justify-content:space-between;margin-bottom:1rem;"><h3 style="margin:0;">📜 Historique</h3><span style="color:var(--color-text-dim);font-size:0.9rem;">🔄 ' + now + '</span></div>';
-    html += '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(233,69,96,0.1);"><th style="padding:1rem;text-align:left;">Utilisateur</th><th style="padding:1rem;text-align:left;">Date & Heure</th><th style="padding:1rem;text-align:left;">Action</th></tr></thead><tbody>';
-    logs.forEach((log, i) => {
+    // Stocker les logs pour le filtrage
+    window.allLogs = data.values.slice(1).reverse();
+    
+    let html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:1rem;">';
+    html += '<h3 style="margin:0;">📜 Historique</h3>';
+    html += '<div style="display:flex;align-items:center;gap:1rem;">';
+    html += '<input type="text" id="logsSearchInput" placeholder="🔍 Rechercher..." style="padding:0.6rem 1rem;background:rgba(255,255,255,0.05);border:1px solid var(--color-border);border-radius:8px;color:var(--color-text);font-size:0.9rem;width:250px;transition:all 0.2s;" oninput="filterLogs()" onfocus="this.style.borderColor=\'white\';this.style.background=\'rgba(255,255,255,0.08)\'" onblur="this.style.borderColor=\'var(--color-border)\';this.style.background=\'rgba(255,255,255,0.05)\'">';
+    html += '<span style="color:var(--color-text-dim);font-size:0.9rem;">🔄 ' + now + '</span>';
+    html += '</div></div>';
+    html += '<div id="logsTableContainer">';
+    html += '<table style="width:100%;border-collapse:collapse;"><thead><tr style="background:rgba(255,255,255,0.05);"><th style="padding:1rem;text-align:left;">Utilisateur</th><th style="padding:1rem;text-align:left;">Date & Heure</th><th style="padding:1rem;text-align:left;">Action</th></tr></thead><tbody id="logsTableBody">';
+    window.allLogs.forEach((log, i) => {
       const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
       html += `<tr style="background:${bg};"><td style="padding:1rem;">${log[0]||'-'}</td><td style="padding:1rem;font-size:0.9rem;">${log[1]||'-'}</td><td style="padding:1rem;">${log[2]||'-'}</td></tr>`;
     });
-    html += '</tbody></table>';
+    html += '</tbody></table></div>';
     container.innerHTML = html;
   } catch (error) {
     console.error('❌ Erreur logs:', error);
   }
 }
+
+function filterLogs() {
+  const searchTerm = document.getElementById('logsSearchInput').value.toLowerCase();
+  const tbody = document.getElementById('logsTableBody');
+  
+  if (!window.allLogs) return;
+  
+  const filteredLogs = window.allLogs.filter(log => {
+    const user = (log[0] || '').toLowerCase();
+    const date = (log[1] || '').toLowerCase();
+    const action = (log[2] || '').toLowerCase();
+    return user.includes(searchTerm) || date.includes(searchTerm) || action.includes(searchTerm);
+  });
+  
+  let html = '';
+  filteredLogs.forEach((log, i) => {
+    const bg = i % 2 === 0 ? 'rgba(255,255,255,0.02)' : 'transparent';
+    html += `<tr style="background:${bg};"><td style="padding:1rem;">${log[0]||'-'}</td><td style="padding:1rem;font-size:0.9rem;">${log[1]||'-'}</td><td style="padding:1rem;">${log[2]||'-'}</td></tr>`;
+  });
+  
+  if (filteredLogs.length === 0) {
+    html = '<tr><td colspan="3" style="padding:2rem;text-align:center;color:var(--color-text-dim);">Aucun résultat trouvé</td></tr>';
+  }
+  
+  tbody.innerHTML = html;
+}
+
 
 </script>
 
