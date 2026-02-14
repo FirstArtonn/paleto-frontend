@@ -2489,7 +2489,6 @@ async function saveEmployeeComment(empId) {
   const newComment = textarea.value.trim();
   
   const url = SCRIPT_URL;
-  const proxy = "https://corsproxy.io/?";
   
   const emp = allEmployees.find(e => e.id === empId);
   const empName = emp ? emp.nom : 'Inconnu';
@@ -2497,7 +2496,7 @@ async function saveEmployeeComment(empId) {
   showToast('⏳ Enregistrement...', 'info');
   
   try {
-    await fetch(proxy + encodeURIComponent(url), {
+    await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -2539,7 +2538,6 @@ function toggleStatusOptions(event) {
 async function updateGrade(empId, newGrade) {
   console.log('🔵 updateGrade appelé:', { empId, newGrade, userGrade: currentUser.grade });
   const url = SCRIPT_URL;
-  const proxy = "https://corsproxy.io/?";
   
   const emp = allEmployees.find(e => e.id === empId);
   const oldGrade = emp ? emp.grade : 'Inconnu';
@@ -2553,7 +2551,7 @@ async function updateGrade(empId, newGrade) {
   showToast('⏳ Mise à jour...', 'info');
   
   try {
-    await fetch(proxy + encodeURIComponent(url), {
+    await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: empId, grade: newGrade })
@@ -2915,12 +2913,11 @@ const L = {"profil":"Profil","accueil":"Accueil","employes":"Employés","recrute
 async function logAction(action) {
   console.log('🔵 logAction appelé:', action);
   const url = SCRIPT_URL;
-  const proxy = "https://corsproxy.io/?";
   const now = new Date();
   const dateTime = now.toLocaleString('fr-FR', {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'});
   
   try {
-    await fetch(proxy + encodeURIComponent(url), {
+    await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ type: 'log', prenomNom: currentUser?.employeeName || 'Inconnu', dateHeure: dateTime, action: action })
@@ -3101,14 +3098,13 @@ async function updateRecruitStatus(recruitId, newStatus) {
   }
   
   const url = SCRIPT_URL;
-  const proxy = "https://corsproxy.io/?";
   
   showToast('⏳ Mise à jour du statut...', 'info');
   
   try {
     console.log('📤 Envoi requête:', { type: 'updateRecruitStatus', id: recruitId, status: newStatus });
     
-    const response = await fetch(proxy + encodeURIComponent(url), {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -3202,12 +3198,11 @@ async function addRecruitAsEmployee(grade) {
   showToast('⏳ Ajout en cours...', 'info');
   
   const url = SCRIPT_URL;
-  const proxy = "https://corsproxy.io/?";
   
   const today = new Date().toLocaleDateString('fr-FR');
   
   try {
-    const response = await fetch(proxy + encodeURIComponent(url), {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -3262,9 +3257,8 @@ async function writeToNameColumn(nom) {
     
     // Envoyer directement au Google Apps Script qui fera TOUT
     const url = SCRIPT_URL;
-    const proxy = "https://corsproxy.io/?";
     
-    const response = await fetch(proxy + encodeURIComponent(url), {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -3314,10 +3308,9 @@ async function deleteEmployee() {
   showToast('⏳ Suppression en cours...', 'info');
   
   const url = SCRIPT_URL;
-  const proxy = "https://corsproxy.io/?";
   
   try {
-    const response = await fetch(proxy + encodeURIComponent(url), {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -3370,10 +3363,9 @@ async function saveComment(recruitId) {
   showToast('⏳ Enregistrement...', 'info');
   
   const url = SCRIPT_URL;
-  const proxy = "https://corsproxy.io/?";
   
   try {
-    const response = await fetch(proxy + encodeURIComponent(url), {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
